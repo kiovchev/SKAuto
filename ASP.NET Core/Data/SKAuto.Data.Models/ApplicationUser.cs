@@ -4,9 +4,8 @@ namespace SKAuto.Data.Models
     using System;
     using System.Collections.Generic;
 
-    using SKAuto.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+    using SKAuto.Data.Common.Models;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {

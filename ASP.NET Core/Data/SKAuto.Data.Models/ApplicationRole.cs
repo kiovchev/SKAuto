@@ -3,9 +3,8 @@ namespace SKAuto.Data.Models
 {
     using System;
 
-    using SKAuto.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+    using SKAuto.Data.Common.Models;
 
     public class ApplicationRole : IdentityRole, IAuditInfo, IDeletableEntity
     {

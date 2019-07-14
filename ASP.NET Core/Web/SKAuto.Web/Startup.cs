@@ -2,17 +2,6 @@
 {
     using System.Reflection;
 
-    using SKAuto.Data;
-    using SKAuto.Data.Common;
-    using SKAuto.Data.Common.Repositories;
-    using SKAuto.Data.Models;
-    using SKAuto.Data.Repositories;
-    using SKAuto.Data.Seeding;
-    using SKAuto.Services.Data;
-    using SKAuto.Services.Mapping;
-    using SKAuto.Services.Messaging;
-    using SKAuto.Web.ViewModels;
-
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -24,6 +13,16 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using SKAuto.Data;
+    using SKAuto.Data.Common;
+    using SKAuto.Data.Common.Repositories;
+    using SKAuto.Data.Models;
+    using SKAuto.Data.Repositories;
+    using SKAuto.Data.Seeding;
+    using SKAuto.Services.Data;
+    using SKAuto.Services.Mapping;
+    using SKAuto.Services.Messaging;
+    using SKAuto.Web.ViewModels;
 
     public class Startup
     {
@@ -39,7 +38,7 @@
         {
             // Framework services
             // TODO: Add pooling when this bug is fixed: https://github.com/aspnet/EntityFrameworkCore/issues/9741
-            services.AddDbContext<ApplicationDbContext>(
+            services.AddDbContext<SKAutoDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
             services
@@ -51,7 +50,7 @@
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequiredLength = 6;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<SKAutoDbContext>()
                 .AddUserStore<ApplicationUserStore>()
                 .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders()
@@ -109,7 +108,7 @@
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<SKAutoDbContext>();
 
                 if (env.IsDevelopment())
                 {

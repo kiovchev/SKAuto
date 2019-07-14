@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace SKAuto.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(SKAutoDbContext))]
     [Migration("20190130121918_InitialCreate")]
     partial class InitialCreate
     {

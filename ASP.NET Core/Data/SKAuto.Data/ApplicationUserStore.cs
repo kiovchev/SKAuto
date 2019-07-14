@@ -2,15 +2,14 @@
 {
     using System.Security.Claims;
 
-    using SKAuto.Data.Models;
-
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using SKAuto.Data.Models;
 
     public class ApplicationUserStore : UserStore<
         ApplicationUser,
         ApplicationRole,
-        ApplicationDbContext,
+        SKAutoDbContext,
         string,
         IdentityUserClaim<string>,
         IdentityUserRole<string>,
@@ -18,7 +17,7 @@
         IdentityUserToken<string>,
         IdentityRoleClaim<string>>
     {
-        public ApplicationUserStore(ApplicationDbContext context, IdentityErrorDescriber describer = null)
+        public ApplicationUserStore(SKAutoDbContext context, IdentityErrorDescriber describer = null)
             : base(context, describer)
         {
         }
