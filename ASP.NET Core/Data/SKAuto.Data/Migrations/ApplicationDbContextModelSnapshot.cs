@@ -280,6 +280,8 @@ namespace SKAuto.Data.Migrations
 
                     b.Property<int>("EndYear");
 
+                    b.Property<string>("ImageAddress");
+
                     b.Property<string>("Name");
 
                     b.Property<int>("StartYear");
