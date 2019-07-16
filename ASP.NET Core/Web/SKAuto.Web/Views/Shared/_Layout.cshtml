@@ -14,11 +14,11 @@
         <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
     </environment>
 </head>
-<body>
+<body class="bg-dark">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SKAuto</a>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-secondary border rounded m-2">
+            <div class="container-fluid">
+                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">SKAuto</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -27,30 +27,39 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    
-    <div class="container">
-        <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
-            @this.RenderBody()
-        </main>
-    </div>
-    
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; @DateTime.Now.Year - SKAuto - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <main class="rounded m-2">
+        <div class="container-fluid">
+            <div class="container-fluid" align="right">
+                <div class="top-border-line primary-separator"></div>
+                <span class="text-danger" href=""><strong>ТЕЛЕФОН: <span class="text-light">---- --- ---</span></strong></span>
+                <span class="text-danger"><strong>|</strong></span>
+                <span class="class=nav-item text-danger" href=""><strong>SKYPE: <span class="text-light">SK_Auto</span></strong></span>
+                <span class="text-danger"><strong>|</strong></span>
+                <span class="text-danger" href=""><strong>FACEBOOK: <span class="text-light">SK_Auto</span></strong></span>
+                <div class="top-border-line primary-separator"></div>
+            </div>
+            <hr class="bg-danger" />
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+    </main>
+    <footer class="bg-secondary border rounded m-2 text-white text-center"`>
+        <div class="container-fluid rounded">
+            <div class="container-fluid">
+                <div class="top-border-line primary-separator"></div>
+                <p class="m-3"><strong>CopyRight© K Design Studios. All rights reserved</strong></p>
+            </div>
         </div>
     </footer>
 

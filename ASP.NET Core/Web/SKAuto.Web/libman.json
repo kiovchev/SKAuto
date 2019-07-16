@@ -1,5 +1,4 @@
 ﻿{
-  "version": "1.0",
   "defaultProvider": "unpkg",
   "libraries": [
     {
@@ -36,5 +35,6 @@
         "dist/jquery.validate.unobtrusive.min.js"
       ]
     }
-  ]
+  ],
+  "version": "1.0"
 }
