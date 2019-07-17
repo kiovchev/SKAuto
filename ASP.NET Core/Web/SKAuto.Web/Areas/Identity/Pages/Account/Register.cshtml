@@ -4,12 +4,12 @@
     ViewData["Title"] = "Register";
 }
 
-<h1 class="text-white">@ViewData["Title"]</h1>
+<h1 class="text-white text-center">Регистрация</h1>
 
-<div class="row text-white">
+<div class="row text-white justify-content-xl-center">
     <div class="col-md-4 m-2">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new account.</h4>
+            <h4 class="text-xl-center text-primary">Създайте нов профил</h4>
             <hr class="bg-white" />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
@@ -27,7 +27,10 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-secondary">Register</button>
+            <hr class="bg-white" />
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-secondary">Register</button>
+            </div>
         </form>
     </div>
 </div>
