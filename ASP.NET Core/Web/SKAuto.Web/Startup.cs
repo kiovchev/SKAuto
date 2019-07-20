@@ -1,5 +1,6 @@
 ﻿namespace SKAuto.Web
 {
+    using System.Linq;
     using System.Reflection;
 
     using Microsoft.AspNetCore.Builder;
@@ -116,6 +117,23 @@
                 }
 
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
+
+                if (!dbContext.Roles.Any())
+                {
+                    dbContext.Roles.Add(new ApplicationRole { Name = "Admin", NormalizedName = "ADMIN" });
+                    //dbContext.Roles.Add(new ApplicationRole { Name = "Employee", NormalizedName = "EMPLOYEE" });
+                    dbContext.Roles.Add(new ApplicationRole { Name = "User", NormalizedName = "USER" });
+                }
+
+                if (!dbContext.OrderStatuses.Any())
+                {
+                    dbContext.OrderStatuses.Add(new OrderStatus { Name = "Pending" });
+                    dbContext.OrderStatuses.Add(new OrderStatus { Name = "Shipped" });
+                    dbContext.OrderStatuses.Add(new OrderStatus { Name = "Delivered" });
+                    dbContext.OrderStatuses.Add(new OrderStatus { Name = "Acquired" });
+                }
+
+                dbContext.SaveChanges();
             }
 
             if (env.IsDevelopment())
