@@ -120,8 +120,6 @@
 
                 if (!dbContext.Roles.Any())
                 {
-                    dbContext.Roles.Add(new ApplicationRole { Name = "Admin", NormalizedName = "ADMIN" });
-                    //dbContext.Roles.Add(new ApplicationRole { Name = "Employee", NormalizedName = "EMPLOYEE" });
                     dbContext.Roles.Add(new ApplicationRole { Name = "User", NormalizedName = "USER" });
                 }
 

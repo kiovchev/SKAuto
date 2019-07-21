@@ -1,9 +1,8 @@
 ﻿namespace SKAuto.Web.Areas.Administration.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
     using SKAuto.Services.Data;
     using SKAuto.Web.Areas.Administration.ViewModels.Dashboard;
-
-    using Microsoft.AspNetCore.Mvc;
 
     public class DashboardController : AdministrationController
     {
