@@ -20,6 +20,7 @@
     using SKAuto.Data.Models;
     using SKAuto.Data.Repositories;
     using SKAuto.Data.Seeding;
+    using SKAuto.Services;
     using SKAuto.Services.Data;
     using SKAuto.Services.Mapping;
     using SKAuto.Services.Messaging;
@@ -99,6 +100,7 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISmsSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IBrandService, BrandService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
