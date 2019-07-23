@@ -16,9 +16,9 @@
 </head>
 <body class="bg-dark">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-secondary border rounded m-2">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light skl-bg-color border rounded m-2">
             <div class="container-fluid">
-                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">SKAuto</a>
+                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/Images/Company-logo.png" width="150" height="40"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -36,22 +36,22 @@
                 </div>
             </div>
         </nav>
+        <div class="container-fluid embed-responsive-item" align="right">
+            <span class="text-danger"><strong>ТЕЛЕФОН: <span class="text-light">---- --- ---</span></strong></span>
+            <span class="text-danger"><strong>|</strong></span>
+            <span class="class=nav-item text-danger" ><strong>SKYPE: <span class="text-light">SK_Auto</span></strong></span>
+            <span class="text-danger"><strong>|</strong></span>
+            <span class="text-danger"><strong>FACEBOOK: <span class="text-light">SK_Auto</span></strong></span>
+        </div>
     </header>
-    <main class="rounded m-2">
-        <div class="container-fluid">
-            <div class="container-fluid" align="right">
-                <span class="text-danger" href=""><strong>ТЕЛЕФОН: <span class="text-light">---- --- ---</span></strong></span>
-                <span class="text-danger"><strong>|</strong></span>
-                <span class="class=nav-item text-danger" href=""><strong>SKYPE: <span class="text-light">SK_Auto</span></strong></span>
-                <span class="text-danger"><strong>|</strong></span>
-                <span class="text-danger" href=""><strong>FACEBOOK: <span class="text-light">SK_Auto</span></strong></span>
-            </div>
+    <main class="rounded m-2 p-2 border">
+        <div class="container-fluid embed-responsive">
             <div class="container-fluid">
                 @RenderBody()
             </div>
         </div>
     </main>
-    <footer class="bg-secondary border rounded m-2 text-white text-center"`>
+    <footer class="skl-bg-color border rounded m-2 text-white text-center"`>
         <div class="container-fluid rounded">
             <div class="container-fluid">
                 <div class="top-border-line primary-separator"></div>

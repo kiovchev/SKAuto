@@ -222,6 +222,8 @@ namespace SKAuto.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ImageAddress");
+
                     b.Property<int?>("ModelId");
 
                     b.Property<string>("Name")
@@ -308,8 +310,6 @@ namespace SKAuto.Data.Migrations
 
                     b.Property<DateTime>("IssuedOn");
 
-                    b.Property<decimal>("OrderPrice");
-
                     b.Property<int>("OrderStatusId");
 
                     b.Property<int>("RecipientId");
@@ -329,7 +329,8 @@ namespace SKAuto.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -346,15 +347,16 @@ namespace SKAuto.Data.Migrations
 
                     b.Property<int>("CategoryId");
 
+                    b.Property<decimal>("InComePrice");
+
                     b.Property<int>("ManufactoryId");
 
                     b.Property<int>("ModelId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.Property<int?>("OrderId");
-
-                    b.Property<decimal>("Price");
 
                     b.Property<int>("Quantity");
 
@@ -379,15 +381,20 @@ namespace SKAuto.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address");
+                    b.Property<string>("Address")
+                        .IsRequired();
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
-                    b.Property<string>("Phone");
+                    b.Property<string>("Phone")
+                        .IsRequired();
 
-                    b.Property<string>("Town");
+                    b.Property<string>("Town")
+                        .IsRequired();
 
                     b.HasKey("Id");
 

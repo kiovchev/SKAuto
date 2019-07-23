@@ -1,134 +1,37 @@
-﻿@{
+﻿@model IList<string>;
+
+@{
     this.ViewData["Title"] = "Home Page";
 }
 
-    <div class="row">
-        <div class="col-2">
-            <div class="list-group bg-secondary rounded">
-                <ul>
+<div class="row">
+    <div class="col-2">
+        <div class="list-group skl-bg-color rounded border m-2 p-2">
+            <ul>
+                @foreach (var item in Model)
+                {
                     <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">ALFA ROMEO</a>
+                        <img src="~/Images/RedCarSteeringWheel3.png" height="20" width="20" />
+                        <a class="text-white" href="">@item</a>
                     </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">AUDI</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">BMW</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">CITROEN</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">DACIA</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">FIAT</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">FORD</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">HONDA</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">HYUNDAI</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">KIA</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">LANCIA</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">MAZDA</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">MERCEDES</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">MITSUBISHI</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">NISSAN</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">OPEL</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">PEUGEOT</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">RENAULT</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">SEAT</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">SKODA</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">SUBARU</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">SUZUKI</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">TOYOTA</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">VOLVO</a>
-                    </li>
-                    <li class="form-inline p-1">
-                        <img src="/CarSteeringLogo/RedCarSteeringWheel3.png" height="20" width="20" />
-                        <a class="text-white" href="">VW</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class=" col-10">
-            <div class="list-group bg-dark d-lg-inline-block offset-md-5">
-                <label>
-                    <a class="btn bg-secondary text-white border" href=""><strong>АВТОЧАСТИ</strong></a>
-                </label>
-                <label>
-                    <a class="btn bg-secondary text-white border" href=""><strong>ПОЛЕЗНО</strong></a>
-                </label>
-            </div>
-            <div>
-                &nbsp
-            </div>
-            <div class="align-content-lg-center">
-                <img src="/CarBackgroung/Car-Background.jpg" class="img-fluid rounded" alt="Responsive image" />
-            </div>
-            <div>
-                &nbsp
-            </div>
-            <div class="align-content-lg-start m-2">
-                <h3 class="text-white">TAKE CARE OF YOUR CAR</h3>
-            </div>
+                }
+            </ul>
         </div>
     </div>
+    <div class=" col-10">
+        <div class="list-group bg-dark d-lg-inline-block offset-md-5 embed-responsive p-2">
+            <label>
+                <a class="btn skl-bg-color text-white border" href=""><strong>АВТОЧАСТИ</strong></a>
+            </label>
+            <label>
+                <a class="btn skl-bg-color text-white border" href=""><strong>ПОЛЕЗНО</strong></a>
+            </label>
+        </div>
+        <div class="align-content-lg-center">
+            <img src="~/Images/Car-Background.jpg" class="img-fluid rounded border" alt="Responsive image" />
+        </div>
+        <div class="align-content-lg-start m-2 embed-responsive">
+            <h4 class="text-white">TAKE CARE OF YOUR CAR</h4>
+        </div>
+    </div>
+</div>
