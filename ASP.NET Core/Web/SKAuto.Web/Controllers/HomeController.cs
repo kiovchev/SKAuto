@@ -17,9 +17,9 @@
 
         public IActionResult Index()
         {
-            List<string> brandNmaes = this.brand.GetAllBrands().Select(b => b.Name).ToList();
+            List<string> brandNames = this.brand.GetAllBrands().Select(b => b.Name).ToList();
 
-            return this.View(brandNmaes);
+            return this.View(brandNames);
         }
 
         public IActionResult Privacy()

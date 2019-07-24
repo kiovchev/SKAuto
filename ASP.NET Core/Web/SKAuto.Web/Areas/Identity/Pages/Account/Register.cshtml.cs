@@ -9,9 +9,11 @@
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using SKAuto.Common;
     using SKAuto.Data.Models;
+    using SKAuto.Services.Data;
 
     [AllowAnonymous]
 #pragma warning disable SA1649 // File name should match first type name
@@ -22,17 +24,20 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
+        private readonly IUserService userService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUserService userService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
+            this.userService = userService;
         }
 
         [BindProperty]
@@ -42,6 +47,11 @@
 
         public void OnGet(string returnUrl = null)
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                this.Response.Redirect("/");
+            }
+
             this.ReturnUrl = returnUrl;
         }
 
@@ -50,7 +60,7 @@
             returnUrl = returnUrl ?? this.Url.Content("~/");
             if (this.ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email };
+                var user = new ApplicationUser { UserName = this.Input.Username, Email = this.Input.Email };
                 var result = await this.userManager.CreateAsync(user, this.Input.Password);
                 if (result.Succeeded)
                 {
@@ -67,6 +77,17 @@
                         this.Input.Email,
                         "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                    if (await this.userManager.Users.CountAsync() == 1)
+                    {
+                        await this.userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
+                        await this.userService.ChangeUserIsAuthorizeSatusByUserIdAsync(user.Id, "true");
+                    }
+                    else
+                    {
+                        await this.userManager.AddToRoleAsync(user, GlobalConstants.UserRoleName);
+                        await this.userService.ChangeUserIsAuthorizeSatusByUserIdAsync(user.Id, "false");
+                    }
 
                     await this.signInManager.SignInAsync(user, isPersistent: false);
                     return this.LocalRedirect(returnUrl);

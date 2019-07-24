@@ -17,6 +17,8 @@ namespace SKAuto.Data.Models
             this.Logins = new HashSet<IdentityUserLogin<string>>();
         }
 
+        public bool IsAuthorize { get; set; }
+
         // Audit info
         public DateTime CreatedOn { get; set; }
 

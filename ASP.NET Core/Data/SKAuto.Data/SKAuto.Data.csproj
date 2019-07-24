@@ -11,6 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190723151548_AddForeignKeyToModels.cs" />
+    <Compile Remove="Migrations\20190723151548_AddForeignKeyToModels.Designer.cs" />
+    <Compile Remove="Migrations\20190723153717_InitializeChanges.cs" />
+    <Compile Remove="Migrations\20190723153717_InitializeChanges.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
 

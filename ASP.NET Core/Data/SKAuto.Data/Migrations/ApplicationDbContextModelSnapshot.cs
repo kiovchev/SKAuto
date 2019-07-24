@@ -158,6 +158,8 @@ namespace SKAuto.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<bool>("IsAuthorize");
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<bool>("LockoutEnabled");

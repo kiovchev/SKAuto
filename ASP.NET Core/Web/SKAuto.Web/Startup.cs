@@ -101,6 +101,7 @@
             services.AddTransient<ISmsSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IBrandService, BrandService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,11 +120,6 @@
                 }
 
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
-
-                if (!dbContext.Roles.Any())
-                {
-                    dbContext.Roles.Add(new ApplicationRole { Name = "User", NormalizedName = "USER" });
-                }
 
                 if (!dbContext.OrderStatuses.Any())
                 {
