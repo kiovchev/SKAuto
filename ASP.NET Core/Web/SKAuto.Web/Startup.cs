@@ -101,6 +101,7 @@
             services.AddTransient<ISmsSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IBrandService, BrandService>();
+            services.AddTransient<IModelService, ModelService>();
             services.AddTransient<IUserService, UserService>();
         }
 
