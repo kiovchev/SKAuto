@@ -226,14 +226,10 @@ namespace SKAuto.Data.Migrations
 
                     b.Property<string>("ImageAddress");
 
-                    b.Property<int?>("ModelId");
-
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ModelId");
 
                     b.ToTable("Categories");
                 });
@@ -302,6 +298,19 @@ namespace SKAuto.Data.Migrations
                     b.HasIndex("BrandId");
 
                     b.ToTable("Models");
+                });
+
+            modelBuilder.Entity("SKAuto.Data.Models.ModelCategories", b =>
+                {
+                    b.Property<int>("CategoryId");
+
+                    b.Property<int>("ModelId");
+
+                    b.HasKey("CategoryId", "ModelId");
+
+                    b.HasIndex("ModelId");
+
+                    b.ToTable("ModelsCategories");
                 });
 
             modelBuilder.Entity("SKAuto.Data.Models.Order", b =>
@@ -512,13 +521,6 @@ namespace SKAuto.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("SKAuto.Data.Models.Category", b =>
-                {
-                    b.HasOne("SKAuto.Data.Models.Model")
-                        .WithMany("Categories")
-                        .HasForeignKey("ModelId");
-                });
-
             modelBuilder.Entity("SKAuto.Data.Models.Company", b =>
                 {
                     b.HasOne("SKAuto.Data.Models.Town", "Town")
@@ -537,6 +539,19 @@ namespace SKAuto.Data.Migrations
                     b.HasOne("SKAuto.Data.Models.Brand", "Brand")
                         .WithMany("Models")
                         .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("SKAuto.Data.Models.ModelCategories", b =>
+                {
+                    b.HasOne("SKAuto.Data.Models.Category", "Category")
+                        .WithMany("ModelCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SKAuto.Data.Models.Model", "Model")
+                        .WithMany("ModelCategories")
+                        .HasForeignKey("ModelId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
