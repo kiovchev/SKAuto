@@ -3,5 +3,28 @@
     this.ViewData["Title"] = "Admin dashboard";
 }
 
-<h1>@this.ViewData["Title"]</h1>
-Settings: @this.Model.SettingsCount
+<h1 style="color:white">Администраторски панел</h1>
+<span style="color:white">Settings: @this.Model.SettingsCount</span>
+
+<div class="row text-white justify-content-xl-center">
+    <div class="col-md-4">
+        <section>
+            <form>
+                <hr class="bg-white" />
+                <div class="form-group border rounded text-white text-center skl-bg-color">
+                    <a class="text-white" href="~/Brand/Create">Добави нов бранд</a>
+                </div>
+                <div class="form-group border rounded text-white text-center skl-bg-color">
+                    <a class="text-white" href="">Добави нов модел</a>
+                </div>
+                <div class="form-group border rounded text-white text-center skl-bg-color">
+                    <a class="text-white" href="">Добави нова категория</a>
+                </div>
+                <div class="form-group border rounded text-white text-center skl-bg-color">
+                    <a class="text-white" href="">Добави нова част</a>
+                </div>
+                <hr class="bg-white" />
+            </form>
+        </section>
+    </div>
+</div>
