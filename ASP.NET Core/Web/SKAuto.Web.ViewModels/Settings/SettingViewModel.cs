@@ -1,9 +1,8 @@
 ﻿namespace SKAuto.Web.ViewModels.Settings
 {
+    using AutoMapper;
     using SKAuto.Data.Models;
     using SKAuto.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {

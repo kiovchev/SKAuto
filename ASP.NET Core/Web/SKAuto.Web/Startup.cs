@@ -103,6 +103,7 @@
             services.AddTransient<IBrandService, BrandService>();
             services.AddTransient<IModelService, ModelService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ICategoryService, CategoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

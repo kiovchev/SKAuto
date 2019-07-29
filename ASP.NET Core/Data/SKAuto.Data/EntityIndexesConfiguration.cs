@@ -2,9 +2,8 @@
 {
     using System.Linq;
 
-    using SKAuto.Data.Common.Models;
-
     using Microsoft.EntityFrameworkCore;
+    using SKAuto.Data.Common.Models;
 
     internal static class EntityIndexesConfiguration
     {
