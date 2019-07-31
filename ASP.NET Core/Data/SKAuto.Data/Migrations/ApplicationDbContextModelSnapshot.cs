@@ -360,7 +360,7 @@ namespace SKAuto.Data.Migrations
 
                     b.Property<decimal>("InComePrice");
 
-                    b.Property<int>("ManufactoryId");
+                    b.Property<int?>("ManufactoryId");
 
                     b.Property<int>("ModelId");
 
@@ -582,8 +582,7 @@ namespace SKAuto.Data.Migrations
 
                     b.HasOne("SKAuto.Data.Models.Manufactory", "Manufactory")
                         .WithMany()
-                        .HasForeignKey("ManufactoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ManufactoryId");
 
                     b.HasOne("SKAuto.Data.Models.Model", "Model")
                         .WithMany()
