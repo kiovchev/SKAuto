@@ -1,0 +1,50 @@
+﻿@using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
+@model List<PartByCategoryAndModelViewModel>;
+
+@{
+    ViewData["Title"] = "All";
+}
+
+@{
+    int count = 0;
+}
+
+    <div class="table-responsive">
+        @if (Model.Count() == 0)
+        {
+            <h3 class="text-danger ">В момента няма налични части за този модел автомобил!!!</h3>
+        }
+        else
+        {
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th class="text-white skl-bg-color border" scope="col">#</th>
+                        <th class="text-white skl-bg-color border" scope="col">Имане на част</th>
+                        <th class="text-white skl-bg-color border" scope="col">Марка и модел</th>
+                        <th class="text-white skl-bg-color border" scope="col">Категория</th>
+                        <th class="text-white skl-bg-color border" scope="col">Производител</th>
+                        <th class="text-white skl-bg-color border" scope="col">Цена</th>
+                        <th class="text-white skl-bg-color border" scope="col">Поръчай част</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count(); i++)
+                    {
+                        ++count;
+                        <tr class="text-center">
+                            <td class="text-white skl-bg-color border" scope="col">@count</td>
+                            <td class="text-white skl-bg-color border" scope="col">@Model[i].PartName</td>
+                            <td class="text-white skl-bg-color border" scope="col">@Model[i].BrandAndModelName</td>
+                            <td class="text-white skl-bg-color border" scope="col">@Model[i].CategoryName</td>
+                            <td class="text-white skl-bg-color border" scope="col">@Model[i].ManufactoryName</td>
+                            <td class="text-white skl-bg-color border" scope="col">@Model[i].SellPrice лв.</td>
+                            <td class="text-white skl-bg-color border" scope="col"><btn class="bg-dark" type="Submit" src="">Поръчай</btn></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+
+

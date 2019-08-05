@@ -3,9 +3,8 @@
     using System;
     using System.Threading.Tasks;
 
-    using SKAuto.Data.Common;
-
     using Microsoft.EntityFrameworkCore;
+    using SKAuto.Data.Common;
 
     public class DbQueryRunner : IDbQueryRunner
     {

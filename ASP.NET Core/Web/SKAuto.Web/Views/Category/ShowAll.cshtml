@@ -1,0 +1,32 @@
+﻿@using SKAuto.Web.ViewModels.ViewModels.CategoryViewModels;
+@model List<CategoryWithModelViewModel>;
+
+@{
+    ViewData["Title"] = "ShowAll";
+}
+
+<h2 class="text-white text-center skl-bg-color rounded m-2 p-1">Налични категории за модела</h2>
+
+<table class="table-responsive">
+    @{
+        int i = 0;
+    }
+    @foreach (var product in @Model)
+    {
+        if (i % 5 == 0)
+        {
+            @:<tr>
+            }
+            @:<td class="text-center">
+                <a class="text-white skl-bg-color rounded" href="/Part/All?modelName=@Model[i].ModelName&categoryName=@Model[i].Name">
+                    <img src="@Model[i].ImageAdsress" height="175" width="220" />
+                    <label>@Model[i].Name</label>
+                </a>
+            @:</td>
+            if ((i + 1) % 5 == 0)
+            {
+            @:</tr>
+        }
+        ++i;
+    }
+</table>
