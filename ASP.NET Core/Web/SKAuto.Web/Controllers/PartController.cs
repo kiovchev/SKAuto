@@ -23,9 +23,9 @@
             this.categoryService = categoryService;
         }
 
-        public async Task<IActionResult> All(string modelName, string categoryName)
+        public async Task<IActionResult> All(PartParamsInputModel model)
         {
-            List<PartByCategoryAndModelViewModel> neededParts = await this.partService.GetPartsByModelAndCategoryAsync(modelName, categoryName);
+            List<PartByCategoryAndModelViewModel> neededParts = await this.partService.GetPartsByModelAndCategoryAsync(model.ModelName, model.CategoryName);
             neededParts = neededParts.OrderBy(x => x.PartName).ToList();
 
             return this.View(neededParts);

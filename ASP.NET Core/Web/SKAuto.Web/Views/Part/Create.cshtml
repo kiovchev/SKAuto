@@ -28,7 +28,7 @@
                 <div class="form-group">
                     <label>Избери категория</label>
                     <select class="form-control" id="categoryName" name="categoryName" type="text">
-                        <option selected disabled>-- Избери модел --</option>
+                        <option selected disabled>-- Избери категория --</option>
                         @for (int i = 0; i < Model.Categories.Count(); i++)
                         {
                             <option>@Model.Categories[i].Name.ToString()</option>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="form-group">
                     <label>Цена</label>
-                    <input type="number" min="0" step="0.01" class="form-control" id="price" name="price" />
+                    <input type="number" min="0.01" step="0.01" class="form-control" id="price" name="price" />
                 </div>
                 <div class="form-group">
                     <label>Производител</label>
