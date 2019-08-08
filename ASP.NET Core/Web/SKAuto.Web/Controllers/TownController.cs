@@ -15,6 +15,18 @@
             this.townService = townService;
         }
 
+        public IActionResult ShowAll(string categoryName)
+        {
+            var towns = this.townService.GetTownsByCategoryName(categoryName);
+
+            TownWithCategoryNameViewModel viewModel = new TownWithCategoryNameViewModel()
+            {
+                CategoryName = categoryName,
+                TownNames = towns,
+            };
+            return this.View(viewModel);
+        }
+
         public IActionResult All()
         {
             var neededTowns = this.townService.GetAllTowns();

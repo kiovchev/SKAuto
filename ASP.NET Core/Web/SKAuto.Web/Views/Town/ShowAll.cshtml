@@ -1,0 +1,27 @@
+﻿@using SKAuto.Web.ViewModels.ViewModels.TownViewModels;
+@model TownWithCategoryNameViewModel;
+
+@{
+    ViewData["Title"] = "ShowAll";
+}
+
+<h1 class="text-white">Избери град</h1>
+<span class="text-primary">Категория: @this.Model.CategoryName</span>
+
+<div class="row text-white justify-content-xl-center">
+    <div class="col-md-4">
+        <section>
+            <form>
+                <hr class="bg-white" />
+                @for (int i = 0; i < Model.TownNames.Count(); i++)
+                {
+                    <div class="form-group border rounded text-white text-center skl-bg-color">
+                        <a class="text-white" href="/Company/AllByTownAndCategory?townName=@Model.TownNames[i]&categoryName=@Model.CategoryName">@Model.TownNames[i]</a>
+                    </div>
+                }
+                <hr class="bg-white" />
+            </form>
+        </section>
+    </div>
+</div>
+

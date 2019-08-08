@@ -1,8 +1,9 @@
 ﻿namespace SKAuto.Services.Data
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.EntityFrameworkCore;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
 
@@ -56,6 +57,18 @@
         public IQueryable<Town> GetAllTowns()
         {
             var allTowns = this.towns.All();
+
+            return allTowns;
+        }
+
+        public IList<string> GetTownsByCategoryName(string name)
+        {
+            var allTowns = this.towns.All().Include(x => x.UseFullCategories)
+                                           .SelectMany(x => x.UseFullCategories
+                                           .Where(y => y.UseFullCategory.Name == name))
+                                           .Select(x => x.Town.Name)
+                                           .OrderBy(x => x)
+                                           .ToList();
 
             return allTowns;
         }
