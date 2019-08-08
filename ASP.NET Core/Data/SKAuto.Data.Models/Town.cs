@@ -1,6 +1,7 @@
 ﻿namespace SKAuto.Data.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     public class Town
     {
@@ -12,6 +13,7 @@
 
         public int Id { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
         public ICollection<TownUseFullCategory> UseFullCategories { get; set; }

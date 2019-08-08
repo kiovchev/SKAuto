@@ -1,0 +1,16 @@
+﻿@using SKAuto.Web.ViewModels.ViewModels.TownViewModels;
+@model AllTownsViewModel;
+
+@{
+    ViewData["Title"] = "All";
+}
+
+<h3 class="text-white">Градове от секция "Полезно"</h3>
+
+<ol>
+    @foreach (var item in Model.TownsNames.OrderBy(x => x))
+    {
+        <li class="text-white"><a class="text-white" href="">@item</a></li>
+    }
+</ol>
+
