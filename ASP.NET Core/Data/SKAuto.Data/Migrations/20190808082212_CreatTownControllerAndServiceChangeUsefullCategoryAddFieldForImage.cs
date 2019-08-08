@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace SKAuto.Data.Migrations
+﻿namespace SKAuto.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class CreatTownControllerAndServiceChangeUsefullCategoryAddFieldForImage : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

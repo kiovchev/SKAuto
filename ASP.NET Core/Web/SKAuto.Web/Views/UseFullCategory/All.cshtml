@@ -1,0 +1,35 @@
+﻿@using SKAuto.Web.ViewModels.ViewModels.UseFullCategoryViewModels;
+@model List<UseFullCategoryWithImageViewModel>;
+
+@{
+    ViewData["Title"] = "All";
+}
+
+<h2 class="text-white text-center skl-bg-color rounded m-2 p-1">Налични полезни категории</h2>
+@{
+    int i = 0;
+}
+
+@foreach (var product in @Model)
+{
+    if (i % 5 == 0)
+    {
+        @:<div class="form-inline justify-content-center">
+        }
+
+        @:<div class="rounded m-3 text-white skl-bg-color">
+            <a class="text-white" href="/">
+                <img src=@Model[i].ImageAdsress height="175" width="220" />
+                <label>@Model[i].Name</label>
+            </a>
+        @:</div>
+
+
+        if ((i + 1) % 5 == 0)
+        {
+        @:</div>
+    }
+
+    ++i;
+}
+

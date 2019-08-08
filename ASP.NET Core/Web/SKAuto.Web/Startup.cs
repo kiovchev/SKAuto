@@ -106,6 +106,7 @@
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IPartService, PartService>();
             services.AddTransient<ITownService, TownService>();
+            services.AddTransient<IUseFullCategoryService, UseFullCategoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

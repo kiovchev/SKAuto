@@ -1,5 +1,7 @@
 ﻿namespace SKAuto.Web.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Mvc;
     using SKAuto.Services.Data;
     using SKAuto.Web.ViewModels.ViewModels.TownViewModels;
@@ -32,7 +34,7 @@
         }
 
         [HttpPost]
-        public IActionResult Create(string name)
+        public async Task<IActionResult> Create(string name)
         {
             if (name == null)
             {
@@ -40,9 +42,17 @@
             }
             else
             {
-                this.townService.CreateTownByName(name);
+                bool townExists = this.townService.CheckIfExists(name);
+                if (townExists)
+                {
+                    return this.Redirect("/Town/Create");
+                }
+                else
+                {
+                    await this.townService.CreateTownByNameAsync(name);
 
-                return this.Redirect("/Town/All");
+                    return this.Redirect("/Town/All");
+                }
             }
         }
     }

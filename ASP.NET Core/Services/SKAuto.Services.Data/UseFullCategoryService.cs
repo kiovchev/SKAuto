@@ -1,0 +1,70 @@
+﻿namespace SKAuto.Services.Data
+{
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using SKAuto.Data.Common.Repositories;
+    using SKAuto.Data.Models;
+
+    public class UseFullCategoryService : IUseFullCategoryService
+    {
+        private readonly IRepository<UseFullCategory> useFullCategories;
+        private readonly IRepository<Town> towns;
+        private readonly IRepository<TownUseFullCategory> townUseFullCategories;
+
+        public UseFullCategoryService(
+            IRepository<UseFullCategory> useFullCategories,
+            IRepository<Town> towns,
+            IRepository<TownUseFullCategory> townUseFullCategories)
+        {
+            this.useFullCategories = useFullCategories;
+            this.towns = towns;
+            this.townUseFullCategories = townUseFullCategories;
+        }
+
+        public bool CheckIfExists(string name)
+        {
+            bool checkUseFullCategory = this.useFullCategories.All().Any(x => x.Name == name);
+
+            return checkUseFullCategory;
+        }
+
+        public async Task CreateUseFullCategoryByNameAsync(string name, string imageAddress)
+        {
+            var towns = this.towns.All();
+
+            if (imageAddress == null)
+            {
+                imageAddress = "/Images/No picture.jpg";
+            }
+
+            UseFullCategory useFullCategory = new UseFullCategory()
+            {
+                Name = name,
+                ImageAddress = imageAddress,
+            };
+
+            foreach (var town in towns)
+            {
+                TownUseFullCategory townUseFullCategory = new TownUseFullCategory()
+                {
+                    UseFullCategory = useFullCategory,
+                    Town = town,
+                };
+
+                await this.townUseFullCategories.AddAsync(townUseFullCategory);
+            }
+
+            await this.useFullCategories.AddAsync(useFullCategory);
+            await this.useFullCategories.SaveChangesAsync();
+        }
+
+        public IQueryable<UseFullCategory> GetAllUseFullCategories()
+        {
+            var allUseFullCategories = this.useFullCategories.All();
+
+            return allUseFullCategories;
+        }
+    }
+}

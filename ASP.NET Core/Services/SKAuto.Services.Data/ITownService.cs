@@ -9,6 +9,8 @@
     {
         IQueryable<Town> GetAllTowns();
 
-        Task CreateTownByName(string name);
+        Task CreateTownByNameAsync(string name);
+
+        bool CheckIfExists(string name);
     }
 }
