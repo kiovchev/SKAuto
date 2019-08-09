@@ -5,6 +5,11 @@
 
     public class Recipient
     {
+        public Recipient()
+        {
+            this.Orders = new List<Order>();
+        }
+
         [Key]
         public int Id { get; set; }
 

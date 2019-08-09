@@ -9,7 +9,7 @@
     {
         public Order()
         {
-            this.Parts = new List<Part>();
+            this.OrderParts = new List<OrderParts>();
         }
 
         [Key]
@@ -17,8 +17,6 @@
 
         [Required]
         public DateTime IssuedOn { get; set; } = DateTime.UtcNow;
-
-        public ICollection<Part> Parts { get; set; }
 
         [Required]
         public int RecipientId { get; set; }
@@ -30,6 +28,8 @@
 
         public OrderStatus OrderStatus { get; set; }
 
-        public decimal OrderPrice => this.Parts.Select(p => p.CustomerPrice).Sum();
+        public ICollection<OrderParts> OrderParts { get; set; }
+
+        public decimal OrderPrice => this.OrderParts.Select(p => p.Part.CustomerPrice).Sum();
     }
 }

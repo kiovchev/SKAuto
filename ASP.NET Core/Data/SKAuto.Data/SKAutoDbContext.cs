@@ -41,6 +41,8 @@
 
         public DbSet<OrderStatus> OrderStatuses { get; set; }
 
+        public DbSet<OrderParts> OrdersParts { get; set; }
+
         public DbSet<Part> Parts { get; set; }
 
         public DbSet<Recipient> Recipients { get; set; }
@@ -134,6 +136,19 @@
                 .HasOne(m => m.Model)
                 .WithMany(mc => mc.ModelCategories)
                 .HasForeignKey(m => m.ModelId);
+
+            builder.Entity<OrderParts>()
+                .HasKey(op => new { op.OrderId, op.PartId });
+
+            builder.Entity<OrderParts>()
+                .HasOne(o => o.Order)
+                .WithMany(op => op.OrderParts)
+                .HasForeignKey(o => o.OrderId);
+
+            builder.Entity<OrderParts>()
+                .HasOne(p => p.Part)
+                .WithMany(op => op.OrderParts)
+                .HasForeignKey(p => p.PartId);
 
             builder.Entity<TownUseFullCategory>()
                 .HasKey(tu => new { tu.TownId, tu.UseFullCategoryId });

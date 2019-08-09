@@ -1,9 +1,15 @@
 ﻿namespace SKAuto.Data.Models
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class Part
     {
+        public Part()
+        {
+            this.OrderParts = new List<OrderParts>();
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -36,5 +42,7 @@
 
         [Required]
         public int Quantity { get; set; }
+
+        public ICollection<OrderParts> OrderParts { get; set; }
     }
 }
