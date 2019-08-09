@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace SKAuto.Data.Migrations
+﻿namespace SKAuto.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddMappingTableOrdersParts : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,7 +23,7 @@ namespace SKAuto.Data.Migrations
                 columns: table => new
                 {
                     OrderId = table.Column<int>(nullable: false),
-                    PartId = table.Column<int>(nullable: false)
+                    PartId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
