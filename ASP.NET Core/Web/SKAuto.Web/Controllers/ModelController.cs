@@ -21,9 +21,9 @@
             this.model = model;
         }
 
-        public async Task<IActionResult> Kind(string name)
+        public async Task<IActionResult> Kind(ModelKindInputModel kindInputModel)
         {
-            var brandId = await this.brand.GetBrandIdByNameAsync(name);
+            var brandId = await this.brand.GetBrandIdByNameAsync(kindInputModel.Name);
             List<Model> models = this.model.GetAllModelsByBrandId(brandId).ToList();
 
             List<ModelsWithImage> modelsByBrand = new List<ModelsWithImage>();
@@ -32,7 +32,7 @@
             {
                 ModelsWithImage modelsWithImage = new ModelsWithImage
                 {
-                    Name = name + " " + item.Name + " " + item.StartYear + "-" + item.EndYear,
+                    Name = kindInputModel.Name + " " + item.Name + " " + item.StartYear + "-" + item.EndYear,
                     ModelImageAddress = item.ImageAddress,
                 };
 
@@ -42,9 +42,10 @@
             return this.View(modelsByBrand);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            List<string> brandNames = this.brand.GetAllBrands().Select(b => b.Name).ToList();
+            IList<string> brandNames = await this.brand.GetBrandNamesAsync();
+            brandNames = brandNames.ToList();
 
             return this.View(brandNames);
         }

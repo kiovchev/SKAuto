@@ -21,7 +21,7 @@
 
         public IActionResult Details()
         {
-            List<Brand> allBrands = this.brandService.GetAllBrands().ToList();
+            List<Brand> allBrands = this.brandService.GetAllBrands().OrderBy(x => x.Name).ToList();
             List<BrandsWithLogosViewModel> brandsWithLogos = new List<BrandsWithLogosViewModel>();
 
             foreach (var brand in allBrands)
@@ -44,34 +44,21 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string name, string imageAddress)
+        public async Task<IActionResult> Create(BrandCreateInputModel brandCreateInputModel)
         {
-            if (name == null)
+            if (brandCreateInputModel.Name == null)
             {
                 return this.View();
             }
 
-            // var brandName = string.Empty;
-            // var currentName = name.Split(" ", System.StringSplitOptions.RemoveEmptyEntries).ToArray();
-            // if (currentName.Length > 1)
-            // {
-            //    currentName = currentName.Select(x => x.ToUpper()).ToArray();
-            //    brandName = string.Join("-", currentName);
-            // }
-            var currentBrand = this.brandService.GetAllBrands().FirstOrDefault(x => x.Name == name);
+            var checkBrand = await this.brandService.IfBrandExistsAsync(brandCreateInputModel.Name);
 
-            if (currentBrand != null)
+            if (checkBrand)
             {
                 return this.View();
             }
             else
             {
-                BrandCreateInputModel brandCreateInputModel = new BrandCreateInputModel
-                {
-                    Name = name.ToUpper(),
-                    ImageAddress = imageAddress,
-                };
-
                 await this.brandService.CreateBrand(brandCreateInputModel);
 
                 return this.Redirect("/Brand/Details");

@@ -24,7 +24,7 @@
         public Recipient Recipient { get; set; }
 
         [Required]
-        public int OrderStatusId { get; set; } = 1;
+        public int OrderStatusId { get; set; }
 
         public OrderStatus OrderStatus { get; set; }
 

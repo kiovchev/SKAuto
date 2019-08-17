@@ -122,6 +122,7 @@
                     BrandAndModelName = modelName,
                     CategoryName = categoryName,
                     ManufactoryName = manufactoryName,
+                    Quantity = part.Quantity,
                     SellPrice = part.CustomerPrice.ToString(format: "0.00"),
                 };
 

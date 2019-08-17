@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
     using SKAuto.Services;
@@ -15,9 +16,10 @@
             this.brand = brand;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<string> brandNames = this.brand.GetAllBrands().Select(b => b.Name).ToList();
+            IList<string> brandNames = await this.brand.GetBrandNamesAsync();
+            brandNames = brandNames.ToList();
 
             return this.View(brandNames);
         }

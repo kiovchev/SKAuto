@@ -1,5 +1,6 @@
 ﻿namespace SKAuto.Services
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -8,6 +9,10 @@
 
     public interface IBrandService
     {
+        Task<IList<string>> GetBrandNamesAsync();
+
+        Task<bool> IfBrandExistsAsync(string name);
+
         IQueryable<Brand> GetAllBrands();
 
         Task<int> GetBrandIdByNameAsync(string name);

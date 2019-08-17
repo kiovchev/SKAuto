@@ -24,7 +24,8 @@
                         <th class="text-white skl-bg-color border" scope="col">Марка и модел</th>
                         <th class="text-white skl-bg-color border" scope="col">Категория</th>
                         <th class="text-white skl-bg-color border" scope="col">Производител</th>
-                        <th class="text-white skl-bg-color border" scope="col">Цена</th>
+                        <th class="text-white skl-bg-color border" scope="col">Заяви количество</th>
+                        <th class="text-white skl-bg-color border" scope="col">Единична цена</th>
                         <th class="text-white skl-bg-color border" scope="col">Поръчай част</th>
                     </tr>
                 </thead>
@@ -32,15 +33,38 @@
                     @for (int i = 0; i < Model.Count(); i++)
                     {
                         ++count;
-                        <tr class="text-center">
-                            <td class="text-white skl-bg-color border" scope="col">@count</td>
-                            <td class="text-white skl-bg-color border" scope="col">@Model[i].PartName</td>
-                            <td class="text-white skl-bg-color border" scope="col">@Model[i].BrandAndModelName</td>
-                            <td class="text-white skl-bg-color border" scope="col">@Model[i].CategoryName</td>
-                            <td class="text-white skl-bg-color border" scope="col">@Model[i].ManufactoryName</td>
-                            <td class="text-white skl-bg-color border" scope="col">@Model[i].SellPrice лв.</td>
+                    <tr class="text-center">
+                        <td class="text-white skl-bg-color border" scope="col">@count</td>
+                        <td class="text-white skl-bg-color border" scope="col">@Model[i].PartName</td>
+                        <td class="text-white skl-bg-color border" scope="col">@Model[i].BrandAndModelName</td>
+                        <td class="text-white skl-bg-color border" scope="col">@Model[i].CategoryName</td>
+                        <td class="text-white skl-bg-color border" scope="col">@Model[i].ManufactoryName</td>
+                        @if (Model[i].Quantity == 0)
+                        {
+                            <td class="text-white skl-bg-color border" scope="col">Няма наличност</td>
+                        }
+                        else
+                        {
+                            <td class="text-white skl-bg-color border">
+                                <select class="form-control" id="modelName" name="modelName" type="text">
+                                    <option selected disabled>-- Въведи брой --</option>
+                                    @for (int k = 1; k <= Model[i].Quantity; k++)
+                                    {
+                                        <option>@k</option>
+                                    }
+                                </select>
+                            </td>
+                        }
+                        <td class="text-white skl-bg-color border" scope="col">@Model[i].SellPrice лв.</td>
+                        @if (Model[i].Quantity == 0)
+                        {
+                            <td class="text-white skl-bg-color border" scope="col"></td>
+                        }
+                        else
+                        {
                             <td class="text-white skl-bg-color border" scope="col"><btn class="bg-dark" type="Submit" src="">Поръчай</btn></td>
-                        </tr>
+                        }
+                    </tr>
                     }
                 </tbody>
             </table>

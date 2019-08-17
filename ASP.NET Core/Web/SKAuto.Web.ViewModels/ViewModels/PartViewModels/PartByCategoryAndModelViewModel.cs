@@ -10,6 +10,8 @@
 
         public string ManufactoryName { get; set; }
 
+        public int Quantity { get; set; }
+
         public string SellPrice { get; set; }
     }
 }

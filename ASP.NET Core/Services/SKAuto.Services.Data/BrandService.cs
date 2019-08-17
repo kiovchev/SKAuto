@@ -1,5 +1,6 @@
 ﻿namespace SKAuto.Services
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -47,6 +48,20 @@
             int brandId = currentBrand.Id;
 
             return brandId;
+        }
+
+        public async Task<IList<string>> GetBrandNamesAsync()
+        {
+            List<string> brandNames = await this.brands.All().Select(b => b.Name).ToListAsync();
+
+            return brandNames;
+        }
+
+        public async Task<bool> IfBrandExistsAsync(string name)
+        {
+            bool checkBrand = await this.brands.All().AnyAsync(x => x.Name == name);
+
+            return checkBrand;
         }
     }
 }
