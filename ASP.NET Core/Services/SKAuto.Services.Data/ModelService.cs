@@ -31,7 +31,7 @@
             this.modelCategories = modelCategories;
         }
 
-        public async Task CreateModel(ModelInputViewModel modelInputViewModel, int brandId)
+        public async Task CreateModel(ModelInputViewModel modelInputViewModel)
         {
             string imageAddress = modelInputViewModel.ImageAddress;
             var brand = await this.brands.All().FirstOrDefaultAsync(x => x.Name == modelInputViewModel.BrandName);
@@ -46,7 +46,7 @@
                 Name = modelInputViewModel.Name,
                 StartYear = modelInputViewModel.StartYear,
                 EndYear = modelInputViewModel.EndYear,
-                BrandId = brandId,
+                BrandId = brand.Id,
                 Brand = brand,
                 ImageAddress = imageAddress,
             };
@@ -68,18 +68,34 @@
             await this.models.SaveChangesAsync();
         }
 
-        public IQueryable<Model> GetAllModels(int id)
+        public async Task<IList<ModelsWithImage>> GetAllModelsAsync(ModelKindInputModel kindInputModel)
         {
-            var allModels = this.models.All();
+            var brandId = await this.brandService.GetBrandIdByNameAsync(kindInputModel.Name);
+            List<Model> allModels = this.models.All().Where(x => x.BrandId == brandId).ToList();
 
-            return allModels;
+            List<ModelsWithImage> modelsByBrand = new List<ModelsWithImage>();
+
+            foreach (var item in allModels)
+            {
+                ModelsWithImage modelsWithImage = new ModelsWithImage
+                {
+                    Name = kindInputModel.Name + " " + item.Name + " " + item.StartYear + "-" + item.EndYear,
+                    ModelImageAddress = item.ImageAddress,
+                };
+
+                modelsByBrand.Add(modelsWithImage);
+            }
+
+            return modelsByBrand;
         }
 
-        public IQueryable<Model> GetAllModelsByBrandId(int id)
+        public async Task<bool> IfModelExists(string brandName, string modelName, int startYear, int endYear)
         {
-            var allModels = this.models.All().Where(x => x.BrandId == id);
+            int brandId = await this.brandService.GetBrandIdByNameAsync(brandName);
+            var allModels = this.models.All().Where(x => x.BrandId == brandId);
+            bool existModel = allModels.Any(x => x.Name == modelName && x.StartYear == startYear && x.EndYear == endYear);
 
-            return allModels;
+            return existModel;
         }
     }
 }

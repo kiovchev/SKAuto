@@ -5,7 +5,6 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
-    using SKAuto.Data.Models;
     using SKAuto.Services;
     using SKAuto.Web.ViewModels.ViewModels;
     using SKAuto.Web.ViewModels.ViewModels.BrandViewModels;
@@ -21,41 +20,36 @@
 
         public IActionResult Details()
         {
-            List<Brand> allBrands = this.brandService.GetAllBrands().OrderBy(x => x.Name).ToList();
-            List<BrandsWithLogosViewModel> brandsWithLogos = new List<BrandsWithLogosViewModel>();
-
-            foreach (var brand in allBrands)
-            {
-                BrandsWithLogosViewModel viewModel = new BrandsWithLogosViewModel
-                {
-                    BrandName = brand.Name,
-                    ImageAddress = brand.ImageAddress,
-                };
-
-                brandsWithLogos.Add(viewModel);
-            }
+            List<BrandsWithLogosViewModel> brandsWithLogos = this.brandService.GetBrandsWithLogos().ToList();
 
             return this.View(brandsWithLogos);
         }
 
         public IActionResult Create()
         {
-            return this.View();
+            if (this.User.IsInRole("Administrator"))
+            {
+                return this.View();
+            }
+            else
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(BrandCreateInputModel brandCreateInputModel)
         {
-            if (brandCreateInputModel.Name == null)
+            if (!this.ModelState.IsValid)
             {
-                return this.View();
+                return this.Redirect("/Brand/Create");
             }
 
             var checkBrand = await this.brandService.IfBrandExistsAsync(brandCreateInputModel.Name);
 
             if (checkBrand)
             {
-                return this.View();
+                return this.Redirect("/Brand/Create");
             }
             else
             {

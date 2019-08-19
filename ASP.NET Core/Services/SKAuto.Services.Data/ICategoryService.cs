@@ -1,16 +1,18 @@
 ﻿namespace SKAuto.Services.Data
 {
-    using System.Linq;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using SKAuto.Data.Models;
+    using SKAuto.Web.ViewModels.ViewModels.CategoryViewModels;
 
     public interface ICategoryService
     {
-        IQueryable<Category> GetAllCategories();
+        IList<CategoryWithImageViewModel> GetAllCategoriesForViewModel();
 
-        IQueryable<Category> GetCategoriesByNameAndYears(string modelName);
+        IList<CategoryWithModelViewModel> GetCategoriesByNameAndYears(string modelName);
 
         Task CreateCategory(string name, string imageAddress);
+
+        bool IfCategoryExists(string name);
     }
 }

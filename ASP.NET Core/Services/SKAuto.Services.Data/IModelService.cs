@@ -1,5 +1,6 @@
 ﻿namespace SKAuto.Services.Data
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -8,10 +9,10 @@
 
     public interface IModelService
     {
-        IQueryable<Model> GetAllModelsByBrandId(int id);
+        Task<IList<ModelsWithImage>> GetAllModelsAsync(ModelKindInputModel kindInputModel);
 
-        IQueryable<Model> GetAllModels(int id);
+        Task CreateModel(ModelInputViewModel modelInputViewModel);
 
-        Task CreateModel(ModelInputViewModel modelInputViewModel, int brandId);
+        Task<bool> IfModelExists(string brandName, string modelName, int startYear, int endYear);
     }
 }

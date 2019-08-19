@@ -5,9 +5,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Microsoft.EntityFrameworkCore;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
+    using SKAuto.Web.ViewModels.ViewModels.CategoryViewModels;
 
     public class CategoryService : ICategoryService
     {
@@ -49,24 +49,32 @@
                 };
 
                 await this.modelCategories.AddAsync(modelCategory);
-
-                // await this.modelCategories.SaveChangesAsync();
             }
 
             await this.categories.AddAsync(category);
             await this.categories.SaveChangesAsync();
-
-            // List<int> modelsID = this.models.All().Select(x => x.Id).ToList();
         }
 
-        public IQueryable<Category> GetAllCategories()
+        public IList<CategoryWithImageViewModel> GetAllCategoriesForViewModel()
         {
-            var allCategories = this.categories.All().Include(x => x.ModelCategories);
+            var allCategories = this.categories.All().ToList();
+            List<CategoryWithImageViewModel> categoryWithImages = new List<CategoryWithImageViewModel>();
 
-            return allCategories;
+            foreach (var item in allCategories)
+            {
+                CategoryWithImageViewModel viewModel = new CategoryWithImageViewModel
+                {
+                    Name = item.Name,
+                    ImageAdsress = item.ImageAddress,
+                };
+
+                categoryWithImages.Add(viewModel);
+            }
+
+            return categoryWithImages;
         }
 
-        public IQueryable<Category> GetCategoriesByNameAndYears(string modelName)
+        public IList<CategoryWithModelViewModel> GetCategoriesByNameAndYears(string modelName)
         {
             string[] nameAsArr = modelName.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
             string name = string.Join(" ", nameAsArr.Skip(1).Take(nameAsArr.Count() - 2));
@@ -86,7 +94,32 @@
                                                                                         y.Model.StartYear == startYear &&
                                                                                         y.Model.EndYear == endYear));
 
-            return allCategories;
+            IList<CategoryWithModelViewModel> neededCategory = new List<CategoryWithModelViewModel>();
+
+            foreach (var item in allCategories)
+            {
+                string catName = item.Name;
+                string catImage = item.ImageAddress;
+
+                CategoryWithModelViewModel category = new CategoryWithModelViewModel
+                {
+                    Name = catName,
+                    ImageAdsress = catImage,
+                    ModelName = modelName,
+                };
+
+                neededCategory.Add(category);
+            }
+
+            return neededCategory;
+        }
+
+        public bool IfCategoryExists(string name)
+        {
+            var allCategories = this.categories.All().ToList();
+            bool existCategogy = allCategories.Any(x => x.Name == name);
+
+            return existCategogy;
         }
     }
 }

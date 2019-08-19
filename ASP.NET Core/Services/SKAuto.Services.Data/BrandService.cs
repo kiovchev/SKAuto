@@ -7,6 +7,7 @@
     using Microsoft.EntityFrameworkCore;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
+    using SKAuto.Web.ViewModels.ViewModels;
     using SKAuto.Web.ViewModels.ViewModels.BrandViewModels;
 
     public class BrandService : IBrandService
@@ -35,13 +36,6 @@
             await this.brands.SaveChangesAsync();
         }
 
-        public IQueryable<Brand> GetAllBrands()
-        {
-            var allBrands = this.brands.All().Include(x => x.Models);
-
-            return allBrands;
-        }
-
         public async Task<int> GetBrandIdByNameAsync(string name)
         {
             var currentBrand = await this.brands.All().FirstOrDefaultAsync(x => x.Name == name);
@@ -55,6 +49,25 @@
             List<string> brandNames = await this.brands.All().Select(b => b.Name).ToListAsync();
 
             return brandNames;
+        }
+
+        public IList<BrandsWithLogosViewModel> GetBrandsWithLogos()
+        {
+            List<Brand> allBrands = this.brands.All().OrderBy(x => x.Name).ToList();
+            List<BrandsWithLogosViewModel> brandsWithLogos = new List<BrandsWithLogosViewModel>();
+
+            foreach (var brand in allBrands)
+            {
+                BrandsWithLogosViewModel viewModel = new BrandsWithLogosViewModel
+                {
+                    BrandName = brand.Name,
+                    ImageAddress = brand.ImageAddress,
+                };
+
+                brandsWithLogos.Add(viewModel);
+            }
+
+            return brandsWithLogos;
         }
 
         public async Task<bool> IfBrandExistsAsync(string name)

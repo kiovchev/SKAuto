@@ -86,6 +86,32 @@
             }
         }
 
+        public PartCreateViewModel GetPartCreateParams()
+        {
+            List<Brand> brands = this.brands.All().Include(x => x.Models).ToList();
+            List<string> categories = this.categories.All().Select(x => x.Name).ToList();
+
+            List<string> brandsWithModels = new List<string>();
+
+            foreach (var brand in brands)
+            {
+                foreach (var model in brand.Models)
+                {
+                    string neededInfo = brand.Name + " " + model.Name + " " + model.StartYear + "-" + model.EndYear;
+
+                    brandsWithModels.Add(neededInfo);
+                }
+            }
+
+            PartCreateViewModel partCreate = new PartCreateViewModel
+            {
+                BrandWithModels = brandsWithModels,
+                Categories = categories,
+            };
+
+            return partCreate;
+        }
+
         public async Task<List<PartByCategoryAndModelViewModel>> GetPartsByModelAndCategoryAsync(string modelName, string categoryName)
         {
             List<string> allCarParams = this.TakeParmsFromModelName(modelName);

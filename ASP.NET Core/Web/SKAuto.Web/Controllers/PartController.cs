@@ -5,22 +5,16 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
-    using SKAuto.Data.Models;
-    using SKAuto.Services;
     using SKAuto.Services.Data;
     using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
 
     public class PartController : BaseController
     {
         private readonly IPartService partService;
-        private readonly IBrandService brandService;
-        private readonly ICategoryService categoryService;
 
-        public PartController(IPartService partService, IBrandService brandService, ICategoryService categoryService)
+        public PartController(IPartService partService)
         {
             this.partService = partService;
-            this.brandService = brandService;
-            this.categoryService = categoryService;
         }
 
         public async Task<IActionResult> All(PartParamsInputModel model)
@@ -33,33 +27,26 @@
 
         public IActionResult Create()
         {
-            List<Brand> brands = this.brandService.GetAllBrands().ToList();
-            List<Category> categories = this.categoryService.GetAllCategories().ToList();
-
-            List<string> brandsWithModels = new List<string>();
-
-            foreach (var brand in brands)
+            if (this.User.IsInRole("Administrator"))
             {
-                foreach (var model in brand.Models)
-                {
-                    string neededInfo = brand.Name + " " + model.Name + " " + model.StartYear + "-" + model.EndYear;
+                PartCreateViewModel partCreate = this.partService.GetPartCreateParams();
 
-                    brandsWithModels.Add(neededInfo);
-                }
+                return this.View(partCreate);
             }
-
-            PartCreateViewModel partCreate = new PartCreateViewModel
+            else
             {
-                BrandWithModels = brandsWithModels,
-                Categories = categories,
-            };
-
-            return this.View(partCreate);
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(PartCreateInputModel model)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.Redirect("/Part/Create");
+            }
+
             await this.partService.CreatePartAsync(model);
 
             return this.RedirectToAction("All", "Part", new { modelName = model.ModelName, categoryName = model.CategoryName });

@@ -19,7 +19,7 @@
         public async Task<IActionResult> Index()
         {
             IList<string> brandNames = await this.brand.GetBrandNamesAsync();
-            brandNames = brandNames.ToList();
+            brandNames = brandNames.OrderBy(x => x).ToList();
 
             return this.View(brandNames);
         }

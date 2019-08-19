@@ -18,45 +18,40 @@
 
         public IActionResult All()
         {
-            var allUseFullCategories = this.useFullCategoryService.GetAllUseFullCategories();
-            List<UseFullCategoryWithImageViewModel> useFullCategoryWithImages = new List<UseFullCategoryWithImageViewModel>();
-
-            foreach (var item in allUseFullCategories)
-            {
-                UseFullCategoryWithImageViewModel viewModel = new UseFullCategoryWithImageViewModel
-                {
-                    Name = item.Name,
-                    ImageAdsress = item.ImageAddress,
-                };
-
-                useFullCategoryWithImages.Add(viewModel);
-            }
+            List<UseFullCategoryWithImageViewModel> useFullCategoryWithImages = this.useFullCategoryService.GetAllUseFullCategoriesWithParams();
 
             return this.View(useFullCategoryWithImages);
         }
 
         public IActionResult Create()
         {
-            return this.View();
+            if (this.User.IsInRole("Administrator"))
+            {
+                return this.View();
+            }
+            else
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string name, string imageAddress)
+        public async Task<IActionResult> Create(UseFullCategoryWithImageViewModel model)
         {
-            if (name == null)
+            if (!this.ModelState.IsValid)
             {
                 return this.Redirect("/UseFullCategory/Create");
             }
             else
             {
-                bool useFullCategoryExists = this.useFullCategoryService.CheckIfExists(name);
+                bool useFullCategoryExists = this.useFullCategoryService.CheckIfExists(model.Name);
                 if (useFullCategoryExists)
                 {
                     return this.Redirect("/UseFullCategory/Create");
                 }
                 else
                 {
-                    await this.useFullCategoryService.CreateUseFullCategoryByNameAsync(name, imageAddress);
+                    await this.useFullCategoryService.CreateUseFullCategoryByNameAsync(model.Name, model.ImageAdsress);
 
                     return this.Redirect("/UseFullCategory/All");
                 }

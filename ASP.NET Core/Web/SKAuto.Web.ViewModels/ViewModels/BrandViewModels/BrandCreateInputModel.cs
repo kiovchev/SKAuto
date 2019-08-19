@@ -7,7 +7,6 @@
         [Required]
         public string Name { get; set; }
 
-        [Required]
         public string ImageAddress { get; set; }
     }
 }

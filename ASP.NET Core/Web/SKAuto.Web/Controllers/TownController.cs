@@ -4,6 +4,7 @@
 
     using Microsoft.AspNetCore.Mvc;
     using SKAuto.Services.Data;
+    using SKAuto.Web.ViewModels.ViewModels.CategoryViewModels;
     using SKAuto.Web.ViewModels.ViewModels.TownViewModels;
 
     public class TownController : BaseController
@@ -15,53 +16,49 @@
             this.townService = townService;
         }
 
-        public IActionResult ShowAll(string categoryName)
+        public IActionResult ShowAll(CategoryNameViewModel model)
         {
-            var towns = this.townService.GetTownsByCategoryName(categoryName);
+            var viewModel = this.townService.GetTownsByCategoryName(model.CategoryName);
 
-            TownWithCategoryNameViewModel viewModel = new TownWithCategoryNameViewModel()
-            {
-                CategoryName = categoryName,
-                TownNames = towns,
-            };
             return this.View(viewModel);
         }
 
         public IActionResult All()
         {
-            var neededTowns = this.townService.GetAllTowns();
-            AllTownsViewModel allTowns = new AllTownsViewModel();
-
-            foreach (var town in neededTowns)
-            {
-                allTowns.TownsNames.Add(town.Name);
-            }
+            AllTownsViewModel allTowns = this.townService.GetTownNames();
 
             return this.View(allTowns);
         }
 
         public IActionResult Create()
         {
-            return this.View();
+            if (this.User.IsInRole("Administrator"))
+            {
+                return this.View();
+            }
+            else
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string name)
+        public async Task<IActionResult> Create(TownInputViewModel model)
         {
-            if (name == null)
+            if (!this.ModelState.IsValid)
             {
                 return this.Redirect("/Town/Create");
             }
             else
             {
-                bool townExists = this.townService.CheckIfExists(name);
+                bool townExists = this.townService.CheckIfExists(model.Name);
                 if (townExists)
                 {
                     return this.Redirect("/Town/Create");
                 }
                 else
                 {
-                    await this.townService.CreateTownByNameAsync(name);
+                    await this.townService.CreateTownByNameAsync(model.Name);
 
                     return this.Redirect("/Town/All");
                 }

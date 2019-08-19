@@ -1,12 +1,12 @@
 ﻿namespace SKAuto.Services.Data
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
+    using SKAuto.Web.ViewModels.ViewModels.TownViewModels;
 
     public class TownService : ITownService
     {
@@ -62,7 +62,21 @@
             return allTowns;
         }
 
-        public IList<string> GetTownsByCategoryName(string name)
+        public AllTownsViewModel GetTownNames()
+        {
+            var allTowns = this.towns.All();
+
+            AllTownsViewModel all = new AllTownsViewModel();
+
+            foreach (var town in allTowns)
+            {
+                all.TownsNames.Add(town.Name);
+            }
+
+            return all;
+        }
+
+        public TownWithCategoryNameViewModel GetTownsByCategoryName(string name)
         {
             var allTowns = this.towns.All().Include(x => x.UseFullCategories)
                                            .SelectMany(x => x.UseFullCategories
@@ -71,7 +85,13 @@
                                            .OrderBy(x => x)
                                            .ToList();
 
-            return allTowns;
+            TownWithCategoryNameViewModel viewModel = new TownWithCategoryNameViewModel()
+            {
+                CategoryName = name,
+                TownNames = allTowns,
+            };
+
+            return viewModel;
         }
     }
 }

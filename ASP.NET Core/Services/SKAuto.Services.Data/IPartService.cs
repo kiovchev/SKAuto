@@ -10,5 +10,7 @@
         Task CreatePartAsync(PartCreateInputModel partModel);
 
         Task<List<PartByCategoryAndModelViewModel>> GetPartsByModelAndCategoryAsync(string modelName, string categoryName);
+
+        PartCreateViewModel GetPartCreateParams();
     }
 }

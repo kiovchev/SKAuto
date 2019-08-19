@@ -1,19 +1,18 @@
 ﻿namespace SKAuto.Services
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
-    using SKAuto.Data.Models;
+    using SKAuto.Web.ViewModels.ViewModels;
     using SKAuto.Web.ViewModels.ViewModels.BrandViewModels;
 
     public interface IBrandService
     {
         Task<IList<string>> GetBrandNamesAsync();
 
-        Task<bool> IfBrandExistsAsync(string name);
+        IList<BrandsWithLogosViewModel> GetBrandsWithLogos();
 
-        IQueryable<Brand> GetAllBrands();
+        Task<bool> IfBrandExistsAsync(string name);
 
         Task<int> GetBrandIdByNameAsync(string name);
 

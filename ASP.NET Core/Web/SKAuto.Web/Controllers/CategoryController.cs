@@ -19,48 +19,40 @@
 
         public IActionResult All()
         {
-            var allCategories = this.categoryService.GetAllCategories();
-            List<CategoryWithImageViewModel> categoryWithImages = new List<CategoryWithImageViewModel>();
-
-            foreach (var item in allCategories)
-            {
-                CategoryWithImageViewModel viewModel = new CategoryWithImageViewModel
-                {
-                    Name = item.Name,
-                    ImageAdsress = item.ImageAddress,
-                };
-
-                categoryWithImages.Add(viewModel);
-            }
+            List<CategoryWithImageViewModel> categoryWithImages = this.categoryService.GetAllCategoriesForViewModel().ToList();
 
             return this.View(categoryWithImages);
         }
 
-        public IActionResult Types(string name)
-        {
-            var allCategories = this.categoryService.GetAllCategories().Where(x => x.ModelCategories.Any(y => y.Model.Name == name)).ToList();
-
-            return null;
-        }
-
         public IActionResult Create()
         {
-            return this.View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(string name, string imageAddress)
-        {
-            var allCategories = this.categoryService.GetAllCategories();
-            bool existCategogy = allCategories.Any(x => x.Name == name);
-
-            if (existCategogy)
+            if (this.User.IsInRole("Administrator"))
             {
                 return this.View();
             }
             else
             {
-                await this.categoryService.CreateCategory(name, imageAddress);
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CategoryWithImageViewModel categoryModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.Redirect("/Category/Create");
+            }
+
+            bool existCategogy = this.categoryService.IfCategoryExists(categoryModel.Name);
+
+            if (existCategogy)
+            {
+                return this.Redirect("/Category/Create");
+            }
+            else
+            {
+                await this.categoryService.CreateCategory(categoryModel.Name, categoryModel.ImageAdsress);
 
                 return this.Redirect("~/Category/All");
             }
@@ -68,26 +60,9 @@
 
         public IActionResult ShowAll(string modelName)
         {
-            var categories = this.categoryService.GetCategoriesByNameAndYears(modelName);
+            var categories = this.categoryService.GetCategoriesByNameAndYears(modelName).ToList();
 
-            List<CategoryWithModelViewModel> neededCategory = new List<CategoryWithModelViewModel>();
-
-            foreach (var item in categories)
-            {
-                string catName = item.Name;
-                string catImage = item.ImageAddress;
-
-                CategoryWithModelViewModel category = new CategoryWithModelViewModel
-                {
-                    Name = catName,
-                    ImageAdsress = catImage,
-                    ModelName = modelName,
-                };
-
-                neededCategory.Add(category);
-            }
-
-            return this.View(neededCategory);
+            return this.View(categories);
         }
     }
 }

@@ -9,11 +9,11 @@
         public PartCreateViewModel()
         {
             this.BrandWithModels = new List<string>();
-            this.Categories = new List<Category>();
+            this.Categories = new List<string>();
         }
 
         public List<string> BrandWithModels { get; set; }
 
-        public List<Category> Categories { get; set; }
+        public List<string> Categories { get; set; }
     }
 }

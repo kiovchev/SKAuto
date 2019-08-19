@@ -1,11 +1,12 @@
 ﻿namespace SKAuto.Services.Data
 {
-    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
+    using SKAuto.Web.ViewModels.ViewModels.UseFullCategoryViewModels;
 
     public class UseFullCategoryService : IUseFullCategoryService
     {
@@ -65,6 +66,25 @@
             var allUseFullCategories = this.useFullCategories.All();
 
             return allUseFullCategories;
+        }
+
+        public List<UseFullCategoryWithImageViewModel> GetAllUseFullCategoriesWithParams()
+        {
+            var allUseFullCategories = this.useFullCategories.All();
+            List<UseFullCategoryWithImageViewModel> useFullCategoryWithImages = new List<UseFullCategoryWithImageViewModel>();
+
+            foreach (var item in allUseFullCategories)
+            {
+                UseFullCategoryWithImageViewModel viewModel = new UseFullCategoryWithImageViewModel
+                {
+                    Name = item.Name,
+                    ImageAdsress = item.ImageAddress,
+                };
+
+                useFullCategoryWithImages.Add(viewModel);
+            }
+
+            return useFullCategoryWithImages;
         }
     }
 }
