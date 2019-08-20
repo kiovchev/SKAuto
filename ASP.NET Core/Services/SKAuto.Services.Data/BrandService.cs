@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using SKAuto.Common;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
     using SKAuto.Web.ViewModels.ViewModels;
@@ -23,7 +24,7 @@
         {
             if (brandCreateInputModel.ImageAddress == null)
             {
-                brandCreateInputModel.ImageAddress = "/Images/No picture.jpg";
+                brandCreateInputModel.ImageAddress = GlobalConstants.ImageAddress;
             }
 
             Brand brand = new Brand
@@ -72,7 +73,7 @@
 
         public async Task<bool> IfBrandExistsAsync(string name)
         {
-            bool checkBrand = await this.brands.All().AnyAsync(x => x.Name == name);
+            bool checkBrand = await this.brands.All().AnyAsync(x => x.Name.ToUpper() == name.ToUpper());
 
             return checkBrand;
         }

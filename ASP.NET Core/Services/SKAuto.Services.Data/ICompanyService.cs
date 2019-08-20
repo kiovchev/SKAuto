@@ -14,5 +14,7 @@
         IList<CompanyInputViewModel> GetCompaniesByTownAndCategory(string townName, string categoryName);
 
         CompanyCreateViewModel GetCompanyCreateParams();
+
+        bool IfCompanyExists(string name, string town, string category);
     }
 }

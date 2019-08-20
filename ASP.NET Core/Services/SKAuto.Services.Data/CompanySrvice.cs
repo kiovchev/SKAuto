@@ -115,5 +115,13 @@
 
             return viewModel;
         }
+
+        public bool IfCompanyExists(string name, string town, string category)
+        {
+            bool checkCompany = this.conpanies.All().Any(x => x.Name.ToUpper() == name.ToUpper()
+            && x.Town.Name.ToUpper() == town.ToUpper() && x.UseFullCategory.Name.ToUpper() == category.ToUpper());
+
+            return checkCompany;
+        }
     }
 }

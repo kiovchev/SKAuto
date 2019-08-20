@@ -26,7 +26,7 @@
 
         public bool CheckIfExists(string name)
         {
-            bool checkTown = this.towns.All().Any(x => x.Name == name);
+            bool checkTown = this.towns.All().Any(x => x.Name.ToUpper() == name.ToUpper());
 
             return checkTown;
         }

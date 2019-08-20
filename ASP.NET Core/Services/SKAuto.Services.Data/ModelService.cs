@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using SKAuto.Common;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
     using SKAuto.Web.ViewModels.ViewModels.ModelViewModels;
@@ -38,7 +39,7 @@
 
             if (imageAddress == null)
             {
-                imageAddress = "/Images/No picture.jpg";
+                imageAddress = GlobalConstants.ImageAddress;
             }
 
             Model model = new Model
@@ -93,7 +94,7 @@
         {
             int brandId = await this.brandService.GetBrandIdByNameAsync(brandName);
             var allModels = this.models.All().Where(x => x.BrandId == brandId);
-            bool existModel = allModels.Any(x => x.Name == modelName && x.StartYear == startYear && x.EndYear == endYear);
+            bool existModel = allModels.Any(x => x.Name.ToUpper() == modelName.ToUpper() && x.StartYear == startYear && x.EndYear == endYear);
 
             return existModel;
         }

@@ -46,9 +46,21 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CompanyInputViewModel company)
+        public async Task<IActionResult> Create(CompanyInputViewModel companyModel)
         {
-            await this.company.CreateCompanyAsync(company);
+            if (!this.ModelState.IsValid)
+            {
+                return this.Redirect("/Company/Create");
+            }
+
+            bool checkIfCompanyExists = this.company.IfCompanyExists(companyModel.Name, companyModel.TownName, companyModel.CategoryName);
+
+            if (checkIfCompanyExists)
+            {
+                return this.Redirect("/Company/Create");
+            }
+
+            await this.company.CreateCompanyAsync(companyModel);
             return this.Redirect("/Company/All");
         }
     }

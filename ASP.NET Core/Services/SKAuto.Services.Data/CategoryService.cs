@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using SKAuto.Common;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
     using SKAuto.Web.ViewModels.ViewModels.CategoryViewModels;
@@ -29,7 +30,7 @@
         {
             if (imageAddress == null)
             {
-                imageAddress = "/Images/No picture.jpg";
+                imageAddress = GlobalConstants.ImageAddress;
             }
 
             Category category = new Category
@@ -117,7 +118,7 @@
         public bool IfCategoryExists(string name)
         {
             var allCategories = this.categories.All().ToList();
-            bool existCategogy = allCategories.Any(x => x.Name == name);
+            bool existCategogy = allCategories.Any(x => x.Name.ToUpper() == name.ToUpper());
 
             return existCategogy;
         }

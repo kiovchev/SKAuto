@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using SKAuto.Common;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
     using SKAuto.Web.ViewModels.ViewModels.UseFullCategoryViewModels;
@@ -26,7 +27,7 @@
 
         public bool CheckIfExists(string name)
         {
-            bool checkUseFullCategory = this.useFullCategories.All().Any(x => x.Name == name);
+            bool checkUseFullCategory = this.useFullCategories.All().Any(x => x.Name.ToUpper() == name.ToUpper());
 
             return checkUseFullCategory;
         }
@@ -37,7 +38,7 @@
 
             if (imageAddress == null)
             {
-                imageAddress = "/Images/No picture.jpg";
+                imageAddress = GlobalConstants.ImageAddress;
             }
 
             UseFullCategory useFullCategory = new UseFullCategory()
