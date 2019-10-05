@@ -1,0 +1,42 @@
+﻿@using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
+@model  PartByCategoryAndModelViewModel;
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="col-6">
+        <h3 class="text-white text-center">Имате регистриран "Получател"</h3>
+        <div class="row text-white justify-content-xl-center">
+            <div class="col-md-10">
+                <section>
+                    <form method="post">
+                        <hr class="bg-white" />
+                        <hr class="bg-white" />
+                        <div class="form-group text-center">
+                            <a class="btn skl-bg-color border" href="/Order/Create">Продължи</a>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <h3 class="text-white text-center">Регистрирайте "Получател"</h3>
+        <div class="row text-white justify-content-xl-center">
+            <div class="col-md-10">
+                <section>
+                    <form method="post">
+                        <hr class="bg-white" />
+                        <hr class="bg-white" />
+                        <div class="form-group text-center">
+                            <a class="btn skl-bg-color border" href="/Recipient/Create?@Model">Регистрирай</a>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
