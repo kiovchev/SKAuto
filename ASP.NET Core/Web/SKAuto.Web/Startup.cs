@@ -108,6 +108,7 @@
             services.AddTransient<ITownService, TownService>();
             services.AddTransient<IUseFullCategoryService, UseFullCategoryService>();
             services.AddTransient<ICompanyService, CompanySrvice>();
+            services.AddTransient<IRecipientService, RecipientService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

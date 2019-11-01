@@ -7,14 +7,7 @@
 
 @{
     int count = 0;
-    int needed = 0;
 }
-
-    <script>
-        function myFunction() {
-           needed = document.getElementById("quantity");
-        }
-    </script>
 
 <div class="table-responsive">
     @if (Model.Count() == 0)
@@ -52,7 +45,7 @@
                         }
                         else
                         {
-                            <td class="text-white skl-bg-color border" scope="col"><a class="btn bg-dark border p-1 text-white" href="/Recipient/Index?partName=@Model[i].PartName&brandAndModelName=@Model[i].BrandAndModelName&categoryName=@Model[i].CategoryName&manufactoryName=@Model[i].ManufactoryName&quantity=@needed&sellPrice=@Model[i].SellPrice">Поръчай</a></td>
+                            <td class="text-white skl-bg-color border" scope="col"><a class="btn bg-dark border p-1 text-white" href="/Recipient/Index?partName=@Model[i].PartName&brandAndModelName=@Model[i].BrandAndModelName&categoryName=@Model[i].CategoryName&manufactoryName=@Model[i].ManufactoryName&quantity=@Model[i].Quantity&sellPrice=@Model[i].SellPrice">Поръчай</a></td>
                         }
                     </tr>
                 }
