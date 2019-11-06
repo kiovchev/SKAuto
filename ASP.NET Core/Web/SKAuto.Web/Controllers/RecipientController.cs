@@ -30,12 +30,13 @@
             return this.View(partModel);
         }
 
+        [HttpGet]
         public IActionResult Create(PartByCategoryAndModelViewModel partModel)
         {
             bool checkModel = this.CheckIsValidModel(partModel);
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return null;
+                return this.Redirect("/Brand/Details");
             }
 
             // use ModelState.IsValid
