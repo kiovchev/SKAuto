@@ -7,8 +7,8 @@
     {
         public Category()
         {
-            this.Parts = new List<Part>();
-            this.ModelCategories = new List<ModelCategories>();
+            this.Parts = new HashSet<Part>();
+            this.ModelCategories = new HashSet<ModelCategories>();
         }
 
         [Key]

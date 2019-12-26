@@ -7,7 +7,8 @@
     {
         public Model()
         {
-            this.ModelCategories = new List<ModelCategories>();
+            this.ModelCategories = new HashSet<ModelCategories>();
+            this.Parts = new HashSet<Part>();
         }
 
         [Key]
@@ -30,5 +31,7 @@
         public string ImageAddress { get; set; }
 
         public ICollection<ModelCategories> ModelCategories { get; set; }
+
+        public ICollection<Part> Parts { get; set; }
     }
 }

@@ -7,7 +7,7 @@
     {
         public Part()
         {
-            this.OrderParts = new List<OrderParts>();
+            this.OrderParts = new HashSet<OrderParts>();
         }
 
         [Key]

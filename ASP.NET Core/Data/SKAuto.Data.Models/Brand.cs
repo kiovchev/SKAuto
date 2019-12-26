@@ -7,7 +7,8 @@
     {
         public Brand()
         {
-            this.Models = new List<Model>();
+            this.Models = new HashSet<Model>();
+            this.Parts = new HashSet<Part>();
         }
 
         [Key]
@@ -18,6 +19,8 @@
 
         public string ImageAddress { get; set; }
 
-        public IEnumerable<Model> Models { get; set; }
+        public ICollection<Model> Models { get; set; }
+
+        public ICollection<Part> Parts { get; set; }
     }
 }
