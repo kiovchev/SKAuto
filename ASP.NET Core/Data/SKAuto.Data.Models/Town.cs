@@ -7,8 +7,8 @@
     {
         public Town()
         {
-            this.UseFullCategories = new List<TownUseFullCategory>();
-            this.Companies = new List<Company>();
+            this.UseFullCategories = new HashSet<TownUseFullCategory>();
+            this.Companies = new HashSet<Company>();
         }
 
         public int Id { get; set; }

@@ -7,7 +7,7 @@
     {
         public Recipient()
         {
-            this.Orders = new List<Order>();
+            this.Orders = new HashSet<Order>();
         }
 
         [Key]
