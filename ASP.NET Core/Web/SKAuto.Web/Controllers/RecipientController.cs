@@ -1,6 +1,5 @@
 ﻿namespace SKAuto.Web.Controllers
 {
-    using System;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
