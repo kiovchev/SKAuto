@@ -66,8 +66,14 @@
             }
             else
             {
-                return null;
+                return this.Redirect("/Recipient/Find?partModel");
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Find(PartByCategoryAndModelViewModel partModel)
+        {
+            return null;
         }
 
         private bool CheckIsValidParamsModel(RecipientParamsViewModel paramsRecipient)
