@@ -66,14 +66,9 @@
             }
             else
             {
-                return this.Redirect("/Recipient/Find?partModel");
+                // TODO Create Order Controller
+                return this.Redirect("/Order/Create?partModel");
             }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Find(PartByCategoryAndModelViewModel partModel)
-        {
-            return null;
         }
 
         private bool CheckIsValidParamsModel(RecipientParamsViewModel paramsRecipient)
