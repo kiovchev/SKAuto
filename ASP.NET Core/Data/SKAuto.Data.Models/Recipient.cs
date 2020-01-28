@@ -20,7 +20,7 @@
         public string LastName { get; set; }
 
         [Required]
-        public string Town { get; set; }
+        public string RecipientTown { get; set; }
 
         [Required]
         public string Address { get; set; }

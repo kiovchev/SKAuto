@@ -18,10 +18,7 @@
 
         public IActionResult Index(PartByCategoryAndModelViewModel partModel)
         {
-            // use ModelState.IsValid
-            bool checkModel = this.CheckIsValidModel(partModel);
-
-            if (!checkModel)
+            if (!this.ModelState.IsValid)
             {
                 return this.Redirect("/Brand/Details");
             }
@@ -32,14 +29,7 @@
         [HttpGet]
         public IActionResult Create(PartByCategoryAndModelViewModel partModel)
         {
-            bool checkModel = this.CheckIsValidModel(partModel);
             if (!this.ModelState.IsValid)
-            {
-                return this.Redirect("/Brand/Details");
-            }
-
-            // use ModelState.IsValid
-            if (!checkModel)
             {
                 return this.Redirect("/Brand/Details");
             }
@@ -50,51 +40,64 @@
         [HttpPost]
         public async Task<IActionResult> Create(PartByCategoryAndModelViewModel partModel, RecipientParamsViewModel paramsRecipient)
         {
-            bool checkModel = this.CheckIsValidModel(partModel);
-            bool paramsModel = this.CheckIsValidParamsModel(paramsRecipient);
-
-            if (!checkModel || !paramsModel)
+            if (!this.ModelState.IsValid)
             {
-                return this.Redirect("/Brand/Details");
+                return this.RedirectToAction("Index", "Recipient", partModel);
             }
 
             bool ifExists = await this.recipientService.IfRecipientExistsAsync(paramsRecipient.Phone);
 
             if (ifExists)
             {
-                return this.Redirect("/Recipient/Index");
+                RecipientFindAndPartModel recipientFindAndPart = new RecipientFindAndPartModel()
+                {
+                    PartModel = partModel,
+                    ParamsRecipient = paramsRecipient,
+                };
+                return this.RedirectToAction("Find", "Recipient", recipientFindAndPart);
             }
             else
             {
-                // TODO Create Order Controller
-                return this.Redirect("/Order/Create?partModel");
+                var recipientId = await this.recipientService.CreateRecipientAndOrderAsync(paramsRecipient);
+
+                RecipientOrderIpnutModel recipientOrderIpnutModel = new RecipientOrderIpnutModel()
+                {
+                    PartModel = partModel,
+                    RecipientId = recipientId,
+                };
+
+                return this.RedirectToAction("CreateOrAdd", "Order", recipientOrderIpnutModel);
             }
         }
 
-        private bool CheckIsValidParamsModel(RecipientParamsViewModel paramsRecipient)
+        [HttpGet]
+        public async Task<IActionResult> Find(PartByCategoryAndModelViewModel partModel, RecipientParamsViewModel paramsRecipient)
         {
-            if (paramsRecipient.Address != null && paramsRecipient.FirstName != null
-                && paramsRecipient.LastName != null && paramsRecipient.Phone != null && paramsRecipient.Town != null)
+            if (this.ModelState.IsValid)
             {
-                return true;
+                RecipientFindInputModel recipientFindModel = new RecipientFindInputModel()
+                {
+                    FirstName = paramsRecipient.FirstName,
+                    LastName = paramsRecipient.LastName,
+                    Phone = paramsRecipient.Phone,
+                };
+
+                var recipientOrderIpnutModel = await this.recipientService.TakeRecipientIdAsync(partModel, recipientFindModel);
+
+                return this.RedirectToAction("CreateOrAdd", "Order", recipientOrderIpnutModel);
             }
             else
             {
-                return false;
+                return this.View();
             }
         }
 
-        private bool CheckIsValidModel(PartByCategoryAndModelViewModel partModel)
+        [HttpPost]
+        public async Task<IActionResult> Find(PartByCategoryAndModelViewModel partModel, RecipientFindInputModel findInputModel)
         {
-            if (partModel.BrandAndModelName != null && partModel.CategoryName != null
-                && partModel.PartName != null && partModel.SellPrice != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var recipientOrderIpnutModel = await this.recipientService.TakeRecipientIdAsync(partModel, findInputModel);
+
+            return this.RedirectToAction("Create", "Order", recipientOrderIpnutModel);
         }
     }
 }
