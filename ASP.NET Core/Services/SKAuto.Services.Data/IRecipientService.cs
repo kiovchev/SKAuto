@@ -9,8 +9,8 @@
     {
         Task<bool> IfRecipientExistsAsync(string phoneNumber);
 
-        Task<int> CreateRecipientAndOrderAsync(RecipientParamsViewModel paramsRecipient);
-
-        Task<RecipientOrderIpnutModel> TakeRecipientIdAsync(PartByCategoryAndModelViewModel partModel, RecipientFindInputModel recipientFindModel);
+        Task CreateRecipientAndOrderAsync(
+            PartByCategoryAndModelViewModel partModel,
+            RecipientParamsViewModel paramsRecipient);
     }
 }

@@ -413,7 +413,7 @@ namespace SKAuto.Data.Migrations
                     b.Property<string>("Phone")
                         .IsRequired();
 
-                    b.Property<string>("RecipientTown")
+                    b.Property<string>("Town")
                         .IsRequired();
 
                     b.HasKey("Id");
@@ -571,7 +571,7 @@ namespace SKAuto.Data.Migrations
             modelBuilder.Entity("SKAuto.Data.Models.Order", b =>
                 {
                     b.HasOne("SKAuto.Data.Models.OrderStatus", "OrderStatus")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("OrderStatusId")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -597,7 +597,7 @@ namespace SKAuto.Data.Migrations
             modelBuilder.Entity("SKAuto.Data.Models.Part", b =>
                 {
                     b.HasOne("SKAuto.Data.Models.Brand", "Brand")
-                        .WithMany("Parts")
+                        .WithMany()
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -611,7 +611,7 @@ namespace SKAuto.Data.Migrations
                         .HasForeignKey("ManufactoryId");
 
                     b.HasOne("SKAuto.Data.Models.Model", "Model")
-                        .WithMany("Parts")
+                        .WithMany()
                         .HasForeignKey("ModelId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
