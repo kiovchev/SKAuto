@@ -71,6 +71,12 @@
             }
         }
 
+        [HttpGet]
+        public IActionResult Find(PartByCategoryAndModelViewModel partModel)
+        {
+            return this.View(partModel);
+        }
+
         private bool CheckIsValidParamsModel(RecipientParamsViewModel paramsRecipient)
         {
             if (paramsRecipient.Address != null && paramsRecipient.FirstName != null
