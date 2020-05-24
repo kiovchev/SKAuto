@@ -55,18 +55,24 @@
         public IList<BrandsWithLogosViewModel> GetBrandsWithLogos()
         {
             List<Brand> allBrands = this.brands.All().OrderBy(x => x.Name).ToList();
-            List<BrandsWithLogosViewModel> brandsWithLogos = new List<BrandsWithLogosViewModel>();
 
-            foreach (var brand in allBrands)
+            List<BrandsWithLogosViewModel> brandsWithLogos = allBrands.Select(x => new BrandsWithLogosViewModel
             {
-                BrandsWithLogosViewModel viewModel = new BrandsWithLogosViewModel
-                {
-                    BrandName = brand.Name,
-                    ImageAddress = brand.ImageAddress,
-                };
+                BrandName = x.Name,
+                ImageAddress = x.ImageAddress,
+            }).ToList();
+            //List<BrandsWithLogosViewModel> brandsWithLogos = new List<BrandsWithLogosViewModel>();
 
-                brandsWithLogos.Add(viewModel);
-            }
+            //foreach (var brand in allBrands)
+            //{
+            //    BrandsWithLogosViewModel viewModel = new BrandsWithLogosViewModel
+            //    {
+            //        BrandName = brand.Name,
+            //        ImageAddress = brand.ImageAddress,
+            //    };
+
+            //    brandsWithLogos.Add(viewModel);
+            //}
 
             return brandsWithLogos;
         }

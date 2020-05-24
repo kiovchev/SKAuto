@@ -12,16 +12,33 @@
     public class RecipientService : IRecipientService
     {
         private readonly IRepository<Recipient> recipients;
+        private readonly IOrderService orderService;
 
-        public RecipientService(IRepository<Recipient> recipients)
+        public RecipientService(IRepository<Recipient> recipients, IOrderService orderService)
         {
             this.recipients = recipients;
+            this.orderService = orderService;
         }
 
-        public Task CreateRecipientAndOrderAsync(PartByCategoryAndModelViewModel partModel, RecipientParamsViewModel paramsRecipient)
+        public async Task<int> CreateRecipientAndOrderAsync(PartByCategoryAndModelViewModel partModel, RecipientParamsViewModel paramsRecipient)
         {
             // need order
-            throw new System.NotImplementedException();
+            var recipient = new Recipient
+            {
+                FirstName = paramsRecipient.FirstName,
+                LastName = paramsRecipient.LastName,
+                Town = paramsRecipient.Town,
+                Address = paramsRecipient.Address,
+                Phone = paramsRecipient.Phone,
+            };
+
+            var currentOrder = await this.orderService.CreateOrderAsync(recipient, partModel);
+            recipient.Orders.Add(currentOrder);
+
+            await this.recipients.AddAsync(recipient);
+            await this.recipients.SaveChangesAsync();
+
+            return recipient.Id;
         }
 
         public async Task<bool> IfRecipientExistsAsync(string phoneNumber)

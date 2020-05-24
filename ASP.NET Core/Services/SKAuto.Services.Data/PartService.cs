@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using SKAuto.Common;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
     using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
@@ -135,7 +136,7 @@
             foreach (var part in partsByParams)
             {
                 Manufactory manufactory = await this.manufactories.All().FirstOrDefaultAsync(x => x.Id == part.ManufactoryId);
-                string manufactoryName = "Липсва информация";
+                string manufactoryName = GlobalConstants.ManufactoryName;
 
                 if (manufactory != null)
                 {
@@ -149,7 +150,7 @@
                     CategoryName = categoryName,
                     ManufactoryName = manufactoryName,
                     Quantity = part.Quantity,
-                    SellPrice = part.CustomerPrice.ToString(format: "0.00"),
+                    SellPrice = part.CustomerPrice.ToString(format: GlobalConstants.PartPriceFormat),
                 };
 
                 partsByCategoryAndModel.Add(currentPart);

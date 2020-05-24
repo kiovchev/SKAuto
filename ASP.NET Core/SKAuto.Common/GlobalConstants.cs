@@ -11,5 +11,11 @@
 
         // Photo
         public const string ImageAddress = "/Images/No picture.jpg";
+
+        // Part
+        public const string PartPriceFormat = "0.00";
+
+        // Manufactory
+        public const string ManufactoryName = "Липсва информация";
     }
 }

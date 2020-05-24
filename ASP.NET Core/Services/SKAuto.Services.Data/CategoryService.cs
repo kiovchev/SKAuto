@@ -91,9 +91,10 @@
                                      .FirstOrDefault();
 
             var allCategories = this.categories.All()
-                                               .Where(x => x.ModelCategories.Any(y => y.Model.Name == name &&
-                                                                                        y.Model.StartYear == startYear &&
-                                                                                        y.Model.EndYear == endYear));
+                                               .Where(x => x.ModelCategories
+                                               .Any(y => y.Model.Name == name &&
+                                               y.Model.StartYear == startYear &&
+                                               y.Model.EndYear == endYear));
 
             IList<CategoryWithModelViewModel> neededCategory = new List<CategoryWithModelViewModel>();
 

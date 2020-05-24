@@ -67,7 +67,8 @@
             else
             {
                 // TODO Create Order Controller
-                return this.Redirect("/Order/Create?partModel");
+                var currentRecipientId = await this.recipientService.CreateRecipientAndOrderAsync(partModel, paramsRecipient);
+                return this.Redirect("/Order/GetAll?currentRecipientIdq");
             }
         }
 
