@@ -32,6 +32,21 @@
             this.manufactories = manufactories;
         }
 
+        public async Task<bool> CheckIfPartExistsAsync(PartCreateInputModel model)
+        {
+            var part = await this.parts.All().FirstOrDefaultAsync(x => x.Name == model.PartName
+                                                                    && x.Model.Name == model.ModelName
+                                                                    && x.Category.Name == model.CategoryName
+                                                                    && x.Manufactory.Name == model.ModelName);
+
+            if (part == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public async Task CreatePartAsync(PartCreateInputModel partModel)
         {
             List<string> allCarParams = this.TakeParmsFromModelName(partModel.ModelName);

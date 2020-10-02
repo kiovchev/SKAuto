@@ -17,6 +17,11 @@
             this.categoryService = categoryService;
         }
 
+        public IActionResult Index()
+        {
+            return this.View();
+        }
+
         public IActionResult All()
         {
             List<CategoryWithImageViewModel> categoryWithImages = this.categoryService.GetAllCategoriesForViewModel().ToList();
@@ -48,6 +53,7 @@
 
             if (existCategogy)
             {
+                //create a category error page
                 return this.Redirect("/Category/Create");
             }
             else

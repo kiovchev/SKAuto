@@ -6,6 +6,7 @@
 
     using Microsoft.EntityFrameworkCore;
     using SKAuto.Common;
+    using SKAuto.Common.DtoModels.ModelDto;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
     using SKAuto.Web.ViewModels.ViewModels.ModelViewModels;
@@ -14,20 +15,17 @@
     {
         private readonly IRepository<Model> models;
         private readonly IBrandService brandService;
-        private readonly IRepository<Brand> brands;
         private readonly IRepository<Category> categories;
         private readonly IRepository<ModelCategories> modelCategories;
 
         public ModelService(
             IRepository<Model> models,
             IBrandService brandService,
-            IRepository<Brand> brands,
             IRepository<Category> categories,
             IRepository<ModelCategories> modelCategories)
         {
             this.models = models;
             this.brandService = brandService;
-            this.brands = brands;
             this.categories = categories;
             this.modelCategories = modelCategories;
         }
@@ -35,7 +33,7 @@
         public async Task CreateModel(ModelInputViewModel modelInputViewModel)
         {
             string imageAddress = modelInputViewModel.ImageAddress;
-            var brand = await this.brands.All().FirstOrDefaultAsync(x => x.Name == modelInputViewModel.BrandName);
+            var brand = await this.brandService.GetBrandByNameAsync(modelInputViewModel.BrandName);
 
             if (imageAddress == null)
             {
@@ -69,7 +67,36 @@
             await this.models.SaveChangesAsync();
         }
 
-        public async Task<IList<ModelsWithImage>> GetAllModelsAsync(ModelKindInputModel kindInputModel)
+        public async Task DeleteModelAsync(int id)
+        {
+            var neededModel = await this.models.All().FirstOrDefaultAsync(x => x.Id == id);
+            this.models.Delete(neededModel);
+            await this.models.SaveChangesAsync();
+        }
+
+        public async Task<IList<ModelWithBrandNameDtoModel>> GetAllModels()
+        {
+            var brandsWithModels = await this.models.All().Include(x => x.Brand).ToListAsync();
+            var models = new List<ModelWithBrandNameDtoModel>();
+
+            foreach (var item in brandsWithModels)
+            {
+                var currentModel = new ModelWithBrandNameDtoModel()
+                {
+                    ModelId = item.Id,
+                    ModelName = item.Name,
+                    StartYear = item.StartYear,
+                    EndYear = item.EndYear,
+                    BrandName = item.Brand.Name,
+                };
+
+                models.Add(currentModel);
+            }
+
+            return models;
+        }
+
+        public async Task<IList<ModelsWithImage>> GetAllModelsByBrandNameAsync(ModelKindInputModel kindInputModel)
         {
             var brandId = await this.brandService.GetBrandIdByNameAsync(kindInputModel.Name);
             List<Model> allModels = this.models.All().Where(x => x.BrandId == brandId).ToList();
@@ -88,6 +115,49 @@
             }
 
             return modelsByBrand;
+        }
+
+        public async Task<int> GetCountOfModelsByBrandIdAsync(int id)
+        {
+            var count = await this.models.All().CountAsync(x => x.BrandId == id);
+
+            return count;
+        }
+
+        public async Task<ModelUpdateOutputDtoModel> GetModelByIdAsync(int id)
+        {
+            var currentModel = await this.models.All().Include(x => x.Brand).FirstOrDefaultAsync(x => x.Id == id);
+            var allBrandsName = await this.brandService.GetBrandNamesAsync();
+
+            var neededModel = new ModelUpdateOutputDtoModel()
+            {
+                ModelId = currentModel.Id,
+                ModelName = currentModel.Name,
+                StartYear = currentModel.StartYear,
+                EndYear = currentModel.EndYear,
+                ImageAddress = currentModel.ImageAddress,
+                BrandName = currentModel.Brand.Name,
+                AllBrandNames = allBrandsName,
+            };
+
+            return neededModel;
+        }
+
+        public async Task<bool> HaveModelCategoriesOrParts(int id)
+        {
+            var neededModel = await this.models.All()
+                .Include(x => x.ModelCategories)
+                .Include(x => x.Parts)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            var countOfModelCategories = neededModel.ModelCategories.Count();
+            var countOfModelParts = neededModel.Parts.Count();
+            if (countOfModelCategories != 0 || countOfModelParts != 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<bool> IfModelExists(string brandName, string modelName, int startYear, int endYear)

@@ -17,6 +17,11 @@
             this.partService = partService;
         }
 
+        public IActionResult Index()
+        {
+            return this.View();
+        }
+
         public async Task<IActionResult> All(PartParamsInputModel model)
         {
             List<PartByCategoryAndModelViewModel> neededParts = await this.partService.GetPartsByModelAndCategoryAsync(model.ModelName, model.CategoryName);
@@ -47,9 +52,22 @@
                 return this.Redirect("/Part/Create");
             }
 
+            var ifPartExists = await this.partService.CheckIfPartExistsAsync(model);
+
+            if (!ifPartExists)
+            {
+                // to create a part error page
+                return this.Redirect("/Part/Error");
+            }
+
             await this.partService.CreatePartAsync(model);
 
             return this.RedirectToAction("All", "Part", new { modelName = model.ModelName, categoryName = model.CategoryName });
+        }
+
+        public IActionResult Error()
+        {
+            return this.View();
         }
     }
 }

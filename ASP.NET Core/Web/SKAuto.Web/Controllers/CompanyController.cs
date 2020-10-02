@@ -17,6 +17,11 @@
             this.company = company;
         }
 
+        public IActionResult Index()
+        {
+            return this.View();
+        }
+
         public IActionResult All()
         {
             List<CompanyInputViewModel> companyNames = this.company.GetAllCompanies().ToList();
@@ -57,6 +62,7 @@
 
             if (checkIfCompanyExists)
             {
+                // create a company error page
                 return this.Redirect("/Company/Create");
             }
 

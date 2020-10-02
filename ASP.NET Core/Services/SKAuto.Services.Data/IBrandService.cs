@@ -3,19 +3,29 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using SKAuto.Web.ViewModels.ViewModels;
-    using SKAuto.Web.ViewModels.ViewModels.BrandViewModels;
+    using SKAuto.Common.DtoModels.BrandDtos;
+    using SKAuto.Data.Models;
 
     public interface IBrandService
     {
         Task<IList<string>> GetBrandNamesAsync();
 
-        IList<BrandsWithLogosViewModel> GetBrandsWithLogos();
+        Task<IList<BrandWithLogoDtoModel>> GetBrandsWithLogos();
 
         Task<bool> IfBrandExistsAsync(string name);
 
         Task<int> GetBrandIdByNameAsync(string name);
 
-        Task CreateBrand(BrandCreateInputModel brandCreateInputModel);
+        Task CreateBrand(BrandCreateDtoModel brandCreateDtoModel);
+
+        Task<IList<BrandDeleteDtoModel>> GetAllBrandsAsync();
+
+        Task<bool> DeleteBrandAsync(int id);
+
+        Task<BrandUpdateDtoModel> GetBrandByIdAsync(int id);
+
+        Task<bool> UpdateBrandAsync(BrandUpdateDtoModel model);
+
+        Task<Brand> GetBrandByNameAsync(string name);
     }
 }

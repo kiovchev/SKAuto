@@ -16,6 +16,11 @@
             this.useFullCategoryService = useFullCategoryService;
         }
 
+        public IActionResult Index()
+        {
+            return this.View();
+        }
+
         public IActionResult All()
         {
             List<UseFullCategoryWithImageViewModel> useFullCategoryWithImages = this.useFullCategoryService.GetAllUseFullCategoriesWithParams();

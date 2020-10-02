@@ -169,3 +169,13 @@ body {
     left: 200%;
     bottom: 0;
 }
+
+.border {
+    border-width: 3px !important;
+}
+
+hr {
+    height: 3px !important;
+}
+
+

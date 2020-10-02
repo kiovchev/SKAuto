@@ -63,6 +63,17 @@
                 }
             }
 
+            // Check  from row 67 to row 75
+            var roles = await this.userManager.GetRolesAsync(user);
+            for (int i = 0; i < roles.Count; i++)
+            {
+                var isRoleDelete = await this.userManager.RemoveFromRoleAsync(user, roles[i]);
+                if (isRoleDelete.Succeeded)
+                {
+                    continue;
+                }
+            }
+
             var result = await this.userManager.DeleteAsync(user);
             var userId = await this.userManager.GetUserIdAsync(user);
             if (!result.Succeeded)

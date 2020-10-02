@@ -16,6 +16,11 @@
             this.townService = townService;
         }
 
+        public IActionResult Index()
+        {
+            return this.View();
+        }
+
         public IActionResult ShowAll(CategoryNameViewModel model)
         {
             var viewModel = this.townService.GetTownsByCategoryName(model.CategoryName);

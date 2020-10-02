@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
+    using SKAuto.Common;
     using SKAuto.Services;
     using SKAuto.Services.Data;
     using SKAuto.Web.ViewModels.ViewModels.ModelViewModels;
@@ -20,9 +21,31 @@
             this.model = model;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            if (this.User.IsInRole("Administrator"))
+            {
+                var models = await this.model.GetAllModels();
+                var modelsAll = models.Select(x => new ModelWithBrandNameOutputModel
+                {
+                    ModelId = x.ModelId,
+                    ModelName = x.ModelName,
+                    StartYear = x.StartYear,
+                    EndYear = x.EndYear,
+                    BrandName = x.BrandName,
+                })
+                    .OrderBy(x => x.BrandName)
+                    .ThenBy(x => x.ModelName)
+                    .ToList();
+                return this.View(modelsAll);
+            }
+
+            return this.Redirect("/Identity/Account/AccessDenied");
+        }
+
         public async Task<IActionResult> Kind(ModelKindInputModel kindInputModel)
         {
-            IList<ModelsWithImage> modelsByBrand = await this.model.GetAllModelsAsync(kindInputModel);
+            IList<ModelsWithImage> modelsByBrand = await this.model.GetAllModelsByBrandNameAsync(kindInputModel);
 
             return this.View(modelsByBrand);
         }
@@ -60,7 +83,9 @@
 
             if (existModel)
             {
-                return this.Redirect("/Model/Create");
+                var error = new ModelError();
+                error.ErrorMessage = GlobalConstants.ModelCreateErrorMessage;
+                return this.RedirectToAction("Error", "Model", error);
             }
             else
             {
@@ -68,6 +93,54 @@
 
                 return this.RedirectToAction("Kind", "Model", new { name = inputViewModel.BrandName });
             }
+        }
+
+        public async Task<IActionResult> Update(int modelId)
+        {
+            if (this.User.IsInRole("Administrator"))
+            {
+                var currentModel = await this.model.GetModelByIdAsync(modelId);
+                var model = new ModelUpdateOutputModel()
+                {
+                    ModelId = currentModel.ModelId,
+                    ModelName = currentModel.ModelName,
+                    StartYear = currentModel.StartYear,
+                    EndYear = currentModel.EndYear,
+                    ImageAddress = currentModel.ImageAddress,
+                    BrandName = currentModel.BrandName,
+                    AllBrandNames = currentModel.AllBrandNames,
+                };
+
+                return this.View(model);
+            }
+
+            return this.Redirect("/Identity/Account/AccessDenied");
+        }
+
+        public async Task<IActionResult> Delete(int modelId)
+        {
+            if (this.User.IsInRole("Administrator"))
+            {
+                var haveCategoriesOrParts = await this.model.HaveModelCategoriesOrParts(modelId);
+
+                if (haveCategoriesOrParts)
+                {
+                    var error = new ModelError();
+                    error.ErrorMessage = GlobalConstants.ModelDeleteErrorMessage;
+                    return this.RedirectToAction("Error", "Model", error);
+                }
+
+                await this.model.DeleteModelAsync(modelId);
+
+                return this.Redirect("/Model/Index");
+            }
+
+            return this.Redirect("/Identity/Account/AccessDenied");
+        }
+
+        public IActionResult Error(ModelError modelError)
+        {
+            return this.View(modelError);
         }
     }
 }

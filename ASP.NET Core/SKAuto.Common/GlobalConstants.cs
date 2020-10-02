@@ -2,6 +2,15 @@
 {
     public static class GlobalConstants
     {
+        // Brand
+        public const string BrandUpdateErrorMessage = "В базата вече има бранд с това име!!!!!";
+        public const string BrandDeleteErrorMessage = "Бранда не може да бъде изтрит - има модел/и свързани с него!!!!!";
+        public const string BrandCreateErrorMessage = "В базата вече има бранд с това име!!!!!";
+
+        // Model
+        public const string ModelCreateErrorMessage = "В базата вече има модел с това име!!!!!";
+        public const string ModelDeleteErrorMessage = "Модела не може да бъде изтрит - има категория/и или част/и свързани с него!!!!!";
+
         // Role
         public const string AdministratorRoleName = "Administrator";
         public const string UserRoleName = "User";

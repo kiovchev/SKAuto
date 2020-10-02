@@ -11,7 +11,7 @@
 }
 else
 {
-    <h2 class="text-white text-center skl-bg-color rounded m-2 p-1">Изберете модел автомобил</h2>
+    <h2 class="text-white text-center border skl-bg-color rounded m-2 p-1">Изберете модел автомобил</h2>
 }
 
 <table class="table-responsive">
@@ -26,8 +26,8 @@ else
             }
             @:<td class="text-center">
                 <a class="text-white" href="/Category/ShowAll?modelName=@Model[i].Name">
-                    <img src="@Model[i].ModelImageAddress" height="175" width="220" />
-                    <label>@Model[i].Name</label>
+                    <img class="border" src="@Model[i].ModelImageAddress" height="175" width="220" />
+                    <label><strong>@Model[i].Name</strong></label>
                 </a>
             @:</td>
             if ((i + 1) % 5 == 0)
