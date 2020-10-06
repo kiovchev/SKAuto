@@ -1,6 +1,6 @@
-﻿namespace SKAuto.Web.ViewModels.ViewModels.BrandViewModels
+﻿namespace SKAuto.Common.DtoModels.BrandDtos
 {
-    public class BrndIndexViewModel
+    public class BrandIndexDtoModel
     {
         public int BrandId { get; set; }
 

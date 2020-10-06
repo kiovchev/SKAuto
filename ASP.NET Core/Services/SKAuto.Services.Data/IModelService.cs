@@ -14,6 +14,8 @@
 
         Task<bool> IfModelExists(string brandName, string modelName, int startYear, int endYear);
 
+        Task<bool> IsSameAsync(string brandName, string modelName, int startYear, int endYear, string imageAddress);
+
         Task<int> GetCountOfModelsByBrandIdAsync(int id);
 
         Task<IList<ModelWithBrandNameDtoModel>> GetAllModels();
@@ -23,5 +25,7 @@
         Task<bool> HaveModelCategoriesOrParts(int id);
 
         Task<ModelUpdateOutputDtoModel> GetModelByIdAsync(int id);
+
+        Task UpdateModelAsync(ModelUpdateInputDtoModel model);
     }
 }

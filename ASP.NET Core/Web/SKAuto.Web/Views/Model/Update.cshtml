@@ -14,7 +14,7 @@
                 <input class="form-control" id="id" name="id" value="@Model.ModelId" type="hidden" />
             </div>
             <div class="form-group">
-                <label>Име на бранд</label>
+                <label>Име на модел</label>
                 <input class="form-control" id="name" name="name" value="@Model.ModelName" />
             </div>
             <div class="form-group">
@@ -28,7 +28,7 @@
             <div class="form-group">
                 <label>Избери бранд</label>
                 <select class="form-control" id="brandName" name="brandName" type="text">
-                    <option selected disabled>@Model.BrandName</option>
+                    <option>@Model.BrandName</option>
                     @for (int i = 0; i < Model.AllBrandNames.Count(); i++)
                     {
                         <option>@Model.AllBrandNames[i]</option>

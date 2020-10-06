@@ -53,7 +53,7 @@
 
             if (existCategogy)
             {
-                //create a category error page
+                // create a category error page
                 return this.Redirect("/Category/Create");
             }
             else

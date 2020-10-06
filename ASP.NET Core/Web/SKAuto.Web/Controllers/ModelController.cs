@@ -6,6 +6,7 @@
 
     using Microsoft.AspNetCore.Mvc;
     using SKAuto.Common;
+    using SKAuto.Common.DtoModels.ModelDto;
     using SKAuto.Services;
     using SKAuto.Services.Data;
     using SKAuto.Web.ViewModels.ViewModels.ModelViewModels;
@@ -59,21 +60,14 @@
 
                 return this.View(brandNames);
             }
-            else
-            {
-                return this.Redirect("/Identity/Account/AccessDenied");
-            }
+
+            return this.Redirect("/Identity/Account/AccessDenied");
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(ModelInputViewModel inputViewModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.Redirect("/Model/Create");
-            }
-
-            if (inputViewModel.StartYear >= inputViewModel.EndYear)
+            if (!this.ModelState.IsValid || inputViewModel.StartYear >= inputViewModel.EndYear)
             {
                 return this.Redirect("/Model/Create");
             }
@@ -87,12 +81,10 @@
                 error.ErrorMessage = GlobalConstants.ModelCreateErrorMessage;
                 return this.RedirectToAction("Error", "Model", error);
             }
-            else
-            {
-                await this.model.CreateModel(inputViewModel);
 
-                return this.RedirectToAction("Kind", "Model", new { name = inputViewModel.BrandName });
-            }
+            await this.model.CreateModel(inputViewModel);
+
+            return this.RedirectToAction("Kind", "Model", new { name = inputViewModel.BrandName });
         }
 
         public async Task<IActionResult> Update(int modelId)
@@ -117,6 +109,35 @@
             return this.Redirect("/Identity/Account/AccessDenied");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Update(ModelUpdateInputModel model)
+        {
+            var isSameModel = await this.model
+                .IsSameAsync(model.BrandName, model.Name, model.StartYear, model.EndYear, model.ImageAddress);
+
+            if (!isSameModel)
+            {
+                var updatedModel = new ModelUpdateInputDtoModel()
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    StartYear = model.StartYear,
+                    EndYear = model.EndYear,
+                    ImageAddress = model.ImageAddress,
+                    BrandName = model.BrandName,
+                };
+
+                await this.model.UpdateModelAsync(updatedModel);
+
+                return this.Redirect("/Model/Index");
+            }
+
+            var error = new ModelError();
+            error.ErrorMessage = GlobalConstants.ModelUpdateErrorMessage;
+
+            return this.RedirectToAction("Error", "Model", error);
+        }
+
         public async Task<IActionResult> Delete(int modelId)
         {
             if (this.User.IsInRole("Administrator"))
@@ -127,6 +148,7 @@
                 {
                     var error = new ModelError();
                     error.ErrorMessage = GlobalConstants.ModelDeleteErrorMessage;
+
                     return this.RedirectToAction("Error", "Model", error);
                 }
 

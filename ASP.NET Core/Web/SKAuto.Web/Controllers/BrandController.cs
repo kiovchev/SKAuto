@@ -23,11 +23,12 @@
         {
             if (this.User.IsInRole("Administrator"))
             {
-                var brands = await this.brandService.GetAllBrandsAsync();
+                var brands = await this.brandService.GetAllBrandsWithImageAsync();
                 var brandsAll = brands.Select(x => new BrndIndexViewModel
                 {
                     BrandId = x.BrandId,
                     BrandName = x.BrandName,
+                    ImageAddress = x.ImageAddress,
                 }).ToList();
                 return this.View(brandsAll);
             }

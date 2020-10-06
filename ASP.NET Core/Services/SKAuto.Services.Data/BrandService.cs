@@ -122,7 +122,9 @@
 
         public async Task<bool> UpdateBrandAsync(BrandUpdateDtoModel model)
         {
-            var sameBrand = await this.brands.AllAsNoTracking().Where(x => x.Name == model.BrandName).FirstOrDefaultAsync();
+            var sameBrand = await this.brands.AllAsNoTracking()
+                                             .Where(x => x.Name == model.BrandName && x.ImageAddress == model.ImageAddress)
+                                             .FirstOrDefaultAsync();
 
             if (sameBrand != null)
             {
@@ -144,6 +146,21 @@
             await this.brands.SaveChangesAsync();
 
             return false;
+        }
+
+        public async Task<IList<BrandIndexDtoModel>> GetAllBrandsWithImageAsync()
+        {
+            var brandsAll = await this.brands.All().OrderBy(x => x.Name).ToListAsync();
+            var result = new List<BrandIndexDtoModel>();
+
+            result = brandsAll.Select(x => new BrandIndexDtoModel
+            {
+                BrandId = x.Id,
+                BrandName = x.Name,
+                ImageAddress = x.ImageAddress,
+            }).ToList();
+
+            return result;
         }
     }
 }

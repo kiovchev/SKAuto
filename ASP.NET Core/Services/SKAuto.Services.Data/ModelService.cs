@@ -99,16 +99,16 @@
         public async Task<IList<ModelsWithImage>> GetAllModelsByBrandNameAsync(ModelKindInputModel kindInputModel)
         {
             var brandId = await this.brandService.GetBrandIdByNameAsync(kindInputModel.Name);
-            List<Model> allModels = this.models.All().Where(x => x.BrandId == brandId).ToList();
+            List<Model> allModels = this.models.All().Where(x => x.BrandId == brandId).OrderBy(x => x.Name).ToList();
 
             List<ModelsWithImage> modelsByBrand = new List<ModelsWithImage>();
 
-            foreach (var item in allModels)
+            foreach (var model in allModels)
             {
                 ModelsWithImage modelsWithImage = new ModelsWithImage
                 {
-                    Name = kindInputModel.Name + " " + item.Name + " " + item.StartYear + "-" + item.EndYear,
-                    ModelImageAddress = item.ImageAddress,
+                    Name = $"{kindInputModel.Name} {model.Name}  {model.StartYear}-{model.EndYear}",
+                    ModelImageAddress = model.ImageAddress,
                 };
 
                 modelsByBrand.Add(modelsWithImage);
@@ -167,6 +167,33 @@
             bool existModel = allModels.Any(x => x.Name.ToUpper() == modelName.ToUpper() && x.StartYear == startYear && x.EndYear == endYear);
 
             return existModel;
+        }
+
+        public async Task<bool> IsSameAsync(string brandName, string modelName, int startYear, int endYear, string imageAddress)
+        {
+            int brandId = await this.brandService.GetBrandIdByNameAsync(brandName);
+            var allModels = this.models.All().Where(x => x.BrandId == brandId);
+            bool existModel = allModels.Any(x => x.Name.ToUpper() == modelName.ToUpper() && x.StartYear == startYear && x.EndYear == endYear);
+
+            return existModel;
+        }
+
+        public async Task UpdateModelAsync(ModelUpdateInputDtoModel model)
+        {
+            var brand = await this.brandService.GetBrandByNameAsync(model.BrandName);
+
+            var modelForUpdate = new Model()
+            {
+                Id = model.Id,
+                Name = model.Name,
+                StartYear = model.StartYear,
+                EndYear = model.EndYear,
+                ImageAddress = model.ImageAddress,
+                Brand = brand,
+            };
+
+            this.models.Update(modelForUpdate);
+            await this.models.SaveChangesAsync();
         }
     }
 }
