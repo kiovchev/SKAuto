@@ -87,6 +87,7 @@
                     ModelName = item.Name,
                     StartYear = item.StartYear,
                     EndYear = item.EndYear,
+                    ImageAddress = item.ImageAddress,
                     BrandName = item.Brand.Name,
                 };
 

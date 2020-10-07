@@ -10,6 +10,8 @@
 
         public int EndYear { get; set; }
 
+        public string ImageAddress { get; set; }
+
         public string BrandName { get; set; }
     }
 }

@@ -38,12 +38,12 @@
                 {
                     ++count;
                     <tr class="text-center">
-                        <td class="text-white skl-bg-color border" scope="col">@count</td>
-                        <td class="text-white skl-bg-color border" scope="col">
-                            <img src="@Model[i].ImageAddress" width="50" height="50"/>
+                        <td class="text-white skl-bg-color border align-middle" scope="col">@count</td>
+                        <td class="text-white skl-bg-color border align-middle" scope="col">
+                            <img src="@Model[i].ImageAddress" width="100" height="75"/>
                         </td>
-                        <td class="text-white skl-bg-color border" id="partName" name="partName" scope="col">@Model[i].BrandName</td>
-                        <td class="text-white skl-bg-color border" scope="col">
+                        <td class="text-white skl-bg-color border align-middle" id="brandName" name="brandName" scope="col">@Model[i].BrandName</td>
+                        <td class="text-white skl-bg-color border align-middle" scope="col">
                             <a class="btn bg-dark border p-1 text-white" asp-controller="Brand" asp-action="Update" asp-route-brandId="@Model[i].BrandId">Промени</a>
                             <a class="btn bg-danger border p-1 text-white" asp-controller="Brand" asp-action="Delete" asp-route-brandId="@Model[i].BrandId">Изтрий</a>
                         </td>

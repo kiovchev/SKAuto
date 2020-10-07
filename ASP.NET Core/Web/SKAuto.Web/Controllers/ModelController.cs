@@ -33,6 +33,7 @@
                     ModelName = x.ModelName,
                     StartYear = x.StartYear,
                     EndYear = x.EndYear,
+                    ImageAddress = x.ImageAddress,
                     BrandName = x.BrandName,
                 })
                     .OrderBy(x => x.BrandName)
