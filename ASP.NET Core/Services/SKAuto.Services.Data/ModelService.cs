@@ -9,6 +9,7 @@
     using SKAuto.Common.DtoModels.ModelDto;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
+    using SKAuto.Services.Mapping.ModelServiceMappers;
     using SKAuto.Web.ViewModels.ViewModels.ModelViewModels;
 
     public class ModelService : IModelService
@@ -30,27 +31,16 @@
             this.modelCategories = modelCategories;
         }
 
-        public async Task CreateModel(ModelInputViewModel modelInputViewModel)
+        public async Task CreateModel(ModelCreateDtoModel modelToCreate)
         {
-            string imageAddress = modelInputViewModel.ImageAddress;
-            var brand = await this.brandService.GetBrandByNameAsync(modelInputViewModel.BrandName);
-
-            if (imageAddress == null)
+            if (modelToCreate.ImageAddress == null)
             {
-                imageAddress = GlobalConstants.ImageAddress;
+                modelToCreate.ImageAddress = GlobalConstants.ImageAddress;
             }
 
-            Model model = new Model
-            {
-                Name = modelInputViewModel.Name,
-                StartYear = modelInputViewModel.StartYear,
-                EndYear = modelInputViewModel.EndYear,
-                BrandId = brand.Id,
-                Brand = brand,
-                ImageAddress = imageAddress,
-            };
-
-            List<Category> allCategories = this.categories.All().ToList();
+            var brand = await this.brandService.GetBrandByNameAsync(modelToCreate.BrandName);
+            var model = ModelServiceCreateMapper.Map(modelToCreate, brand);
+            var allCategories = this.categories.All().ToList();
 
             for (int i = 0; i < allCategories.Count(); i++)
             {
@@ -87,69 +77,25 @@
         public async Task<IList<ModelWithBrandNameDtoModel>> GetAllModels()
         {
             var brandsWithModels = await this.models.All().Include(x => x.Brand).ToListAsync();
-            var models = new List<ModelWithBrandNameDtoModel>();
-
-            foreach (var item in brandsWithModels)
-            {
-                var currentModel = new ModelWithBrandNameDtoModel()
-                {
-                    ModelId = item.Id,
-                    ModelName = item.Name,
-                    StartYear = item.StartYear,
-                    EndYear = item.EndYear,
-                    ImageAddress = item.ImageAddress,
-                    BrandName = item.Brand.Name,
-                };
-
-                models.Add(currentModel);
-            }
+            var models = GetAllModelsMapper.Map(brandsWithModels);
 
             return models;
         }
 
-        public async Task<IList<ModelsWithImage>> GetAllModelsByBrandNameAsync(ModelKindInputModel kindInputModel)
+        public async Task<IList<ModelWithImageDtoModel>> GetAllModelsByBrandNameAsync(ModelKindInputModel kindInputModel)
         {
             var brandId = await this.brandService.GetBrandIdByNameAsync(kindInputModel.Name);
-            List<Model> allModels = this.models.All().Where(x => x.BrandId == brandId).OrderBy(x => x.Name).ToList();
-
-            List<ModelsWithImage> modelsByBrand = new List<ModelsWithImage>();
-
-            foreach (var model in allModels)
-            {
-                ModelsWithImage modelsWithImage = new ModelsWithImage
-                {
-                    Name = $"{kindInputModel.Name} {model.Name}  {model.StartYear}-{model.EndYear}",
-                    ModelImageAddress = model.ImageAddress,
-                };
-
-                modelsByBrand.Add(modelsWithImage);
-            }
+            var allModels = await this.models.All().Where(x => x.BrandId == brandId).OrderBy(x => x.Name).ToListAsync();
+            var modelsByBrand = GetAllModelsByBrandMapper.Map(allModels, kindInputModel.Name);
 
             return modelsByBrand;
-        }
-
-        public async Task<int> GetCountOfModelsByBrandIdAsync(int id)
-        {
-            var count = await this.models.All().CountAsync(x => x.BrandId == id);
-
-            return count;
         }
 
         public async Task<ModelUpdateOutputDtoModel> GetModelByIdAsync(int id)
         {
             var currentModel = await this.models.All().Include(x => x.Brand).FirstOrDefaultAsync(x => x.Id == id);
             var allBrandsName = await this.brandService.GetBrandNamesAsync();
-
-            var neededModel = new ModelUpdateOutputDtoModel()
-            {
-                ModelId = currentModel.Id,
-                ModelName = currentModel.Name,
-                StartYear = currentModel.StartYear,
-                EndYear = currentModel.EndYear,
-                ImageAddress = currentModel.ImageAddress,
-                BrandName = currentModel.Brand.Name,
-                AllBrandNames = allBrandsName,
-            };
+            var neededModel = GetModelByIdMapper.Map(currentModel, allBrandsName);
 
             return neededModel;
         }
@@ -191,15 +137,7 @@
         {
             var brand = await this.brandService.GetBrandByNameAsync(model.BrandName);
 
-            var modelForUpdate = new Model()
-            {
-                Id = model.Id,
-                Name = model.Name,
-                StartYear = model.StartYear,
-                EndYear = model.EndYear,
-                ImageAddress = model.ImageAddress,
-                Brand = brand,
-            };
+            var modelForUpdate = ModelServiceUpdateMapper.Map(model, brand);
 
             this.models.Update(modelForUpdate);
             await this.models.SaveChangesAsync();

@@ -9,6 +9,7 @@
     using SKAuto.Common.DtoModels.ModelDto;
     using SKAuto.Services;
     using SKAuto.Services.Data;
+    using SKAuto.Web.HandMappers.ModelMappers;
     using SKAuto.Web.ViewModels.ViewModels.ModelViewModels;
 
     public class ModelController : BaseController
@@ -27,18 +28,8 @@
             if (this.User.IsInRole("Administrator"))
             {
                 var models = await this.model.GetAllModels();
-                var modelsAll = models.Select(x => new ModelWithBrandNameOutputModel
-                {
-                    ModelId = x.ModelId,
-                    ModelName = x.ModelName,
-                    StartYear = x.StartYear,
-                    EndYear = x.EndYear,
-                    ImageAddress = x.ImageAddress,
-                    BrandName = x.BrandName,
-                })
-                    .OrderBy(x => x.BrandName)
-                    .ThenBy(x => x.ModelName)
-                    .ToList();
+                var modelsAll = ModelIndexMapper.Map(models);
+
                 return this.View(modelsAll);
             }
 
@@ -47,7 +38,8 @@
 
         public async Task<IActionResult> Kind(ModelKindInputModel kindInputModel)
         {
-            IList<ModelsWithImage> modelsByBrand = await this.model.GetAllModelsByBrandNameAsync(kindInputModel);
+            var allModelsByBrand = await this.model.GetAllModelsByBrandNameAsync(kindInputModel);
+            var modelsByBrand = ModelKindMapper.Map(allModelsByBrand);
 
             return this.View(modelsByBrand);
         }
@@ -56,8 +48,7 @@
         {
             if (this.User.IsInRole("Administrator"))
             {
-                IList<string> brandNames = await this.brand.GetBrandNamesAsync();
-                brandNames = brandNames.ToList();
+                var brandNames = await this.brand.GetBrandNamesAsync();
 
                 return this.View(brandNames);
             }
@@ -66,15 +57,15 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ModelInputViewModel inputViewModel)
+        public async Task<IActionResult> Create(ModelInputViewModel createModel)
         {
-            if (!this.ModelState.IsValid || inputViewModel.StartYear >= inputViewModel.EndYear)
+            if (!this.ModelState.IsValid || createModel.StartYear >= createModel.EndYear)
             {
                 return this.Redirect("/Model/Create");
             }
 
             bool existModel = await this.model
-                .IfModelExistsAsync(inputViewModel.BrandName, inputViewModel.Name, inputViewModel.StartYear, inputViewModel.EndYear);
+                .IfModelExistsAsync(createModel.BrandName, createModel.Name, createModel.StartYear, createModel.EndYear);
 
             if (existModel)
             {
@@ -83,9 +74,10 @@
                 return this.RedirectToAction("Error", "Model", error);
             }
 
-            await this.model.CreateModel(inputViewModel);
+            var modelToCreate = ModelCreateMapper.Map(createModel);
+            await this.model.CreateModel(modelToCreate);
 
-            return this.RedirectToAction("Kind", "Model", new { name = inputViewModel.BrandName });
+            return this.RedirectToAction("Kind", "Model", new { name = createModel.BrandName });
         }
 
         public async Task<IActionResult> Update(int modelId)
@@ -93,16 +85,7 @@
             if (this.User.IsInRole("Administrator"))
             {
                 var currentModel = await this.model.GetModelByIdAsync(modelId);
-                var model = new ModelUpdateOutputModel()
-                {
-                    ModelId = currentModel.ModelId,
-                    ModelName = currentModel.ModelName,
-                    StartYear = currentModel.StartYear,
-                    EndYear = currentModel.EndYear,
-                    ImageAddress = currentModel.ImageAddress,
-                    BrandName = currentModel.BrandName,
-                    AllBrandNames = currentModel.AllBrandNames,
-                };
+                var model = ModelUpdateGetMapper.Map(currentModel);
 
                 return this.View(model);
             }
@@ -118,17 +101,8 @@
 
             if (!isSameModel)
             {
-                var updatedModel = new ModelUpdateInputDtoModel()
-                {
-                    Id = model.Id,
-                    Name = model.Name,
-                    StartYear = model.StartYear,
-                    EndYear = model.EndYear,
-                    ImageAddress = model.ImageAddress,
-                    BrandName = model.BrandName,
-                };
-
-                await this.model.UpdateModelAsync(updatedModel);
+                var modelToUpdate = ModelUpdatePostMapper.Map(model);
+                await this.model.UpdateModelAsync(modelToUpdate);
 
                 return this.Redirect("/Model/Index");
             }
