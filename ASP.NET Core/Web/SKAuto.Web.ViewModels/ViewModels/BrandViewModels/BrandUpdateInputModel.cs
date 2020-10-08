@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SKAuto.Web.ViewModels.ViewModels.BrandViewModels
+﻿namespace SKAuto.Web.ViewModels.ViewModels.BrandViewModels
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class BrandUpdateInputModel
     {
         [Required]

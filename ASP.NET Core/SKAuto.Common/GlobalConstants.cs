@@ -9,7 +9,7 @@
 
         // Model
         public const string ModelCreateErrorMessage = "В базата вече има модел с това име!!!!!";
-        public const string ModelDeleteErrorMessage = "Модела не може да бъде изтрит - има категория/и или част/и свързани с него!!!!!";
+        public const string ModelDeleteErrorMessage = "Модела не може да бъде изтрит - има част/и свързани с него!!!!!";
         public const string ModelUpdateErrorMessage = "В базата вече съществува такъв модел!!!!!";
 
         // Role

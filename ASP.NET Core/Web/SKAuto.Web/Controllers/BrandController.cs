@@ -1,13 +1,11 @@
 ﻿namespace SKAuto.Web.Controllers
 {
-    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
     using SKAuto.Common;
-    using SKAuto.Common.DtoModels.BrandDtos;
     using SKAuto.Services;
-    using SKAuto.Web.ViewModels.ViewModels;
+    using SKAuto.Web.HandMappers.BrandMappers;
     using SKAuto.Web.ViewModels.ViewModels.BrandViewModels;
 
     public class BrandController : BaseController
@@ -24,12 +22,8 @@
             if (this.User.IsInRole("Administrator"))
             {
                 var brands = await this.brandService.GetAllBrandsWithImageAsync();
-                var brandsAll = brands.Select(x => new BrndIndexViewModel
-                {
-                    BrandId = x.BrandId,
-                    BrandName = x.BrandName,
-                    ImageAddress = x.ImageAddress,
-                }).ToList();
+                var brandsAll = BrandIndexMapper.Map(brands);
+
                 return this.View(brandsAll);
             }
 
@@ -39,11 +33,7 @@
         public async Task<IActionResult> All()
         {
             var brandsWithLogos = await this.brandService.GetBrandsWithLogos();
-            var brands = brandsWithLogos.Select(x => new BrandWithLogoViewModel
-            {
-                BrandName = x.BrandName,
-                ImageAddress = x.ImageAddress,
-            }).ToList();
+            var brands = BrandAllMapper.Map(brandsWithLogos);
 
             return this.View(brands);
         }
@@ -75,11 +65,7 @@
                 return this.RedirectToAction("Error", "Brand", error);
             }
 
-            var brandDtoModel = new BrandCreateDtoModel()
-            {
-                Name = brandCreateInputModel.Name.ToUpper(),
-                ImageAddress = brandCreateInputModel.ImageAddress,
-            };
+            var brandDtoModel = BrandCreateMapper.Map(brandCreateInputModel);
             await this.brandService.CreateBrand(brandDtoModel);
 
             return this.Redirect("/Brand/Index");
@@ -90,10 +76,7 @@
             if (this.User.IsInRole("Administrator"))
             {
                 var currentBrand = await this.brandService.GetBrandByIdAsync(brandId);
-                var brand = new BrandUpdateOutputModel();
-                brand.BrandId = currentBrand.BrandId;
-                brand.BrandName = currentBrand.BrandName;
-                brand.ImageAddress = currentBrand.ImageAddress;
+                var brand = BrandUpdateGetMapper.Map(currentBrand);
 
                 return this.View(brand);
             }
@@ -104,20 +87,27 @@
         [HttpPost]
         public async Task<IActionResult> Update(BrandUpdateInputModel model)
         {
-            var brand = new BrandUpdateDtoModel();
-            brand.BrandId = model.Id;
-            brand.BrandName = model.Name.ToUpper();
-            brand.ImageAddress = model.ImageAddress;
-            var isSame = await this.brandService.UpdateBrandAsync(brand);
-            var error = new BrandError();
-            error.ErrorMessage = GlobalConstants.BrandUpdateErrorMessage;
-
-            if (isSame)
+            if (!this.ModelState.IsValid)
             {
-                return this.RedirectToAction("Error", "Brand", error);
+                return this.Redirect("/Brand/Index");
             }
 
-            return this.Redirect("/Brand/Index");
+            if (this.User.IsInRole("Administrator"))
+            {
+                var brand = BrandUpdatePostMapper.Map(model);
+                var isSame = await this.brandService.UpdateBrandAsync(brand);
+                var error = new BrandError();
+                error.ErrorMessage = GlobalConstants.BrandUpdateErrorMessage;
+
+                if (isSame)
+                {
+                    return this.RedirectToAction("Error", "Brand", error);
+                }
+
+                return this.Redirect("/Brand/Index");
+            }
+
+            return this.Redirect("/Identity/Account/AccessDenied");
         }
 
         public async Task<IActionResult> Delete(int brandId)

@@ -74,7 +74,7 @@
             }
 
             bool existModel = await this.model
-                .IfModelExists(inputViewModel.BrandName, inputViewModel.Name, inputViewModel.StartYear, inputViewModel.EndYear);
+                .IfModelExistsAsync(inputViewModel.BrandName, inputViewModel.Name, inputViewModel.StartYear, inputViewModel.EndYear);
 
             if (existModel)
             {
@@ -143,9 +143,9 @@
         {
             if (this.User.IsInRole("Administrator"))
             {
-                var haveCategoriesOrParts = await this.model.HaveModelCategoriesOrParts(modelId);
+                var haveParts = await this.model.HavePartsAsync(modelId);
 
-                if (haveCategoriesOrParts)
+                if (haveParts)
                 {
                     var error = new ModelError();
                     error.ErrorMessage = GlobalConstants.ModelDeleteErrorMessage;

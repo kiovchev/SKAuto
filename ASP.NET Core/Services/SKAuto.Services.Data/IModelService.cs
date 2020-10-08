@@ -12,7 +12,7 @@
 
         Task CreateModel(ModelInputViewModel modelInputViewModel);
 
-        Task<bool> IfModelExists(string brandName, string modelName, int startYear, int endYear);
+        Task<bool> IfModelExistsAsync(string brandName, string modelName, int startYear, int endYear);
 
         Task<bool> IsSameAsync(string brandName, string modelName, int startYear, int endYear, string imageAddress);
 
@@ -22,7 +22,7 @@
 
         Task DeleteModelAsync(int id);
 
-        Task<bool> HaveModelCategoriesOrParts(int id);
+        Task<bool> HavePartsAsync(int id);
 
         Task<ModelUpdateOutputDtoModel> GetModelByIdAsync(int id);
 

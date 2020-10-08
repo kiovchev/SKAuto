@@ -1,22 +1,76 @@
-﻿<h1 style="color:white">Операции с Категории</h1>
+﻿@using SKAuto.Web.ViewModels.ViewModels.CategoryViewModels;
+@model List<CategoryIndexViewModel>;
 
-<div class="row text-white justify-content-xl-center">
-    <div class="col-md-4">
-        <section>
-            <form>
-                <hr class="bg-white" />
-                <div class="form-group border rounded text-white text-center skl-bg-color">
-                    <a class="btn btn-lg btn-block text-white" asp-controller="Category" asp-action="Create">Добави нова категория</a>
-                </div>
-                <div class="form-group border rounded text-white text-center skl-bg-color">
-                    <a class="btn btn-lg btn-block text-white" href="">Изтрий категория</a>
-                </div>
-                <div class="form-group border rounded text-white text-center skl-bg-color">
-                    <a class="btn btn-lg btn-block text-white" href="">Промени категория</a>
-                </div>
-                <hr class="bg-white" />
-            </form>
-        </section>
-    </div>
+{
+    ViewData["Title"] = "Index";
+}
+
+@{
+    int count = 0;
+}
+
+<h1 style="color:white">Операции с Категории</h1>
+
+<div class="form-group border rounded text-white text-center skl-bg-color mt-5">
+    <a class="btn btn-lg btn-block text-white" asp-controller="Category" asp-action="Create">Добави нова категория</a>
 </div>
+
+
+
+<div class="table-responsive">
+    @if (Model.Count() == 0)
+    {
+        <h3 class="text-danger ">В момента няма данни за категории!!!</h3>
+    }
+    else
+    {
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th class="text-white skl-bg-color border" scope="col">#</th>
+                    <th class="text-white skl-bg-color border" scope="col">Снимка</th>
+                    <th class="text-white skl-bg-color border" scope="col">Име на категория</th>
+                    <th class="text-white skl-bg-color border" scope="col">Промени/Изтрий</th>>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    ++count;
+                    <tr class="text-center">
+                        <td class="text-white skl-bg-color border align-middle" scope="col">@count</td>
+                        <td class="text-white skl-bg-color border align-middle" scope="col">
+                            <img src="@Model[i].ImageAddress" width="100" height="75" />
+                        </td>
+                        <td class="text-white skl-bg-color border align-middle" id="categoryName" name="categoryName" scope="col">@Model[i].CategoryName</td>
+                        <td class="text-white skl-bg-color border align-middle" scope="col">
+                            <a class="btn bg-dark border p-1 text-white" asp-controller="Category" asp-action="Update" asp-route-brandId="@Model[i].CategoryId">Промени</a>
+                            <a class="btn bg-danger border p-1 text-white" asp-controller="Category" asp-action="Delete" asp-route-brandId="@Model[i].CategoryId">Изтрий</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@*<div class="row text-white justify-content-xl-center">
+        <div class="col-md-4">
+            <section>
+                <form>
+                    <hr class="bg-white" />
+                    <div class="form-group border rounded text-white text-center skl-bg-color">
+                        <a class="btn btn-lg btn-block text-white" asp-controller="Category" asp-action="Create">Добави нова категория</a>
+                    </div>
+                    <div class="form-group border rounded text-white text-center skl-bg-color">
+                        <a class="btn btn-lg btn-block text-white" href="">Изтрий категория</a>
+                    </div>
+                    <div class="form-group border rounded text-white text-center skl-bg-color">
+                        <a class="btn btn-lg btn-block text-white" href="">Промени категория</a>
+                    </div>
+                    <hr class="bg-white" />
+                </form>
+            </section>
+        </div>
+    </div>*@
 

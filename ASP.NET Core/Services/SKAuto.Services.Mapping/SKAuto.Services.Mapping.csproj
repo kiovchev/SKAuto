@@ -19,4 +19,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\SKAuto.Data.Models\SKAuto.Data.Models.csproj" />
+    <ProjectReference Include="..\..\SKAuto.Common\SKAuto.Common.csproj" />
+  </ItemGroup>
+
 </Project>

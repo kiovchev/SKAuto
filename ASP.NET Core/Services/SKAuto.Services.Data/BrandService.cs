@@ -9,6 +9,7 @@
     using SKAuto.Common.DtoModels.BrandDtos;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
+    using SKAuto.Services.Mapping.BrandServiceMappers;
 
     public class BrandService : IBrandService
     {
@@ -26,37 +27,16 @@
                 brandCreateDtoModel.ImageAddress = GlobalConstants.ImageAddress;
             }
 
-            Brand brand = new Brand
-            {
-                Name = brandCreateDtoModel.Name,
-                ImageAddress = brandCreateDtoModel.ImageAddress,
-            };
+            var brand = BrandServiceCreateMapper.Map(brandCreateDtoModel);
 
             await this.brands.AddAsync(brand);
             await this.brands.SaveChangesAsync();
         }
 
-        public async Task<IList<BrandDeleteDtoModel>> GetAllBrandsAsync()
-        {
-            var brandsAll = await this.brands.All().OrderBy(x => x.Name).ToListAsync();
-            var result = new List<BrandDeleteDtoModel>();
-
-            result = brandsAll.Select(x => new BrandDeleteDtoModel
-            {
-                BrandId = x.Id,
-                BrandName = x.Name,
-            }).ToList();
-
-            return result;
-        }
-
         public async Task<BrandUpdateDtoModel> GetBrandByIdAsync(int id)
         {
             var currentBrand = await this.brands.All().FirstOrDefaultAsync(x => x.Id == id);
-            var brandDto = new BrandUpdateDtoModel();
-            brandDto.BrandId = currentBrand.Id;
-            brandDto.BrandName = currentBrand.Name;
-            brandDto.ImageAddress = currentBrand.ImageAddress;
+            var brandDto = BrandServiceUpdateDtoMapper.Map(currentBrand);
 
             return brandDto;
         }
@@ -71,14 +51,14 @@
         public async Task<int> GetBrandIdByNameAsync(string name)
         {
             var currentBrand = await this.brands.All().FirstOrDefaultAsync(x => x.Name == name);
-            int brandId = currentBrand.Id;
+            var brandId = currentBrand.Id;
 
             return brandId;
         }
 
         public async Task<IList<string>> GetBrandNamesAsync()
         {
-            List<string> brandNames = await this.brands.All().Select(b => b.Name).OrderBy(b => b).ToListAsync();
+            var brandNames = await this.brands.All().Select(b => b.Name).OrderBy(b => b).ToListAsync();
 
             return brandNames;
         }
@@ -86,12 +66,7 @@
         public async Task<IList<BrandWithLogoDtoModel>> GetBrandsWithLogos()
         {
             var allBrands = await this.brands.All().OrderBy(x => x.Name).ToListAsync();
-
-            var brandsWithLogos = allBrands.Select(x => new BrandWithLogoDtoModel
-            {
-                BrandName = x.Name,
-                ImageAddress = x.ImageAddress,
-            }).ToList();
+            var brandsWithLogos = GetBrandsWithLogoMapper.Map(allBrands);
 
             return brandsWithLogos;
         }
@@ -122,25 +97,14 @@
 
         public async Task<bool> UpdateBrandAsync(BrandUpdateDtoModel model)
         {
-            var sameBrand = await this.brands.AllAsNoTracking()
-                                             .Where(x => x.Name == model.BrandName && x.ImageAddress == model.ImageAddress)
-                                             .FirstOrDefaultAsync();
+            var sameBrandCount = await this.SameBrandCount(model);
 
-            if (sameBrand != null)
+            if (sameBrandCount > 0)
             {
                 return true;
             }
 
-            var brand = new Brand();
-            brand.Id = model.BrandId;
-            brand.Name = model.BrandName;
-
-            if (model.ImageAddress == null)
-            {
-                model.ImageAddress = GlobalConstants.ImageAddress;
-            }
-
-            brand.ImageAddress = model.ImageAddress;
+            var brand = BrandServiceUpdateInputMapper.Map(model);
 
             this.brands.Update(brand);
             await this.brands.SaveChangesAsync();
@@ -151,16 +115,19 @@
         public async Task<IList<BrandIndexDtoModel>> GetAllBrandsWithImageAsync()
         {
             var brandsAll = await this.brands.All().OrderBy(x => x.Name).ToListAsync();
-            var result = new List<BrandIndexDtoModel>();
-
-            result = brandsAll.Select(x => new BrandIndexDtoModel
-            {
-                BrandId = x.Id,
-                BrandName = x.Name,
-                ImageAddress = x.ImageAddress,
-            }).ToList();
+            var result = BrandServiceIndexMapper.Map(brandsAll);
 
             return result;
+        }
+
+        public async Task<int> SameBrandCount(BrandUpdateDtoModel model)
+        {
+            var sameBrandCount = await this.brands.AllAsNoTracking()
+                                                  .Where(x => x.Name == model.BrandName
+                                                            & x.ImageAddress == model.ImageAddress)
+                                                  .CountAsync();
+
+            return sameBrandCount;
         }
     }
 }

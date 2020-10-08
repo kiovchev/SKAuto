@@ -5,7 +5,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore;
     using SKAuto.Common;
+    using SKAuto.Common.DtoModels.CategoryDtos;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
     using SKAuto.Web.ViewModels.ViewModels.CategoryViewModels;
@@ -43,7 +45,7 @@
 
             for (int i = 0; i < allModels.Count(); i++)
             {
-                ModelCategories modelCategory = new ModelCategories
+                var modelCategory = new ModelCategories
                 {
                     Category = category,
                     Model = allModels[i],
@@ -56,26 +58,32 @@
             await this.categories.SaveChangesAsync();
         }
 
-        public IList<CategoryWithImageViewModel> GetAllCategoriesForViewModel()
+        public async Task<IList<CategoryIndexDtoModel>> GetAllCategories()
         {
-            var allCategories = this.categories.All().ToList();
-            List<CategoryWithImageViewModel> categoryWithImages = new List<CategoryWithImageViewModel>();
-
-            foreach (var item in allCategories)
+            var categoriesAll = this.categories.All();
+            List<CategoryIndexDtoModel> categories = await categoriesAll.Select(x => new CategoryIndexDtoModel
             {
-                CategoryWithImageViewModel viewModel = new CategoryWithImageViewModel
-                {
-                    Name = item.Name,
-                    ImageAdsress = item.ImageAddress,
-                };
+                CategoryId = x.Id,
+                CategoryName = x.Name,
+                ImageAddress = x.ImageAddress,
+            }).ToListAsync();
 
-                categoryWithImages.Add(viewModel);
-            }
+            return categories;
+        }
+
+        public async Task<IList<CategoruAllDtoModel>> GetAllCategoriesForViewModel()
+        {
+            var allCategories = await this.categories.All().ToListAsync();
+            IList<CategoruAllDtoModel> categoryWithImages = allCategories.Select(x => new CategoruAllDtoModel
+                {
+                    CategoryName = x.Name,
+                    ImageAddress = x.ImageAddress,
+                }).ToList();
 
             return categoryWithImages;
         }
 
-        public IList<CategoryWithModelViewModel> GetCategoriesByNameAndYears(string modelName)
+        public async Task<IList<CategoryWithModelViewModel>> GetCategoriesByNameAndYears(string modelName)
         {
             string[] nameAsArr = modelName.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
             string name = string.Join(" ", nameAsArr.Skip(1).Take(nameAsArr.Count() - 2));
@@ -85,10 +93,10 @@
             int startYear = int.Parse(years[0]);
             int endYear = int.Parse(years[1]);
 
-            int modelId = this.models.All()
+            int modelId = await this.models.All()
                                      .Where(x => x.Name == name && x.StartYear == startYear && x.EndYear == endYear)
                                      .Select(y => y.Id)
-                                     .FirstOrDefault();
+                                     .FirstOrDefaultAsync();
 
             var allCategories = this.categories.All()
                                                .Where(x => x.ModelCategories
@@ -116,9 +124,9 @@
             return neededCategory;
         }
 
-        public bool IfCategoryExists(string name)
+        public async Task<bool> IfCategoryExists(string name)
         {
-            var allCategories = this.categories.All().ToList();
+            var allCategories = await this.categories.All().ToListAsync();
             bool existCategogy = allCategories.Any(x => x.Name.ToUpper() == name.ToUpper());
 
             return existCategogy;

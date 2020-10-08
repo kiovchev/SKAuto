@@ -3,16 +3,19 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using SKAuto.Common.DtoModels.CategoryDtos;
     using SKAuto.Web.ViewModels.ViewModels.CategoryViewModels;
 
     public interface ICategoryService
     {
-        IList<CategoryWithImageViewModel> GetAllCategoriesForViewModel();
+        Task<IList<CategoryIndexDtoModel>> GetAllCategories();
 
-        IList<CategoryWithModelViewModel> GetCategoriesByNameAndYears(string modelName);
+        Task<IList<CategoruAllDtoModel>> GetAllCategoriesForViewModel();
+
+        Task<IList<CategoryWithModelViewModel>> GetCategoriesByNameAndYears(string modelName);
 
         Task CreateCategory(string name, string imageAddress);
 
-        bool IfCategoryExists(string name);
+        Task<bool> IfCategoryExists(string name);
     }
 }

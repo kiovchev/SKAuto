@@ -69,7 +69,17 @@
 
         public async Task DeleteModelAsync(int id)
         {
-            var neededModel = await this.models.All().FirstOrDefaultAsync(x => x.Id == id);
+            var neededModel = await this.models.All()
+                                               .Include(x => x.ModelCategories)
+                                               .FirstOrDefaultAsync(x => x.Id == id);
+
+            foreach (var item in neededModel.ModelCategories)
+            {
+                this.modelCategories.Delete(item);
+            }
+
+            await this.modelCategories.SaveChangesAsync();
+
             this.models.Delete(neededModel);
             await this.models.SaveChangesAsync();
         }
@@ -144,16 +154,14 @@
             return neededModel;
         }
 
-        public async Task<bool> HaveModelCategoriesOrParts(int id)
+        public async Task<bool> HavePartsAsync(int id)
         {
             var neededModel = await this.models.All()
-                .Include(x => x.ModelCategories)
                 .Include(x => x.Parts)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            var countOfModelCategories = neededModel.ModelCategories.Count();
             var countOfModelParts = neededModel.Parts.Count();
-            if (countOfModelCategories != 0 || countOfModelParts != 0)
+            if (countOfModelParts != 0)
             {
                 return true;
             }
@@ -161,7 +169,7 @@
             return false;
         }
 
-        public async Task<bool> IfModelExists(string brandName, string modelName, int startYear, int endYear)
+        public async Task<bool> IfModelExistsAsync(string brandName, string modelName, int startYear, int endYear)
         {
             int brandId = await this.brandService.GetBrandIdByNameAsync(brandName);
             var allModels = this.models.All().Where(x => x.BrandId == brandId);

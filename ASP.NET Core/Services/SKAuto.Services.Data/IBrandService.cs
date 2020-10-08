@@ -18,8 +18,6 @@
 
         Task CreateBrand(BrandCreateDtoModel brandCreateDtoModel);
 
-        Task<IList<BrandDeleteDtoModel>> GetAllBrandsAsync();
-
         Task<IList<BrandIndexDtoModel>> GetAllBrandsWithImageAsync();
 
         Task<bool> DeleteBrandAsync(int id);
@@ -29,5 +27,7 @@
         Task<bool> UpdateBrandAsync(BrandUpdateDtoModel model);
 
         Task<Brand> GetBrandByNameAsync(string name);
+
+        Task<int> SameBrandCount(BrandUpdateDtoModel model);
     }
 }

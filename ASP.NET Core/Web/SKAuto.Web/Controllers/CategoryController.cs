@@ -17,16 +17,34 @@
             this.categoryService = categoryService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return this.View();
+            var categoriesFromDb = await this.categoryService.GetAllCategories();
+            IList<CategoryIndexViewModel> categories = categoriesFromDb.Select(x => new CategoryIndexViewModel
+            {
+                CategoryId = x.CategoryId,
+                CategoryName = x.CategoryName,
+                ImageAddress = x.ImageAddress,
+            }).ToList();
+
+            return this.View(categories);
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
-            List<CategoryWithImageViewModel> categoryWithImages = this.categoryService.GetAllCategoriesForViewModel().ToList();
+            if (this.User.IsInRole("Administrator"))
+            {
+                var allCategories = await this.categoryService.GetAllCategoriesForViewModel();
+                IList<CategoryWithImageViewModel> categoryWithImages = allCategories.Select(x => new CategoryWithImageViewModel
+                {
+                    Name = x.CategoryName,
+                    ImageAdsress = x.ImageAddress,
+                }).ToList();
 
-            return this.View(categoryWithImages);
+                return this.View(categoryWithImages);
+            }
+
+            return this.Redirect("/Identity/Account/AccessDenied");
         }
 
         public IActionResult Create()
@@ -35,10 +53,8 @@
             {
                 return this.View();
             }
-            else
-            {
-                return this.Redirect("/Identity/Account/AccessDenied");
-            }
+
+            return this.Redirect("/Identity/Account/AccessDenied");
         }
 
         [HttpPost]
@@ -49,24 +65,22 @@
                 return this.Redirect("/Category/Create");
             }
 
-            bool existCategogy = this.categoryService.IfCategoryExists(categoryModel.Name);
+            bool existCategogy = await this.categoryService.IfCategoryExists(categoryModel.Name);
 
             if (existCategogy)
             {
                 // create a category error page
                 return this.Redirect("/Category/Create");
             }
-            else
-            {
-                await this.categoryService.CreateCategory(categoryModel.Name, categoryModel.ImageAdsress);
 
-                return this.Redirect("~/Category/All");
-            }
+            await this.categoryService.CreateCategory(categoryModel.Name, categoryModel.ImageAdsress);
+
+            return this.Redirect("~/Category/All");
         }
 
-        public IActionResult ShowAll(string modelName)
+        public async Task<IActionResult> ShowAll(string modelName)
         {
-            var categories = this.categoryService.GetCategoriesByNameAndYears(modelName).ToList();
+            var categories = await this.categoryService.GetCategoriesByNameAndYears(modelName);
 
             return this.View(categories);
         }
