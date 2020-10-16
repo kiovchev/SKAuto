@@ -1,8 +1,8 @@
-﻿namespace SKAuto.Web.ViewModels.ViewModels.BrandViewModels
+﻿namespace SKAuto.Web.ViewModels.ViewModels.CategoryViewModels
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class BrandUpdateInputModel
+    public class CategoryUpdateInputModel
     {
         [Required]
         public int Id { get; set; }

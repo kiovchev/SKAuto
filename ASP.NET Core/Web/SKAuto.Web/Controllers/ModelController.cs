@@ -1,12 +1,9 @@
 ﻿namespace SKAuto.Web.Controllers
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
     using SKAuto.Common;
-    using SKAuto.Common.DtoModels.ModelDto;
     using SKAuto.Services;
     using SKAuto.Services.Data;
     using SKAuto.Web.HandMappers.ModelMappers;
@@ -96,21 +93,31 @@
         [HttpPost]
         public async Task<IActionResult> Update(ModelUpdateInputModel model)
         {
-            var isSameModel = await this.model
-                .IsSameAsync(model.BrandName, model.Name, model.StartYear, model.EndYear, model.ImageAddress);
-
-            if (!isSameModel)
+            if (this.User.IsInRole("Administrator"))
             {
-                var modelToUpdate = ModelUpdatePostMapper.Map(model);
-                await this.model.UpdateModelAsync(modelToUpdate);
+                if (!this.ModelState.IsValid)
+                {
+                    return this.Redirect("/Model/Index");
+                }
 
-                return this.Redirect("/Model/Index");
+                var isSameModel = await this.model
+                    .IsSameAsync(model.BrandName, model.Name, model.StartYear, model.EndYear, model.ImageAddress);
+
+                if (!isSameModel)
+                {
+                    var modelToUpdate = ModelUpdatePostMapper.Map(model);
+                    await this.model.UpdateModelAsync(modelToUpdate);
+
+                    return this.Redirect("/Model/Index");
+                }
+
+                var error = new ModelError();
+                error.ErrorMessage = GlobalConstants.ModelUpdateErrorMessage;
+
+                return this.RedirectToAction("Error", "Model", error);
             }
 
-            var error = new ModelError();
-            error.ErrorMessage = GlobalConstants.ModelUpdateErrorMessage;
-
-            return this.RedirectToAction("Error", "Model", error);
+            return this.Redirect("/Identity/Account/AccessDenied");
         }
 
         public async Task<IActionResult> Delete(int modelId)

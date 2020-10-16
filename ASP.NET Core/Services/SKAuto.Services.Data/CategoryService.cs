@@ -10,7 +10,7 @@
     using SKAuto.Common.DtoModels.CategoryDtos;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
-    using SKAuto.Web.ViewModels.ViewModels.CategoryViewModels;
+    using SKAuto.Services.Mapping.CategoryServiceMapper;
 
     public class CategoryService : ICategoryService
     {
@@ -28,20 +28,15 @@
             this.modelCategories = modelCategories;
         }
 
-        public async Task CreateCategory(string name, string imageAddress)
+        public async Task CreateCategoryAsync(CategoryCreateDtoModel categoryCreateDto)
         {
-            if (imageAddress == null)
+            if (categoryCreateDto.ImageAddress == null)
             {
-                imageAddress = GlobalConstants.ImageAddress;
+                categoryCreateDto.ImageAddress = GlobalConstants.ImageAddress;
             }
 
-            Category category = new Category
-            {
-                Name = name,
-                ImageAddress = imageAddress,
-            };
-
-            List<Model> allModels = this.models.All().ToList();
+            var category = CategoryServiceCreateMapper.Map(categoryCreateDto);
+            var allModels = this.models.All().ToList();
 
             for (int i = 0; i < allModels.Count(); i++)
             {
@@ -58,38 +53,55 @@
             await this.categories.SaveChangesAsync();
         }
 
-        public async Task<IList<CategoryIndexDtoModel>> GetAllCategories()
+        public async Task<bool> DeleteCategoryAsync(int categoryId)
         {
-            var categoriesAll = this.categories.All();
-            List<CategoryIndexDtoModel> categories = await categoriesAll.Select(x => new CategoryIndexDtoModel
+            var category = await this.categories.All()
+                .Include(x => x.ModelCategories)
+                .Include(x => x.Parts)
+                .FirstOrDefaultAsync(x => x.Id == categoryId);
+
+            if (category.Parts.Count > 0)
             {
-                CategoryId = x.Id,
-                CategoryName = x.Name,
-                ImageAddress = x.ImageAddress,
-            }).ToListAsync();
+                return false;
+            }
+
+            if (category.ModelCategories.Count > 0)
+            {
+                foreach (var item in category.ModelCategories)
+                {
+                    this.modelCategories.Delete(item);
+                }
+
+                await this.modelCategories.SaveChangesAsync();
+            }
+
+            this.categories.Delete(category);
+            await this.categories.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<IList<CategoryIndexDtoModel>> GetAllCategoriesAsync()
+        {
+            var categoriesAll = await this.categories.All().ToListAsync();
+            var categories = GetAllCategoriesMapper.Map(categoriesAll);
 
             return categories;
         }
 
-        public async Task<IList<CategoruAllDtoModel>> GetAllCategoriesForViewModel()
+        public async Task<IList<CategoryAllDtoModel>> GetAllCategoriesForViewModelAsync()
         {
             var allCategories = await this.categories.All().ToListAsync();
-            IList<CategoruAllDtoModel> categoryWithImages = allCategories.Select(x => new CategoruAllDtoModel
-                {
-                    CategoryName = x.Name,
-                    ImageAddress = x.ImageAddress,
-                }).ToList();
+            var categoriesWithImages = GetAllCategoriesForViewModelMapper.Map(allCategories);
 
-            return categoryWithImages;
+            return categoriesWithImages;
         }
 
-        public async Task<IList<CategoryWithModelViewModel>> GetCategoriesByNameAndYears(string modelName)
+        public async Task<IList<GetCategoriesByNameAndYearsDtoModel>> GetCategoriesByNameAndYears(string modelName)
         {
             string[] nameAsArr = modelName.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
             string name = string.Join(" ", nameAsArr.Skip(1).Take(nameAsArr.Count() - 2));
-
             string[] years = nameAsArr[nameAsArr.Length - 1].Split(new char[] { '-' }).ToArray();
-
             int startYear = int.Parse(years[0]);
             int endYear = int.Parse(years[1]);
 
@@ -104,22 +116,15 @@
                                                y.Model.StartYear == startYear &&
                                                y.Model.EndYear == endYear));
 
-            IList<CategoryWithModelViewModel> neededCategory = new List<CategoryWithModelViewModel>();
+            var neededCategories = GetCategoriesByNameAndYearsMapper.Map(allCategories, modelName);
 
-            foreach (var item in allCategories)
-            {
-                string catName = item.Name;
-                string catImage = item.ImageAddress;
+            return neededCategories;
+        }
 
-                CategoryWithModelViewModel category = new CategoryWithModelViewModel
-                {
-                    Name = catName,
-                    ImageAdsress = catImage,
-                    ModelName = modelName,
-                };
-
-                neededCategory.Add(category);
-            }
+        public async Task<CategoryUpdateOutputDtoModel> GetCategoryByIdAsync(int categoryId)
+        {
+            var category = await this.categories.All().Where(x => x.Id == categoryId).FirstOrDefaultAsync();
+            var neededCategory = GetCategoryByIdMapper.Map(category);
 
             return neededCategory;
         }
@@ -130,6 +135,22 @@
             bool existCategogy = allCategories.Any(x => x.Name.ToUpper() == name.ToUpper());
 
             return existCategogy;
+        }
+
+        public async Task<bool> IsSameCategoryAsync(string name, string imageAddress)
+        {
+            var allCategories = await this.categories.AllAsNoTracking().ToListAsync();
+            bool existCategogy = allCategories.Any(x => x.Name.ToUpper() == name.ToUpper()
+            && x.ImageAddress == imageAddress);
+
+            return existCategogy;
+        }
+
+        public async Task UpdateCategoryAsync(CategoryUpdateInputDtoModel categoryDto)
+        {
+            var catetory = CategoryUpdateMapper.Map(categoryDto);
+            this.categories.Update(catetory);
+            await this.categories.SaveChangesAsync();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace SKAuto.Common.DtoModels.CategoryDtos
 {
-    public class CategoruAllDtoModel
+    public class CategoryAllDtoModel
     {
         public string CategoryName { get; set; }
 

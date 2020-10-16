@@ -4,18 +4,25 @@
     using System.Threading.Tasks;
 
     using SKAuto.Common.DtoModels.CategoryDtos;
-    using SKAuto.Web.ViewModels.ViewModels.CategoryViewModels;
 
     public interface ICategoryService
     {
-        Task<IList<CategoryIndexDtoModel>> GetAllCategories();
+        Task<CategoryUpdateOutputDtoModel> GetCategoryByIdAsync(int categoryId);
 
-        Task<IList<CategoruAllDtoModel>> GetAllCategoriesForViewModel();
+        Task<IList<CategoryIndexDtoModel>> GetAllCategoriesAsync();
 
-        Task<IList<CategoryWithModelViewModel>> GetCategoriesByNameAndYears(string modelName);
+        Task<IList<CategoryAllDtoModel>> GetAllCategoriesForViewModelAsync();
 
-        Task CreateCategory(string name, string imageAddress);
+        Task<IList<GetCategoriesByNameAndYearsDtoModel>> GetCategoriesByNameAndYears(string modelName);
+
+        Task CreateCategoryAsync(CategoryCreateDtoModel categoryCreateDto);
 
         Task<bool> IfCategoryExists(string name);
+
+        Task<bool> IsSameCategoryAsync(string name, string imageAddress);
+
+        Task UpdateCategoryAsync(CategoryUpdateInputDtoModel categoryDto);
+
+        Task<bool> DeleteCategoryAsync(int categoryId);
     }
 }

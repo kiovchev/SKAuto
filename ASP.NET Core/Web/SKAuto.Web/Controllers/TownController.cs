@@ -4,7 +4,6 @@
 
     using Microsoft.AspNetCore.Mvc;
     using SKAuto.Services.Data;
-    using SKAuto.Web.ViewModels.ViewModels.CategoryViewModels;
     using SKAuto.Web.ViewModels.ViewModels.TownViewModels;
 
     public class TownController : BaseController
@@ -21,8 +20,9 @@
             return this.View();
         }
 
-        public IActionResult ShowAll(CategoryNameViewModel model)
+        public IActionResult ShowAll(TownShallAllViewModel model)
         {
+            // change input model and delete that one
             var viewModel = this.townService.GetTownsByCategoryName(model.CategoryName);
 
             return this.View(viewModel);

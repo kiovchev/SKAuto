@@ -63,12 +63,15 @@
                                                .Include(x => x.ModelCategories)
                                                .FirstOrDefaultAsync(x => x.Id == id);
 
-            foreach (var item in neededModel.ModelCategories)
+            if (neededModel.ModelCategories.Count > 0)
             {
-                this.modelCategories.Delete(item);
-            }
+                foreach (var item in neededModel.ModelCategories)
+                {
+                    this.modelCategories.Delete(item);
+                }
 
-            await this.modelCategories.SaveChangesAsync();
+                await this.modelCategories.SaveChangesAsync();
+            }
 
             this.models.Delete(neededModel);
             await this.models.SaveChangesAsync();

@@ -1,7 +1,7 @@
 ﻿@using SKAuto.Web.ViewModels.ViewModels.CategoryViewModels;
-@model List<CategoryIndexViewModel>;
+@model IList<CategoryIndexViewModel>;
 
-{
+@{
     ViewData["Title"] = "Index";
 }
 
@@ -44,8 +44,8 @@
                         </td>
                         <td class="text-white skl-bg-color border align-middle" id="categoryName" name="categoryName" scope="col">@Model[i].CategoryName</td>
                         <td class="text-white skl-bg-color border align-middle" scope="col">
-                            <a class="btn bg-dark border p-1 text-white" asp-controller="Category" asp-action="Update" asp-route-brandId="@Model[i].CategoryId">Промени</a>
-                            <a class="btn bg-danger border p-1 text-white" asp-controller="Category" asp-action="Delete" asp-route-brandId="@Model[i].CategoryId">Изтрий</a>
+                            <a class="btn bg-dark border p-1 text-white" asp-controller="Category" asp-action="Update" asp-route-categoryId="@Model[i].CategoryId">Промени</a>
+                            <a class="btn bg-danger border p-1 text-white" asp-controller="Category" asp-action="Delete" asp-route-categoryId="@Model[i].CategoryId">Изтрий</a>
                         </td>
                     </tr>
                 }
