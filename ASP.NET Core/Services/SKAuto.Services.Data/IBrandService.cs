@@ -20,6 +20,8 @@
 
         Task<IList<BrandIndexDtoModel>> GetAllBrandsWithImageAsync();
 
+        Task<IList<Brand>> GetAllBrandsWithModelsAsync();
+
         Task<bool> DeleteBrandAsync(int id);
 
         Task<BrandUpdateDtoModel> GetBrandByIdAsync(int id);

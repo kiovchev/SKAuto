@@ -129,5 +129,12 @@
 
             return sameBrandCount;
         }
+
+        public async Task<IList<Brand>> GetAllBrandsWithModelsAsync()
+        {
+            var brandsWithModels = await this.brands.All().Include(x => x.Models).ToListAsync();
+
+            return brandsWithModels;
+        }
     }
 }

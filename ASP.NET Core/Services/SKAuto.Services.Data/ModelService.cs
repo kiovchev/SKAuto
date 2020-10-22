@@ -16,18 +16,18 @@
     {
         private readonly IRepository<Model> models;
         private readonly IBrandService brandService;
-        private readonly IRepository<Category> categories;
+        private readonly ICategoryService categoryService;
         private readonly IRepository<ModelCategories> modelCategories;
 
         public ModelService(
             IRepository<Model> models,
             IBrandService brandService,
-            IRepository<Category> categories,
+            ICategoryService categoryService,
             IRepository<ModelCategories> modelCategories)
         {
             this.models = models;
             this.brandService = brandService;
-            this.categories = categories;
+            this.categoryService = categoryService;
             this.modelCategories = modelCategories;
         }
 
@@ -40,11 +40,11 @@
 
             var brand = await this.brandService.GetBrandByNameAsync(modelToCreate.BrandName);
             var model = ModelServiceCreateMapper.Map(modelToCreate, brand);
-            var allCategories = this.categories.All().ToList();
+            var allCategories = await this.categoryService.GetAllCategoriesForModelAsync();
 
             for (int i = 0; i < allCategories.Count(); i++)
             {
-                ModelCategories modelCategory = new ModelCategories
+                var modelCategory = new ModelCategories
                 {
                     Category = allCategories[i],
                     Model = model,
@@ -101,6 +101,15 @@
             var neededModel = GetModelByIdMapper.Map(currentModel, allBrandsName);
 
             return neededModel;
+        }
+
+        public async Task<Model> GetModelByNameStartAndEndYearsAsync(string name, int startYear, int endYear)
+        {
+            var model = await this.models.All().FirstOrDefaultAsync(x => x.Name == name
+                                                                && x.StartYear == startYear
+                                                                && x.EndYear == endYear);
+
+            return model;
         }
 
         public async Task<bool> HavePartsAsync(int id)

@@ -11,7 +11,7 @@
 
         Task<List<PartByCategoryAndModelViewModel>> GetPartsByModelAndCategoryAsync(string modelName, string categoryName);
 
-        PartCreateViewModel GetPartCreateParams();
+        Task<PartCreateViewModel> GetPartCreateParams();
 
         Task<bool> CheckIfPartExistsAsync(PartCreateInputModel model);
     }

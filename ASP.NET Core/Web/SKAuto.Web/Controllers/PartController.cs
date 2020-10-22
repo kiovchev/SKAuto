@@ -30,18 +30,16 @@
             return this.View(neededParts);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             if (this.User.IsInRole("Administrator"))
             {
-                PartCreateViewModel partCreate = this.partService.GetPartCreateParams();
+                PartCreateViewModel partCreate = await this.partService.GetPartCreateParams();
 
                 return this.View(partCreate);
             }
-            else
-            {
-                return this.Redirect("/Identity/Account/AccessDenied");
-            }
+
+            return this.Redirect("/Identity/Account/AccessDenied");
         }
 
         [HttpPost]
@@ -54,9 +52,8 @@
 
             var ifPartExists = await this.partService.CheckIfPartExistsAsync(model);
 
-            if (!ifPartExists)
+            if (ifPartExists)
             {
-                // to create a part error page
                 return this.Redirect("/Part/Error");
             }
 

@@ -2,8 +2,6 @@
 {
     using System.Collections.Generic;
 
-    using SKAuto.Data.Models;
-
     public class PartCreateViewModel
     {
         public PartCreateViewModel()
@@ -12,8 +10,8 @@
             this.Categories = new List<string>();
         }
 
-        public List<string> BrandWithModels { get; set; }
+        public IList<string> BrandWithModels { get; set; }
 
-        public List<string> Categories { get; set; }
+        public IList<string> Categories { get; set; }
     }
 }

@@ -8,7 +8,7 @@
 
     public static class GetCategoriesByNameAndYearsMapper
     {
-        public static IList<GetCategoriesByNameAndYearsDtoModel> Map(IQueryable<Category> allCategories, string modelName)
+        public static IList<GetCategoriesByNameAndYearsDtoModel> Map(IList<Category> allCategories, string modelName)
         {
             var neededCategory = allCategories.Select(x => new GetCategoriesByNameAndYearsDtoModel
             {

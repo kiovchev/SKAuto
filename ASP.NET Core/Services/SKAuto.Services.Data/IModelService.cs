@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using SKAuto.Common.DtoModels.ModelDto;
+    using SKAuto.Data.Models;
     using SKAuto.Web.ViewModels.ViewModels.ModelViewModels;
 
     public interface IModelService
@@ -23,6 +24,8 @@
         Task<bool> HavePartsAsync(int id);
 
         Task<ModelUpdateOutputDtoModel> GetModelByIdAsync(int id);
+
+        Task<Model> GetModelByNameStartAndEndYearsAsync(string name, int startYear, int endYear);
 
         Task UpdateModelAsync(ModelUpdateInputDtoModel model);
     }

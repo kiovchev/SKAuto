@@ -89,12 +89,26 @@
             return categories;
         }
 
+        public async Task<IList<Category>> GetAllCategoriesForModelAsync()
+        {
+            var categories = await this.categories.All().ToListAsync();
+
+            return categories;
+        }
+
         public async Task<IList<CategoryAllDtoModel>> GetAllCategoriesForViewModelAsync()
         {
             var allCategories = await this.categories.All().ToListAsync();
             var categoriesWithImages = GetAllCategoriesForViewModelMapper.Map(allCategories);
 
             return categoriesWithImages;
+        }
+
+        public async Task<IList<string>> GetAllCategoryNamesAsync()
+        {
+            var categoriesNames = await this.categories.All().Select(x => x.Name).ToListAsync();
+
+            return categoriesNames;
         }
 
         public async Task<IList<GetCategoriesByNameAndYearsDtoModel>> GetCategoriesByNameAndYears(string modelName)
@@ -105,16 +119,11 @@
             int startYear = int.Parse(years[0]);
             int endYear = int.Parse(years[1]);
 
-            int modelId = await this.models.All()
-                                     .Where(x => x.Name == name && x.StartYear == startYear && x.EndYear == endYear)
-                                     .Select(y => y.Id)
-                                     .FirstOrDefaultAsync();
-
-            var allCategories = this.categories.All()
+            var allCategories = await this.categories.All()
                                                .Where(x => x.ModelCategories
                                                .Any(y => y.Model.Name == name &&
                                                y.Model.StartYear == startYear &&
-                                               y.Model.EndYear == endYear));
+                                               y.Model.EndYear == endYear)).ToListAsync();
 
             var neededCategories = GetCategoriesByNameAndYearsMapper.Map(allCategories, modelName);
 
@@ -127,6 +136,13 @@
             var neededCategory = GetCategoryByIdMapper.Map(category);
 
             return neededCategory;
+        }
+
+        public async Task<Category> GetCategoryByNameAsync(string categoryName)
+        {
+            var category = await this.categories.All().FirstOrDefaultAsync(x => x.Name == categoryName);
+
+            return category;
         }
 
         public async Task<bool> IfCategoryExists(string name)
