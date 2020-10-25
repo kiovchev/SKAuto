@@ -6,7 +6,7 @@
 
     using Microsoft.EntityFrameworkCore;
     using SKAuto.Common;
-    using SKAuto.Common.DtoModels.ModelDto;
+    using SKAuto.Common.DtoModels.ModelDtos;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
     using SKAuto.Services.Mapping.ModelServiceMappers;

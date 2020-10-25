@@ -1,6 +1,6 @@
 ﻿namespace SKAuto.Web.HandMappers.ModelMappers
 {
-    using SKAuto.Common.DtoModels.ModelDto;
+    using SKAuto.Common.DtoModels.ModelDtos;
     using SKAuto.Web.ViewModels.ViewModels.ModelViewModels;
 
     public static class ModelCreateMapper

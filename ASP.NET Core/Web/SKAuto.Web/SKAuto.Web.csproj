@@ -44,8 +44,4 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="HandMappers\PartMappers\" />
-  </ItemGroup>
 </Project>

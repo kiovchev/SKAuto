@@ -1,7 +1,9 @@
-﻿namespace SKAuto.Common.DtoModels.ModelDto
+﻿namespace SKAuto.Common.DtoModels.ModelDtos
 {
-    public class ModelCreateDtoModel
+    public class ModelUpdateInputDtoModel
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public int StartYear { get; set; }

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using SKAuto.Common.DtoModels.ModelDto;
+    using SKAuto.Common.DtoModels.ModelDtos;
     using SKAuto.Web.ViewModels.ViewModels.ModelViewModels;
 
     public static class ModelIndexMapper

@@ -1,6 +1,6 @@
 ﻿namespace SKAuto.Services.Mapping.ModelServiceMappers
 {
-    using SKAuto.Common.DtoModels.ModelDto;
+    using SKAuto.Common.DtoModels.ModelDtos;
     using SKAuto.Data.Models;
 
     public static class ModelServiceCreateMapper

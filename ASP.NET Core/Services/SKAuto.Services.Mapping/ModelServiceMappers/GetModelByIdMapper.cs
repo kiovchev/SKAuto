@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using SKAuto.Common.DtoModels.ModelDto;
+    using SKAuto.Common.DtoModels.ModelDtos;
     using SKAuto.Data.Models;
 
     public static class GetModelByIdMapper

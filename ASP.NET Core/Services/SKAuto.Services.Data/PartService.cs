@@ -1,14 +1,16 @@
 ﻿namespace SKAuto.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
     using SKAuto.Common;
+    using SKAuto.Common.DtoModels.PartDtos;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
-    using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
+    using SKAuto.Services.Mapping.PartServiceMappers;
 
     public class PartService : IPartService
     {
@@ -32,12 +34,45 @@
             this.manufactoryService = manufactoryService;
         }
 
-        public async Task<bool> CheckIfPartExistsAsync(PartCreateInputModel model)
+        public async Task AddQuantityAsync(PartAddInputDtoModel model)
         {
-            var part = await this.parts.All().FirstOrDefaultAsync(x => x.Name == model.PartName
-                                                                    && x.Model.Name == model.ModelName
-                                                                    && x.Category.Name == model.CategoryName
-                                                                    && x.Manufactory.Name == model.ModelName);
+            var part = await this.parts.All().FirstOrDefaultAsync(x => x.Id == model.PartId);
+            var totalQuantity = part.Quantity + model.Quantity;
+            if (part.InComePrice != model.Price)
+            {
+                var averagePrice = Math.Round(((part.Quantity * part.InComePrice) + (model.Quantity * model.Price)) / totalQuantity, 2);
+                part.InComePrice = averagePrice;
+            }
+
+            part.Quantity = totalQuantity;
+
+            this.parts.Update(part);
+            await this.parts.SaveChangesAsync();
+        }
+
+        public async Task<bool> CheckIfPartExistsAsync(
+                                                        string partName,
+                                                        string brandAndModelName,
+                                                        string categoryName,
+                                                        string manufactoryName)
+        {
+            var carParams = this.TakeParmsFromModelName(brandAndModelName);
+            var brandName = carParams[0];
+            var modelName = carParams[1];
+            var modelStartYear = int.Parse(carParams[2]);
+            var modelEndYear = int.Parse(carParams[3]);
+            var part = await this.parts.All()
+                                       .Include(x => x.Brand)
+                                       .Include(x => x.Model)
+                                       .Include(x => x.Category)
+                                       .Include(x => x.Manufactory)
+                                       .FirstOrDefaultAsync(x => x.Name == partName
+                                                                    && x.Brand.Name == brandName
+                                                                    && x.Model.Name == modelName
+                                                                    && x.Model.StartYear == modelStartYear
+                                                                    && x.Model.EndYear == modelEndYear
+                                                                    && x.Category.Name == categoryName
+                                                                    && x.Manufactory.Name == manufactoryName);
 
             if (part == null)
             {
@@ -47,7 +82,7 @@
             return true;
         }
 
-        public async Task CreatePartAsync(PartCreateInputModel partModel)
+        public async Task CreatePartAsync(PartCreateInputDtoModel partModel)
         {
             var allCarParams = this.TakeParmsFromModelName(partModel.ModelName);
             var brandName = allCarParams[0];
@@ -63,15 +98,7 @@
                                                                                     modelEndYear);
             var category = await this.categoryService.GetCategoryByNameAsync(categoryName);
 
-            var part = new Part
-            {
-                Name = partModel.PartName,
-                Brand = brand,
-                Model = model,
-                Category = category,
-                InComePrice = partModel.Price,
-                Quantity = partModel.Quantity,
-            };
+            var part = PartServiceCreateMapper.Map(partModel, brand, model, category);
 
             if (partModel.ManufactoryName != null)
             {
@@ -89,7 +116,42 @@
             await this.parts.SaveChangesAsync();
         }
 
-        public async Task<PartCreateViewModel> GetPartCreateParams()
+        public async Task DeletePartAsync(int partId)
+        {
+            var part = await this.parts.All().FirstOrDefaultAsync(x => x.Id == partId);
+
+            this.parts.Delete(part);
+            await this.parts.SaveChangesAsync();
+        }
+
+        public async Task<PartAddOutputDtoModel> GetAddOutputModelByIdAsync(int partId)
+        {
+            var part = await this.parts.All()
+                                       .Include(x => x.Brand)
+                                       .Include(x => x.Model)
+                                       .Include(x => x.Category)
+                                       .Include(x => x.Manufactory)
+                                       .FirstOrDefaultAsync(x => x.Id == partId);
+            var partDto = PartServiceAddOutputMapper.Map(part);
+
+            return partDto;
+        }
+
+        public async Task<IList<PartGetAllPartsForIndexDtoModel>> GetAllPartsAsync()
+        {
+            var allParts = await this.parts.All()
+                                     .Include(x => x.Brand)
+                                     .Include(x => x.Model)
+                                     .Include(x => x.Category)
+                                     .Include(x => x.Manufactory)
+                                     .ToListAsync();
+
+            var partAllModel = PartServiceIndexMapper.Map(allParts);
+
+            return partAllModel;
+        }
+
+        public async Task<PartCreateOutPutDtoModel> GetPartCreateParams()
         {
             var brands = await this.brandService.GetAllBrandsWithModelsAsync();
             var categories = await this.categoryService.GetAllCategoryNamesAsync();
@@ -100,22 +162,17 @@
             {
                 foreach (var model in brand.Models)
                 {
-                    string neededInfo = brand.Name + " " + model.Name + " " + model.StartYear + "-" + model.EndYear;
-
+                    string neededInfo = $"{brand.Name} {model.Name} {model.StartYear}-{model.EndYear}";
                     brandsWithModels.Add(neededInfo);
                 }
             }
 
-            var partCreate = new PartCreateViewModel
-            {
-                BrandWithModels = brandsWithModels.OrderBy(x => x).ToList(),
-                Categories = categories.OrderBy(x => x).ToList(),
-            };
+            var partCreate = PartGetPartCreateParamsMapper.Map(brandsWithModels, categories);
 
             return partCreate;
         }
 
-        public async Task<List<PartByCategoryAndModelViewModel>> GetPartsByModelAndCategoryAsync(string modelName, string categoryName)
+        public async Task<IList<PartAllDtoModel>> GetPartsByModelAndCategoryAsync(string modelName, string categoryName)
         {
             var allCarParams = this.TakeParmsFromModelName(modelName);
             string currentBrandName = allCarParams[0];
@@ -134,7 +191,7 @@
                                                                    x.ModelId == model.Id &&
                                                                    x.CategoryId == category.Id).ToListAsync();
 
-            var partsByCategoryAndModel = new List<PartByCategoryAndModelViewModel>();
+            var partsByCategoryAndModel = new List<PartAllDtoModel>();
 
             foreach (var part in partsByParams)
             {
@@ -146,20 +203,91 @@
                     manufactoryName = manufactory.Name;
                 }
 
-                var currentPart = new PartByCategoryAndModelViewModel
-                {
-                    PartName = part.Name,
-                    BrandAndModelName = modelName,
-                    CategoryName = categoryName,
-                    ManufactoryName = manufactoryName,
-                    Quantity = part.Quantity,
-                    SellPrice = part.CustomerPrice.ToString(format: GlobalConstants.PartPriceFormat),
-                };
-
+                var currentPart = PartAllServiceMapper.Map(part, modelName, categoryName, manufactoryName);
                 partsByCategoryAndModel.Add(currentPart);
             }
 
             return partsByCategoryAndModel;
+        }
+
+        public async Task<PartUpdateOutputDtoModel> GetPartUpdateModel(int partId)
+        {
+            var part = await this.parts.All()
+                                       .Include(x => x.Brand)
+                                       .Include(x => x.Model)
+                                       .Include(x => x.Category)
+                                       .Include(x => x.Manufactory)
+                                       .FirstOrDefaultAsync(x => x.Id == partId);
+            var brands = await this.brandService.GetAllBrandsWithModelsAsync();
+            var categories = await this.categoryService.GetAllCategoryNamesAsync();
+            var brandsAndModelsNames = new List<string>();
+
+            foreach (var brand in brands)
+            {
+                foreach (var model in brand.Models)
+                {
+                    string neededInfo = $"{brand.Name} {model.Name} {model.StartYear}-{model.EndYear}";
+
+                    brandsAndModelsNames.Add(neededInfo);
+                }
+            }
+
+            var partDto = PartServiceGetUpdateModelMapper.Map(part, brandsAndModelsNames, categories);
+
+            return partDto;
+        }
+
+        public async Task<bool> IsSamePartAsync(string partName, string brandAndModelName, string categoryName, string manufactoryName, int partQuantity, decimal price)
+        {
+            var carParams = this.TakeParmsFromModelName(brandAndModelName);
+            var brandName = carParams[0];
+            var modelName = carParams[1];
+            var modelStartYear = int.Parse(carParams[2]);
+            var modelEndYear = int.Parse(carParams[3]);
+            var part = await this.parts.All()
+                                       .Include(x => x.Brand)
+                                       .Include(x => x.Model)
+                                       .Include(x => x.Category)
+                                       .Include(x => x.Manufactory)
+                                       .FirstOrDefaultAsync(x => x.Name == partName
+                                                                    && x.Brand.Name == brandName
+                                                                    && x.Model.Name == modelName
+                                                                    && x.Model.StartYear == modelStartYear
+                                                                    && x.Model.EndYear == modelEndYear
+                                                                    && x.Category.Name == categoryName
+                                                                    && x.Manufactory.Name == manufactoryName
+                                                                    && x.Quantity == partQuantity
+                                                                    && x.InComePrice == price);
+
+            if (part == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task UpdatePartAsync(PartUpdateInputDtoModel model)
+        {
+            var allCarParams = this.TakeParmsFromModelName(model.BrandAndModelName);
+            string currentBrandName = allCarParams[0];
+            string currentModelName = allCarParams[1];
+            int currentStartYear = int.Parse(allCarParams[2]);
+            int currentEndYear = int.Parse(allCarParams[3]);
+
+            var part = await this.parts.All().FirstOrDefaultAsync(x => x.Id == model.PartId);
+            var brand = await this.brandService.GetBrandByNameAsync(currentBrandName);
+            var currentModel = await this.modelService.GetModelByNameStartAndEndYearsAsync(
+                                                                                           currentModelName,
+                                                                                           currentStartYear,
+                                                                                           currentEndYear);
+            var category = await this.categoryService.GetCategoryByNameAsync(model.CategoryName);
+            var manufactory = await this.manufactoryService.GetManufactoryByNameAsync(model.ManufactoryName);
+
+            var currentPart = PartServiceUpdateMapper.Map(model, part, brand, currentModel, category, manufactory);
+
+            this.parts.Update(currentPart);
+            await this.parts.SaveChangesAsync();
         }
 
         private List<string> TakeParmsFromModelName(string brandWithModelName)

@@ -1,0 +1,63 @@
+﻿@using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
+@model PartUpdateOutputModel;
+
+@{
+    ViewData["Title"] = "Update";
+}
+
+<h1 class="text-white text-center">Промени част</h1>
+<div class="row text-white justify-content-xl-center">
+    <div class="col-md-4">
+        <form id="account" method="post">
+            <hr class="bg-white" />
+            <div class="form-group">
+                <label>Име на част</label>
+                <input class="form-control" id="partName" name="partName" value="@Model.PartName" />
+            </div>
+            <div class="form-group">
+                <label>Модел и марка</label>
+                <select class="form-control" id="brandAndModelName" name="brandAndModelName" type="text">
+                    <option selected>@Model.BrandAndModelName</option>
+                    @foreach (var item in Model.AllBrandsAndModelsNames)
+                    {
+                        @if (item != Model.BrandAndModelName)
+                        {
+                            <option>@item</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Категория</label>
+                <select class="form-control" id="categoryName" name="categoryName" type="text">
+                    <option selected>@Model.CategoryName</option>
+                    @foreach (var item in Model.AllCategoriesNames)
+                    {
+                        @if (item != Model.CategoryName)
+                        {
+                            <option>@item</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Цена</label>
+                <input type="number" min="0.01" step="0.01" class="form-control" id="price" name="price" value="@Model.Price" />
+            </div>
+            <div class="form-group">
+                <label>Производител</label>
+                <input class="form-control" id="manufactoryName" name="manufactoryName" value="@Model.ManufactoryName" />
+            </div>
+            <div class="form-group">
+                <label>Брой части</label>
+                <input type="number" min="1" step="1" class="form-control" id="quantity" name="quantity" value="@Model.Quantity" />
+            </div>
+            <hr class="bg-white" />
+            <div class="form-group text-center">
+                <button type="submit" class="btn skl-bg-color border">Промени</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+

@@ -1,4 +1,4 @@
-﻿namespace SKAuto.Common.DtoModels.ModelDto
+﻿namespace SKAuto.Common.DtoModels.ModelDtos
 {
     public class ModelWithBrandNameDtoModel
     {

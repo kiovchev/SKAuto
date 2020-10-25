@@ -17,7 +17,6 @@
         public const string CategotyCreateErrorMessage = "В базата вече съществува категория с това име!!!!!";
         public const string CategoryDeleteErrorMessage = "Категорията не може да бъде изтрита - има част/и свързани с нея!!!!";
 
-
         // Role
         public const string AdministratorRoleName = "Administrator";
         public const string UserRoleName = "User";

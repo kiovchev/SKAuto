@@ -1,11 +1,10 @@
-﻿using SKAuto.Common.DtoModels.ModelDto;
-using SKAuto.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SKAuto.Services.Mapping.ModelServiceMappers
+﻿namespace SKAuto.Services.Mapping.ModelServiceMappers
 {
+    using System.Collections.Generic;
+
+    using SKAuto.Common.DtoModels.ModelDtos;
+    using SKAuto.Data.Models;
+
     public static class GetAllModelsMapper
     {
         public static IList<ModelWithBrandNameDtoModel> Map(List<Model> brandsWithModels)

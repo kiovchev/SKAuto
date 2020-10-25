@@ -3,16 +3,40 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
+    using SKAuto.Common.DtoModels.PartDtos;
 
     public interface IPartService
     {
-        Task CreatePartAsync(PartCreateInputModel partModel);
+        Task CreatePartAsync(PartCreateInputDtoModel partModel);
 
-        Task<List<PartByCategoryAndModelViewModel>> GetPartsByModelAndCategoryAsync(string modelName, string categoryName);
+        Task DeletePartAsync(int partId);
 
-        Task<PartCreateViewModel> GetPartCreateParams();
+        Task<bool> IsSamePartAsync(
+                                    string partName,
+                                    string brandAndModelName,
+                                    string categoryName,
+                                    string manufactoryName,
+                                    int partQuantity,
+                                    decimal price);
 
-        Task<bool> CheckIfPartExistsAsync(PartCreateInputModel model);
+        Task<IList<PartAllDtoModel>> GetPartsByModelAndCategoryAsync(string modelName, string categoryName);
+
+        Task<PartCreateOutPutDtoModel> GetPartCreateParams();
+
+        Task<bool> CheckIfPartExistsAsync(
+                                           string partName,
+                                           string brandAndModelName,
+                                           string categoryName,
+                                           string manufactoryName);
+
+        Task<IList<PartGetAllPartsForIndexDtoModel>> GetAllPartsAsync();
+
+        Task<PartAddOutputDtoModel> GetAddOutputModelByIdAsync(int partId);
+
+        Task AddQuantityAsync(PartAddInputDtoModel model);
+
+        Task<PartUpdateOutputDtoModel> GetPartUpdateModel(int partId);
+
+        Task UpdatePartAsync(PartUpdateInputDtoModel model);
     }
 }
