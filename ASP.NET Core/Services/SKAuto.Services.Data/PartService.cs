@@ -151,6 +151,18 @@
             return partAllModel;
         }
 
+        public async Task<Part> GetPartByIdAsync(int partId)
+        {
+            var part = await this.parts.All()
+                                       .Include(x => x.Brand)
+                                       .Include(x => x.Model)
+                                       .Include(x => x.Category)
+                                       .Include(x => x.Manufactory)
+                                       .FirstOrDefaultAsync(x => x.Id == partId);
+
+            return part;
+        }
+
         public async Task<PartCreateOutPutDtoModel> GetPartCreateParams()
         {
             var brands = await this.brandService.GetAllBrandsWithModelsAsync();

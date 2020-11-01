@@ -1,5 +1,5 @@
-﻿@using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
-@model PartByCategoryAndModelViewModel;
+﻿@using SKAuto.Web.ViewModels.ViewModels.RecipientViewModels;
+@model RecipientFindOutputViewModel;
 
 @{
     ViewData["Title"] = "Find";
@@ -12,8 +12,32 @@
             <form method="post">
                 <hr class="bg-white" />
                 <div class="form-group">
+                    <label>Име на част</label>
+                    <input class="form-control" name="partName" type="text" value="@Model.PartName" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Марка и модел</label>
+                    <input class="form-control" name="brandAndModelName" type="text" value="@Model.BrandAndModelName" readonly />
+                </div>                                                  
+                <div class="form-group">                                
+                    <label>Категория</label>                            
+                    <input class="form-control" name="categoryName" type="text" value="@Model.CategoryName" readonly />
+                </div>                                                  
+                <div class="form-group">                                
+                    <label>Производител</label>                         
+                    <input class="form-control" name="manufactoryName" type="text" value="@Model.ManufactoryName" readonly />
+                </div>                                                  
+                <div class="form-group">                                
+                    <label>Цена за брой</label>                         
+                    <input class="form-control" name="price" type="number" value="@Model.Price" readonly />
+                </div>                                                  
+                <div class="form-group">                                
+                    <label>Искано количество</label>                         
+                    <input class="form-control" name="quantity" type="number" min="1" max="@Model.Quantity" step="1" />
+                </div>
+                <div class="form-group">
                     <label>Телефон на получател</label>
-                    <input class="form-control" id="phone" name="phone" type="text" />
+                    <input class="form-control" name="phone" type="text" />
                 </div>
                 <hr class="bg-white" />
                 <div class="form-group text-center">

@@ -2,6 +2,7 @@
 {
     using System.Threading.Tasks;
 
+    using SKAuto.Common.DtoModels.RecipientDtos;
     using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
     using SKAuto.Web.ViewModels.ViewModels.RecipientViewModels;
 
@@ -12,5 +13,9 @@
         Task<int> CreateRecipientAndOrderAsync(
             PartByCategoryAndModelViewModel partModel,
             RecipientParamsViewModel paramsRecipient);
+
+        Task<RecipientFindOutPutDtoModel> GetPartParams(int partId);
+
+        Task FindRecipientAndAddPartToAnOrder(int partid, int quantity, string number);
     }
 }

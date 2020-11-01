@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using SKAuto.Common;
     using SKAuto.Common.DtoModels.PartDtos;
     using SKAuto.Data.Models;
 
@@ -15,7 +16,7 @@
                 PartName = part.Name,
                 BrandAndModelName = $"{part.Brand.Name} {part.Model.Name} {part.Model.StartYear}-{part.Model.EndYear}",
                 CategoryName = part.Category.Name,
-                ManufactoryName = part.Manufactory == null ? "Липсва информация" : part.Manufactory.Name,
+                ManufactoryName = part.Manufactory == null ? GlobalConstants.ManufactoryName : part.Manufactory.Name,
                 Price = part.InComePrice,
                 Quantity = part.Quantity,
                 AllBrandsAndModelsNames = brandsAndModelsNames,

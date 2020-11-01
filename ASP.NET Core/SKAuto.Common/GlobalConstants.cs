@@ -32,5 +32,11 @@
 
         // Manufactory
         public const string ManufactoryName = "Липсва информация";
+
+        // OrderStatus
+        public const string PendingStatus = "Peding";
+        public const string DeliverStatus = "Deliverd";
+        public const string ShippedStatus = "shipped";
+        public const string AcquiredStatus = "Aquired";
     }
 }

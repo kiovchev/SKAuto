@@ -2,6 +2,8 @@
 {
     public class PartByCategoryAndModelViewModel
     {
+        public int PartId { get; set; }
+
         public string PartName { get; set; }
 
         public string BrandAndModelName { get; set; }

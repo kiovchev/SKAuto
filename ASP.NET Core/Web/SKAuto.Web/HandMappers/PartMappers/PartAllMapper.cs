@@ -12,6 +12,7 @@
         {
             var allParts = partAllDtoModels.Select(x => new PartByCategoryAndModelViewModel
             {
+                PartId = x.PartId,
                 PartName = x.PartName,
                 BrandAndModelName = x.BrandAndModelName,
                 CategoryName = x.CategoryName,

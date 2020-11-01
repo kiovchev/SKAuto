@@ -135,7 +135,7 @@
                     dbContext.OrderStatuses.Add(new OrderStatus { Name = "Pending" });
                     dbContext.OrderStatuses.Add(new OrderStatus { Name = "Shipped" });
                     dbContext.OrderStatuses.Add(new OrderStatus { Name = "Delivered" });
-                    dbContext.OrderStatuses.Add(new OrderStatus { Name = "Acquired" });
+                    dbContext.OrderStatuses.Add(new OrderStatus { Name = "  " });
                 }
 
                 dbContext.SaveChanges();

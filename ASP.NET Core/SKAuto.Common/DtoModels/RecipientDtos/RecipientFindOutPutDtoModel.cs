@@ -1,6 +1,6 @@
-﻿namespace SKAuto.Common.DtoModels.PartDtos
+﻿namespace SKAuto.Common.DtoModels.RecipientDtos
 {
-    public class PartAllDtoModel
+    public class RecipientFindOutPutDtoModel
     {
         public int PartId { get; set; }
 
@@ -12,8 +12,8 @@
 
         public string ManufactoryName { get; set; }
 
-        public int Quantity { get; set; }
+        public decimal Price { get; set; }
 
-        public string SellPrice { get; set; }
+        public int Quantity { get; set; }
     }
 }

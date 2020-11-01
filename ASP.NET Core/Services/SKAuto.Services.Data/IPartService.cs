@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using SKAuto.Common.DtoModels.PartDtos;
+    using SKAuto.Data.Models;
 
     public interface IPartService
     {
@@ -36,6 +37,8 @@
         Task AddQuantityAsync(PartAddInputDtoModel model);
 
         Task<PartUpdateOutputDtoModel> GetPartUpdateModel(int partId);
+
+        Task<Part> GetPartByIdAsync(int partId);
 
         Task UpdatePartAsync(PartUpdateInputDtoModel model);
     }

@@ -10,6 +10,7 @@
         {
             var currentPart = new PartAllDtoModel
             {
+                PartId = part.Id,
                 PartName = part.Name,
                 BrandAndModelName = modelName,
                 CategoryName = categoryName,

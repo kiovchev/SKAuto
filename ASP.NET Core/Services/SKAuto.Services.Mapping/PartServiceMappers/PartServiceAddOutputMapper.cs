@@ -1,5 +1,6 @@
 ﻿namespace SKAuto.Services.Mapping.PartServiceMappers
 {
+    using SKAuto.Common;
     using SKAuto.Common.DtoModels.PartDtos;
     using SKAuto.Data.Models;
 
@@ -13,7 +14,7 @@
                 PartName = part.Name,
                 BrandAndModelName = $"{part.Brand.Name} {part.Model.Name} {part.Model.StartYear}-{part.Model.EndYear}",
                 CategoryName = part.Category.Name,
-                ManufactoryName = part.Manufactory == null ? "Липсва информация" : part.Manufactory.Name,
+                ManufactoryName = part.Manufactory == null ? GlobalConstants.ManufactoryName : part.Manufactory.Name,
             };
 
             return partDto;

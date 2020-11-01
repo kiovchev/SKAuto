@@ -1,8 +1,10 @@
-﻿@using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
-@model  PartByCategoryAndModelViewModel;
+﻿@*@using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
+@model  PartByCategoryAndModelViewModel;*@
+@using SKAuto.Web.ViewModels.ViewModels.RecipientViewModels;
+@model RecipientHomeViewModel;
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Home";
 }
 
 <div class="row">
@@ -15,7 +17,8 @@
                         <hr class="bg-white" />
                         <hr class="bg-white" />
                         <div class="form-group text-center">
-                            <a class="btn skl-bg-color border" href="/Recipient/Find?partName=@Model.PartName&brandAndModelName=@Model.BrandAndModelName&categoryName=@Model.CategoryName&manufactoryName=@Model.ManufactoryName&sellPrice=@Model.SellPrice">Продължи</a>
+                            @*<a class="btn skl-bg-color border" href="/Recipient/Find?partName=@Model.PartName&brandAndModelName=@Model.BrandAndModelName&categoryName=@Model.CategoryName&manufactoryName=@Model.ManufactoryName&sellPrice=@Model.SellPrice">Продължи</a>*@
+                            <a class="btn skl-bg-color border" href="/Recipient/Find?partId=@Model.PartId">Продължи</a>
                         </div>
                     </form>
                 </section>
@@ -31,7 +34,8 @@
                         <hr class="bg-white" />
                         <hr class="bg-white" />
                         <div class="form-group text-center">
-                            <a class="btn skl-bg-color border" href="/Recipient/Create?partName=@Model.PartName&brandAndModelName=@Model.BrandAndModelName&categoryName=@Model.CategoryName&manufactoryName=@Model.ManufactoryName&sellPrice=@Model.SellPrice">Регистрирай</a>
+                            @*<a class="btn skl-bg-color border" href="/Recipient/Create?partName=@Model.PartName&brandAndModelName=@Model.BrandAndModelName&categoryName=@Model.CategoryName&manufactoryName=@Model.ManufactoryName&sellPrice=@Model.SellPrice">Регистрирай</a>*@
+                            <a class="btn skl-bg-color border" href="/Recipient/Create?partName=@Model.PartId">Регистрирай</a>
                         </div>
                     </form>
                 </section>

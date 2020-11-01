@@ -4,6 +4,7 @@
 
     using Microsoft.AspNetCore.Mvc;
     using SKAuto.Services.Data;
+    using SKAuto.Web.HandMappers.RecipientMappers;
     using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
     using SKAuto.Web.ViewModels.ViewModels.RecipientViewModels;
 
@@ -16,30 +17,19 @@
             this.recipientService = recipientService;
         }
 
-        public IActionResult Index(PartByCategoryAndModelViewModel partModel)
+        public IActionResult Home(RecipientHomeViewModel model)
         {
-            // use ModelState.IsValid
-            bool checkModel = this.CheckIsValidModel(partModel);
-
-            if (!checkModel)
-            {
-                return this.Redirect("/Brand/Details");
-            }
-
-            return this.View(partModel);
-        }
-
-        [HttpGet]
-        public IActionResult Create(PartByCategoryAndModelViewModel partModel)
-        {
-            bool checkModel = this.CheckIsValidModel(partModel);
             if (!this.ModelState.IsValid)
             {
                 return this.Redirect("/Brand/Details");
             }
 
-            // use ModelState.IsValid
-            if (!checkModel)
+            return this.View(model);
+        }
+
+        public IActionResult Create(RecipientHomeViewModel partModel)
+        {
+            if (!this.ModelState.IsValid)
             {
                 return this.Redirect("/Brand/Details");
             }
@@ -72,10 +62,25 @@
             }
         }
 
-        [HttpGet]
-        public IActionResult Find(PartByCategoryAndModelViewModel partModel)
+        public async Task<IActionResult> Find(int partId)
         {
-            return this.View(partModel);
+            var dtoModel = await this.recipientService.GetPartParams(partId);
+            var model = RecipientFindOutputMapper.Map(dtoModel);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Find(RecipientFindInputViewModel model)
+        {
+            // look at input model - need only partId, quantity and phone
+            if (this.ModelState.IsValid)
+            {
+                return this.Redirect("/Brand/All");
+            }
+
+            // find or create order and redirect to this recipient order
+            return null;
         }
 
         private bool CheckIsValidParamsModel(RecipientParamsViewModel paramsRecipient)
