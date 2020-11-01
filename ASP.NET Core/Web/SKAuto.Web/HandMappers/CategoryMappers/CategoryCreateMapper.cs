@@ -10,7 +10,7 @@
             var category = new CategoryCreateDtoModel
             {
                 CategoryName = categoryModel.Name,
-                ImageAddress = categoryModel.ImageAdsress,
+                ImageAddress = categoryModel.ImageAddress,
             };
 
             return category;

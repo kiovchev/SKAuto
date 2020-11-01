@@ -13,7 +13,7 @@
             var categoryWithImages = allCategories.Select(x => new CategoryWithImageViewModel
             {
                 Name = x.CategoryName,
-                ImageAdsress = x.ImageAddress,
+                ImageAddress = x.ImageAddress,
             }).ToList();
 
             return categoryWithImages;
