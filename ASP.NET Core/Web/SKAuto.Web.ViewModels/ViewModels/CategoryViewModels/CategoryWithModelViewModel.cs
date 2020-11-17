@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
 
-        public string ImageAdsress { get; set; }
+        public string ImageAddress { get; set; }
 
         public string ModelName { get; set; }
     }

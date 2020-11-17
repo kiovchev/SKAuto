@@ -13,7 +13,7 @@
             var neededCategories = categories.Select(x => new CategoryWithModelViewModel
             {
                 Name = x.Name,
-                ImageAdsress = x.ImageAdsress,
+                ImageAddress = x.ImageAddress,
                 ModelName = x.ModelName,
             }).ToList();
 

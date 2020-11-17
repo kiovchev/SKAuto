@@ -13,7 +13,7 @@
             var neededCategory = allCategories.Select(x => new GetCategoriesByNameAndYearsDtoModel
             {
                 Name = x.Name,
-                ImageAdsress = x.ImageAddress,
+                ImageAddress = x.ImageAddress,
                 ModelName = modelName,
             }).ToList();
 
