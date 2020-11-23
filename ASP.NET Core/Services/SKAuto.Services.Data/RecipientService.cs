@@ -4,33 +4,21 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-    using SKAuto.Common;
-    using SKAuto.Common.DtoModels.RecipientDtos;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
-    using SKAuto.Services.Mapping.RecipientServiceMappers;
-    using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
     using SKAuto.Web.ViewModels.ViewModels.RecipientViewModels;
 
     public class RecipientService : IRecipientService
     {
         private readonly IRepository<Recipient> recipients;
-        private readonly IOrderService orderService;
-        private readonly IPartService partService;
 
-        public RecipientService(
-                                IRepository<Recipient> recipients,
-                                IOrderService orderService,
-                                IPartService partService)
+        public RecipientService(IRepository<Recipient> recipients)
         {
             this.recipients = recipients;
-            this.orderService = orderService;
-            this.partService = partService;
         }
 
-        public async Task<int> CreateRecipientAndOrderAsync(PartByCategoryAndModelViewModel partModel, RecipientParamsViewModel paramsRecipient)
+        public async Task<int> CreateRecipientAsync(RecipientParamsViewModel paramsRecipient)
         {
-            // need order
             var recipient = new Recipient
             {
                 FirstName = paramsRecipient.FirstName,
@@ -40,38 +28,31 @@
                 Phone = paramsRecipient.Phone,
             };
 
-            var currentOrder = await this.orderService.CreateOrderAsync(recipient, partModel);
-            recipient.Orders.Add(currentOrder);
-
             await this.recipients.AddAsync(recipient);
             await this.recipients.SaveChangesAsync();
+            var recipientId = recipient.Id;
 
-            return recipient.Id;
+            return recipientId;
         }
 
-        public async Task FindRecipientAndAddPartToAnOrder(int partid, int quantity, string number)
+        public async Task<int> FindRecipientAsync(string number)
         {
-            var recipient = await this.recipients.All()
-                                                 .Include(x => x.Orders)
-                                                 .ThenInclude(x => x.OrderStatus)
-                                                 .FirstOrDefaultAsync(x => x.Phone == number);
+            var recipient = await this.recipients.All().FirstOrDefaultAsync(x => x.Phone == number);
+            var recipientId = 0;
 
-            var order = recipient.Orders.FirstOrDefault(x => x.OrderStatus.Name == GlobalConstants.PendingStatus);
-            if (order == null)
+            if (recipient != null)
             {
+                recipientId = recipient.Id;
             }
-            else
-            {
-                // must go to part repository part in table minus quantity, after that go to order repo find create orderparts and add to orderparts part with quantity
-            }
+
+            return recipientId;
         }
 
-        public async Task<RecipientFindOutPutDtoModel> GetPartParams(int partId)
+        public async Task<Recipient> GetRecipientByIdAsync(int recipientId)
         {
-            var part = await this.partService.GetPartByIdAsync(partId);
-            var dtoModel = RecipientServiceFindOutputMapper.Map(part);
+            var recipient = await this.recipients.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == recipientId);
 
-            return dtoModel;
+            return recipient;
         }
 
         public async Task<bool> IfRecipientExistsAsync(string phoneNumber)

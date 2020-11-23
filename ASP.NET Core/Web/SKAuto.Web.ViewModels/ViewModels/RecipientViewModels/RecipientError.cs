@@ -1,7 +1,7 @@
 ﻿namespace SKAuto.Web.ViewModels.ViewModels.RecipientViewModels
 {
-    public class RecipientHomeViewModel
+    public class RecipientError
     {
-        public int PartId { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

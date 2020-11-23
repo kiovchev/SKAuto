@@ -113,6 +113,7 @@
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IManufactoryService, ManufactoryService>();
             services.AddTransient<IItemService, ItemService>();
+            services.AddTransient<IRecipientService, RecipientService>();
 
             // cart
             services.AddDistributedMemoryCache();

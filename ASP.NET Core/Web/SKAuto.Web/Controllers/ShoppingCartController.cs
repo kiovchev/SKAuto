@@ -23,11 +23,7 @@
         public IActionResult Index()
         {
             var cart = SessionHelper.GetObjectFromJson<List<CartViewModel>>(this.HttpContext.Session, "cart");
-
-            if (cart.Count > 0)
-            {
-                this.ViewData["cart"] = cart;
-            }
+            this.ViewData["cart"] = cart;
 
             return this.View();
         }

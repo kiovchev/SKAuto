@@ -22,7 +22,7 @@
                     OrderedQuantity = table.Column<int>(nullable: false),
                     IsOrdered = table.Column<bool>(nullable: false),
                     OrderedAt = table.Column<DateTime>(nullable: false),
-                    OrderId = table.Column<int>(nullable: true)
+                    OrderId = table.Column<int>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -62,7 +62,7 @@
                 columns: table => new
                 {
                     OrderId = table.Column<int>(nullable: false),
-                    PartId = table.Column<int>(nullable: false)
+                    PartId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {

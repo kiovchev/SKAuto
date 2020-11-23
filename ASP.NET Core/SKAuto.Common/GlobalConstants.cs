@@ -38,5 +38,9 @@
         public const string DeliverStatus = "Deliverd";
         public const string ShippedStatus = "shipped";
         public const string AcquiredStatus = "Aquired";
+
+        // Recipient
+        public const string RecipientFindErrorMessage = "В базата няма получател с такъв телефон!!!!!";
+        public const string RecipientCreateErrorMessage = "В базата има получател с такъв телефон!!!!!";
     }
 }

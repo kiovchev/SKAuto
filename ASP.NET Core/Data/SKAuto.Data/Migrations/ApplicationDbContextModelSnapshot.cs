@@ -425,7 +425,7 @@ namespace SKAuto.Data.Migrations
                     b.Property<string>("Phone")
                         .IsRequired();
 
-                    b.Property<string>("Town")
+                    b.Property<string>("RecipientTown")
                         .IsRequired();
 
                     b.HasKey("Id");
