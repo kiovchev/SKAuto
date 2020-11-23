@@ -9,7 +9,7 @@
     {
         public Order()
         {
-            this.OrderParts = new HashSet<OrderParts>();
+            this.Items = new HashSet<Item>();
         }
 
         [Key]
@@ -28,8 +28,8 @@
 
         public OrderStatus OrderStatus { get; set; }
 
-        public ICollection<OrderParts> OrderParts { get; set; }
+        public ICollection<Item> Items { get; set; }
 
-        public decimal OrderPrice => this.OrderParts.Select(p => p.Part.CustomerPrice).Sum();
+        public decimal OrderPrice => this.Items.Select(p => p.Part.CustomerPrice).Sum();
     }
 }

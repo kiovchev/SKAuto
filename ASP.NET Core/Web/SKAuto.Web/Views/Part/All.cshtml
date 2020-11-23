@@ -1,4 +1,4 @@
-﻿    @using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
+﻿@using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
 @model IList<PartByCategoryAndModelViewModel>;
 
 @{
@@ -45,7 +45,11 @@
                         }
                         else
                         {
-                            <td class="text-white skl-bg-color border" scope="col"><a class="btn bg-dark border p-1 text-white" href="/Recipient/Home?partId=@Model[i].PartId">Поръчай</a></td>
+                            <td class="text-white skl-bg-color border" scope="col">
+                                <a class="btn bg-dark border p-1 text-white" href="/ShoppingCart/OrderNow?partId=@Model[i].PartId">
+                                    Поръчай
+                                </a>
+                            </td>
                         }
                     </tr>
                 }

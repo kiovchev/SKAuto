@@ -1,5 +1,6 @@
 ﻿namespace SKAuto.Web
 {
+    using System;
     using System.Linq;
     using System.Reflection;
 
@@ -111,6 +112,16 @@
             services.AddTransient<IRecipientService, RecipientService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IManufactoryService, ManufactoryService>();
+            services.AddTransient<IItemService, ItemService>();
+
+            // cart
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(120);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -156,6 +167,9 @@
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+
+            // cart
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

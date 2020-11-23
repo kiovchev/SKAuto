@@ -41,5 +41,9 @@
         Task<Part> GetPartByIdAsync(int partId);
 
         Task UpdatePartAsync(PartUpdateInputDtoModel model);
+
+        Task<Part> GetPartForItemByPartId(int id);
+
+        Task ReturnPartFromCartAsync(int partId, int orderedQuantity);
     }
 }

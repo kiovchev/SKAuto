@@ -4,6 +4,13 @@
     using System.Diagnostics;
     using System.IO;
 
+    using CommandLine;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI.Services;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using SKAuto.Data;
     using SKAuto.Data.Common;
     using SKAuto.Data.Common.Repositories;
@@ -12,15 +19,6 @@
     using SKAuto.Data.Seeding;
     using SKAuto.Services.Data;
     using SKAuto.Services.Messaging;
-
-    using CommandLine;
-
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
 
     public static class Program
     {

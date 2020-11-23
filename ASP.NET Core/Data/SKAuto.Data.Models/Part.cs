@@ -7,7 +7,7 @@
     {
         public Part()
         {
-            this.OrderParts = new HashSet<OrderParts>();
+            this.Items = new HashSet<Item>();
         }
 
         [Key]
@@ -43,6 +43,6 @@
         [Required]
         public int Quantity { get; set; }
 
-        public ICollection<OrderParts> OrderParts { get; set; }
+        public ICollection<Item> Items { get; set; }
     }
 }

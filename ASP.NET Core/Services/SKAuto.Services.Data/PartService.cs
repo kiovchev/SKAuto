@@ -184,6 +184,22 @@
             return partCreate;
         }
 
+        public async Task<Part> GetPartForItemByPartId(int id)
+        {
+            var part = await this.parts.All()
+                                 .Include(x => x.Brand)
+                                 .Include(x => x.Model)
+                                 .Include(x => x.Category)
+                                 .Include(x => x.Manufactory)
+                                 .FirstOrDefaultAsync(x => x.Id == id);
+
+            part.Quantity -= 1;
+            this.parts.Update(part);
+            await this.parts.SaveChangesAsync();
+
+            return part;
+        }
+
         public async Task<IList<PartAllDtoModel>> GetPartsByModelAndCategoryAsync(string modelName, string categoryName)
         {
             var allCarParams = this.TakeParmsFromModelName(modelName);
@@ -277,6 +293,14 @@
             }
 
             return true;
+        }
+
+        public async Task ReturnPartFromCartAsync(int partId, int orderedQuantity)
+        {
+            var part = await this.parts.All().FirstOrDefaultAsync(x => x.Id == partId);
+            part.Quantity += orderedQuantity;
+
+            this.parts.Update(part);
         }
 
         public async Task UpdatePartAsync(PartUpdateInputDtoModel model)
