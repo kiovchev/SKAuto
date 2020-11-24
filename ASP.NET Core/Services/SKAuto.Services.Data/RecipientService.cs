@@ -23,7 +23,7 @@
             {
                 FirstName = paramsRecipient.FirstName,
                 LastName = paramsRecipient.LastName,
-                Town = paramsRecipient.Town,
+                RecipientTown = paramsRecipient.Town,
                 Address = paramsRecipient.Address,
                 Phone = paramsRecipient.Phone,
             };

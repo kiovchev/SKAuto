@@ -79,7 +79,7 @@
                 UseFullCategoryWithImageViewModel viewModel = new UseFullCategoryWithImageViewModel
                 {
                     Name = item.Name,
-                    ImageAdsress = item.ImageAddress,
+                    ImageAddress = item.ImageAddress,
                 };
 
                 useFullCategoryWithImages.Add(viewModel);

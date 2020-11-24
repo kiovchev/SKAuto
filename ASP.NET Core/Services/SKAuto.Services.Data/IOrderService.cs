@@ -2,11 +2,10 @@
 {
     using System.Threading.Tasks;
 
-    using SKAuto.Data.Models;
-    using SKAuto.Web.ViewModels.ViewModels.PartViewModels;
+    using SKAuto.Common.DtoModels.CartDtos;
 
     public interface IOrderService
     {
-        Task<Order> CreateOrderAsync(Recipient recipient, PartByCategoryAndModelViewModel partModel);
+        Task<int> CreateOrderAsync(CartOrderCreateDtoModel dtoModel);
     }
 }

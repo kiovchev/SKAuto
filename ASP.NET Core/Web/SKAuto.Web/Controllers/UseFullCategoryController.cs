@@ -56,7 +56,7 @@
                 }
                 else
                 {
-                    await this.useFullCategoryService.CreateUseFullCategoryByNameAsync(model.Name, model.ImageAdsress);
+                    await this.useFullCategoryService.CreateUseFullCategoryByNameAsync(model.Name, model.ImageAddress);
 
                     return this.Redirect("/UseFullCategory/All");
                 }

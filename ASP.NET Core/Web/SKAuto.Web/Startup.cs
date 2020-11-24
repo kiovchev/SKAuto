@@ -114,6 +114,7 @@
             services.AddTransient<IManufactoryService, ManufactoryService>();
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<IRecipientService, RecipientService>();
+            services.AddTransient<IOrderStatusService, OrderStatusService>();
 
             // cart
             services.AddDistributedMemoryCache();
@@ -147,7 +148,7 @@
                     dbContext.OrderStatuses.Add(new OrderStatus { Name = "Pending" });
                     dbContext.OrderStatuses.Add(new OrderStatus { Name = "Shipped" });
                     dbContext.OrderStatuses.Add(new OrderStatus { Name = "Delivered" });
-                    dbContext.OrderStatuses.Add(new OrderStatus { Name = "  " });
+                    dbContext.OrderStatuses.Add(new OrderStatus { Name = "Acquired" });
                 }
 
                 dbContext.SaveChanges();
