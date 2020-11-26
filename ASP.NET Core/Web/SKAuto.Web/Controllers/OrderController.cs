@@ -23,9 +23,12 @@
             return this.View();
         }
 
-        public IActionResult Last(int orderId)
+        public async Task<IActionResult> Last(int orderId)
         {
-            return this.View();
+            var lastOrder = await this.orderService.GetLastOrderAsync(orderId);
+            var orverViewModel = OrderLastMapper.Map(lastOrder);
+
+            return this.View(orverViewModel);
         }
 
         public async Task<IActionResult> Create(int recipientId)

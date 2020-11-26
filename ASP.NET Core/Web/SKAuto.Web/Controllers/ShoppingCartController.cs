@@ -23,7 +23,15 @@
         public IActionResult Index()
         {
             var cart = SessionHelper.GetObjectFromJson<List<CartViewModel>>(this.HttpContext.Session, "cart");
-            this.ViewData["cart"] = cart;
+
+            if (cart == null)
+            {
+                this.HttpContext.Session.Clear();
+            }
+            else if (cart.Count > 0)
+            {
+                this.ViewData["cart"] = cart;
+            }
 
             return this.View();
         }
@@ -38,6 +46,7 @@
                 var item = CartViewMapper.Map(cartDto);
 
                 cart.Add(item);
+
                 SessionHelper.SetObjectAsJson(this.HttpContext.Session, "cart", cart);
             }
             else

@@ -31,7 +31,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.Redirect("/Brand/Details");
+                return this.Redirect("/Recipient/Home");
             }
 
             bool ifExists = await this.recipientService.IfRecipientExistsAsync(paramsRecipient.Phone);

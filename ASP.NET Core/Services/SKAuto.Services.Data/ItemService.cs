@@ -1,6 +1,7 @@
 ﻿namespace SKAuto.Services.Data
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -101,6 +102,18 @@
             }
 
             return neededItems;
+        }
+
+        public async Task<List<Item>> GetItemsByOrderIdAsync(int orderId)
+        {
+            var items = await this.itemsRepository.All()
+                                                  .Include(x => x.Part)
+                                                  .ThenInclude(x => x.Model)
+                                                  .ThenInclude(x => x.Brand)
+                                                  .Where(x => x.OrderId == orderId)
+                                                  .ToListAsync();
+
+            return items;
         }
     }
 }

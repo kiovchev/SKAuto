@@ -19,5 +19,7 @@
         Task ChangeItemAndPartQuantityInDbAsync(int itemId);
 
         Task<List<Item>> GetItemsByItemsIdsAsync(List<int> itemsIds);
+
+        Task<List<Item>> GetItemsByOrderIdAsync(int orderId);
     }
 }

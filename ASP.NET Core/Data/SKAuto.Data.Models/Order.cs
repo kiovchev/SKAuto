@@ -16,7 +16,7 @@
         public int Id { get; set; }
 
         [Required]
-        public DateTime IssuedOn { get; set; } = DateTime.UtcNow;
+        public DateTime IssuedOn { get; set; } = DateTime.UtcNow.AddHours(2);
 
         [Required]
         public int RecipientId { get; set; }
@@ -30,6 +30,6 @@
 
         public ICollection<Item> Items { get; set; }
 
-        public decimal OrderPrice => this.Items.Select(p => p.Part.CustomerPrice).Sum();
+        public decimal OrderPrice => this.Items.Select(p => p.Part.CustomerPrice * p.OrderedQuantity).Sum();
     }
 }
