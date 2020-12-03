@@ -1,9 +1,10 @@
 ﻿namespace SKAuto.Web.HandMappers.OrderMappers
 {
+    using System.Linq;
+
     using SKAuto.Common.DtoModels.OrderDtos;
     using SKAuto.Web.ViewModels.ViewModels.CatViewModels;
     using SKAuto.Web.ViewModels.ViewModels.OrderViewModel;
-    using System.Linq;
 
     public static class OrderLastMapper
     {

@@ -16,6 +16,12 @@
             this.recipientService = recipientService;
         }
 
+        public IActionResult Index()
+        {
+            var recipientsForIndexDto = this.recipientService.GetAllRecipientsAsync();
+            return this.View();
+        }
+
         public IActionResult Home()
         {
             return this.View();

@@ -1,0 +1,58 @@
+﻿@using SKAuto.Web.ViewModels.ViewModels.CartViewModels;
+
+@{
+    ViewData["Title"] = "Last";
+    decimal sum = 0;
+    int count = 0;
+}
+@if (ViewData["cart"] as List<CartViewModel> != null)
+{
+    <div class="table-responsive">
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th class="text-white skl-bg-color border" scope="col">#</th>
+                    <th class="text-white skl-bg-color border" scope="col">Марка и модел</th>
+                    <th class="text-white skl-bg-color border" scope="col">Име на част</th>
+                    <th class="text-white skl-bg-color border" scope="col">Количество</th>
+                    <th class="text-white skl-bg-color border" scope="col">Единична цена</th>
+                    <th class="text-white skl-bg-color border" scope="col">Цена общо</th>
+                    <th class="text-white skl-bg-color border" scope="col">Премахни</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewData["cart"] as List<CartViewModel>)
+                {
+                    ++count;
+                    <tr class="text-center">
+                        <td class="text-white skl-bg-color border" scope="col">@count</td>
+                        <td class="text-white skl-bg-color border" name="brandAndModelName" scope="col">@item.BrandAndModel</td>
+                        <td class="text-white skl-bg-color border" name="partName" scope="col">@item.PartName</td>
+                        <td class="text-white skl-bg-color border" name="quantity" scope="col">@item.OrderedQuantity</td>
+                        <td class="text-white skl-bg-color border" name="pricePerPart" scope="col">@item.CustomerPrice.ToString("0.00") лв.</td>
+                        <td class="text-white skl-bg-color border" name="price" scope="col">@item.TotalPerItem.ToString("0.00") лв.</td>
+
+                        <td class="text-white skl-bg-color border align-middle" scope="col">
+                            <a class="btn bg-danger border p-1 text-white" asp-controller="ShoppingCart" asp-action="Remove" asp-route-partId="@item.PartId">Изтрий</a>
+                        </td>
+                    </tr>
+
+                    sum += item.OrderedQuantity * item.CustomerPrice;
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="text-white text-right">Общо: @(sum.ToString("0.00")) лв.</h3>
+
+    if (count > 0)
+    {
+        <a class="btn bg-dark border p-1 text-white" href="/Recipient/Home">
+            Поръчай
+        </a>
+    }
+}
+else
+{
+    <h3 class="text-danger">Количката е празна.</h3>
+}

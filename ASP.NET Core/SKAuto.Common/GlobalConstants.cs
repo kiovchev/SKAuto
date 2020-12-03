@@ -38,6 +38,10 @@
         public const string DeliverStatus = "Deliverd";
         public const string ShippedStatus = "Shipped";
         public const string AcquiredStatus = "Aquired";
+        public const string PendingBGStatus = "Заявена поръчка";
+        public const string DeliverBGStatus = "Доставена поръчка";
+        public const string ShippedBGStatus = "Изпратена поръчка";
+        public const string AcquiredBGStatus = "Получена поръчка";
 
         // Recipient
         public const string RecipientFindErrorMessage = "В базата няма получател с такъв телефон!!!!!";

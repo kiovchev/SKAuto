@@ -8,6 +8,7 @@
     using SKAuto.Web.HandMappers.OrderMappers;
     using SKAuto.Web.Helper;
     using SKAuto.Web.ViewModels.ViewModels.CartViewModels;
+    using SKAuto.Web.ViewModels.ViewModels.OrderViewModel;
 
     public class OrderController : BaseController
     {
@@ -18,17 +19,22 @@
             this.orderService = orderService;
         }
 
-        public IActionResult All()
+        public IActionResult Index()
         {
             return this.View();
         }
 
-        public async Task<IActionResult> Last(int orderId)
+        public async Task<IActionResult> Last(LastOrderParamViewModel model)
         {
-            var lastOrder = await this.orderService.GetLastOrderAsync(orderId);
-            var orverViewModel = OrderLastMapper.Map(lastOrder);
+            if (model.OrderId > 0)
+            {
+                var lastOrder = await this.orderService.GetLastOrderAsync(model.OrderId);
+                var orverViewModel = OrderLastMapper.Map(lastOrder);
 
-            return this.View(orverViewModel);
+                return this.View(orverViewModel);
+            }
+
+            return this.Redirect("/Home/Index");
         }
 
         public async Task<IActionResult> Create(int recipientId)
@@ -38,7 +44,7 @@
             var orderId = await this.orderService.CreateOrderAsync(orderDtoModel);
             this.HttpContext.Session.Clear();
 
-            return this.RedirectToAction("Last", "Order", new { orderId = orderId });
+            return this.RedirectToAction("Last", "Order", new LastOrderParamViewModel { OrderId = orderId });
         }
     }
 }

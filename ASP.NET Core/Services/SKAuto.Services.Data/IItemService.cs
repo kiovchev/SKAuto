@@ -21,5 +21,11 @@
         Task<List<Item>> GetItemsByItemsIdsAsync(List<int> itemsIds);
 
         Task<List<Item>> GetItemsByOrderIdAsync(int orderId);
+
+        Task<List<ItemAllDto>> GetAllItemsAsync();
+
+        Task RemoveItemsAndAddQuantityForPartsInDbAsync();
+
+        Task Delete(int itemId);
     }
 }

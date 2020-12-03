@@ -8,6 +8,7 @@
     using Microsoft.EntityFrameworkCore.Internal;
     using SKAuto.Services.Data;
     using SKAuto.Web.HandMappers.CartMappers;
+    using SKAuto.Web.HandMappers.CartNappers;
     using SKAuto.Web.Helper;
     using SKAuto.Web.ViewModels.ViewModels.CartViewModels;
 
@@ -21,6 +22,58 @@
         }
 
         public IActionResult Index()
+        {
+            if (!this.User.IsInRole("Administrator"))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            return this.View();
+        }
+
+        public async Task<IActionResult> Home()
+        {
+            if (!this.User.IsInRole("Administrator"))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            await this.itemService.RemoveItemsAndAddQuantityForPartsInDbAsync();
+
+            return this.Redirect("/ShoppingCart/Index");
+        }
+
+        public async Task<IActionResult> All()
+        {
+            if (!this.User.IsInRole("Administrator"))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            var itemsDtos = await this.itemService.GetAllItemsAsync();
+            var itemsAll = CartAllMapper.Map(itemsDtos);
+
+            return this.View(itemsAll);
+        }
+
+        public async Task<IActionResult> Delete(int itemId)
+        {
+            if (itemId == 0)
+            {
+                return this.Redirect("/Home/Index");
+            }
+
+            if (!this.User.IsInRole("Administrator"))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            await this.itemService.Delete(itemId);
+
+            return this.Redirect("/ShoppingCart/All");
+        }
+
+        public IActionResult Last()
         {
             var cart = SessionHelper.GetObjectFromJson<List<CartViewModel>>(this.HttpContext.Session, "cart");
 
@@ -38,6 +91,11 @@
 
         public async Task<IActionResult> OrderNow(int partId)
         {
+            if (partId == 0)
+            {
+                return this.Redirect("/Home/Index");
+            }
+
             var cart = SessionHelper.GetObjectFromJson<List<CartViewModel>>(this.HttpContext.Session, "cart");
             if (cart == null)
             {
@@ -68,16 +126,21 @@
                 SessionHelper.SetObjectAsJson(this.HttpContext.Session, "cart", cart);
             }
 
-            return this.Redirect("/ShoppingCart/Index");
+            return this.Redirect("/ShoppingCart/Last");
         }
 
         public async Task<IActionResult> Remove(int partId)
         {
+            if (partId == 0)
+            {
+                return this.Redirect("/Home/Index");
+            }
+
             var cart = SessionHelper.GetObjectFromJson<List<CartViewModel>>(this.HttpContext.Session, "cart");
 
             if (cart == null)
             {
-                return this.Redirect("/ShoppingCart/Index");
+                return this.Redirect("/ShoppingCart/Last");
             }
 
             int index = cart.Select(x => x.PartId).IndexOf(partId);
@@ -94,7 +157,7 @@
 
             SessionHelper.SetObjectAsJson(this.HttpContext.Session, "cart", cart);
 
-            return this.Redirect("/ShoppingCart/Index");
+            return this.Redirect("/ShoppingCart/Last");
         }
     }
 }

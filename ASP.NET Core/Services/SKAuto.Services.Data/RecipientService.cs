@@ -1,11 +1,14 @@
 ﻿namespace SKAuto.Services.Data
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using SKAuto.Common.DtoModels.RecipientDtos;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
+    using SKAuto.Services.Mapping.RecipientServiceMappers;
     using SKAuto.Web.ViewModels.ViewModels.RecipientViewModels;
 
     public class RecipientService : IRecipientService
@@ -46,6 +49,14 @@
             }
 
             return recipientId;
+        }
+
+        public async Task<List<RecipientIndexDto>> GetAllRecipientsAsync()
+        {
+            var recpientsAll = await this.recipients.AllAsNoTracking().ToListAsync();
+            var recipientsForIndex = RecipientServiceIndexMapper.Map(recpientsAll);
+
+            return recipientsForIndex;
         }
 
         public async Task<Recipient> GetRecipientByIdAsync(int recipientId)

@@ -1,7 +1,6 @@
 ﻿namespace SKAuto.Services.Data
 {
     using System;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -10,6 +9,7 @@
     using SKAuto.Common.DtoModels.OrderDtos;
     using SKAuto.Data.Common.Repositories;
     using SKAuto.Data.Models;
+    using SKAuto.Services.Mapping.OrderServiceMappers;
 
     public class OrderService : IOrderService
     {
@@ -66,21 +66,7 @@
 
             if (lastOrder != null)
             {
-                neededOrder = new LastOrderDto
-                {
-                    Id = lastOrder.Id,
-                    IssuedOn = lastOrder.IssuedOn,
-                    RecipientName = $"{lastOrder.Recipient.FirstName} {lastOrder.Recipient.LastName}",
-                    Items = orderItems.Select(x => new ItemForLastOrderDto
-                    {
-                        ItemId = x.ItemId,
-                        BrandAndModel = $"{x.Part.Brand.Name} {x.Part.Model.Name} {x.Part.Model.StartYear}-{x.Part.Model.EndYear}",
-                        OrderedQuantity = x.OrderedQuantity,
-                        CustomerPrice = x.Part.CustomerPrice,
-                        PartName = x.Part.Name,
-                    }).ToList(),
-                    OrderStatus = lastOrder.OrderStatus.Name,
-                };
+                neededOrder = OrderServiceLastOrderMapper.Map(lastOrder, orderItems);
             }
 
             return neededOrder;

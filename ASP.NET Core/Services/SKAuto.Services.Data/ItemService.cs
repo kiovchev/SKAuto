@@ -1,5 +1,6 @@
 ﻿namespace SKAuto.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -67,9 +68,6 @@
             var item = await this.itemsRepository.All().FirstOrDefaultAsync(x => x.ItemId == itemId);
             item.OrderedQuantity++;
 
-            // долния ред може би не ни е нужен да се провери
-
-            // item.DbQuantity = await this.partService.GetPartQuantityAsync(item.PartId);
             this.itemsRepository.Update(item);
             await this.itemsRepository.SaveChangesAsync();
         }
@@ -114,6 +112,52 @@
                                                   .ToListAsync();
 
             return items;
+        }
+
+        public async Task<List<ItemAllDto>> GetAllItemsAsync()
+        {
+            var itemsAll = await this.itemsRepository.All()
+                                                     .Include(x => x.Part)
+                                                     .ThenInclude(x => x.Model)
+                                                     .ThenInclude(x => x.Brand)
+                                                     .Include(x => x.Order)
+                                                     .ThenInclude(x => x.OrderStatus)
+                                                     .Include(x => x.Order)
+                                                     .ThenInclude(x => x.Recipient)
+                                                     .ToListAsync();
+
+            var itemsDtos = CartServiceIdexMapper.Map(itemsAll);
+            return itemsDtos;
+        }
+
+        public async Task RemoveItemsAndAddQuantityForPartsInDbAsync()
+        {
+            var allItems = await this.itemsRepository.All()
+                                                     .Include(x => x.Part)
+                                                     .Where(x => (DateTime.UtcNow.AddHours(2).Minute - x.OrderedAt.Minute) > 2
+                                                            && x.IsOrdered == false)
+                                                     .ToListAsync();
+
+            if (allItems.Count > 0)
+            {
+                for (int i = 0; i < allItems.Count; i++)
+                {
+                    this.itemsRepository.Delete(allItems[i]);
+                    await this.partService.ReturnPartFromCartAsync(allItems[i].PartId, allItems[i].OrderedQuantity);
+                }
+
+                await this.itemsRepository.SaveChangesAsync();
+            }
+        }
+
+        public async Task Delete(int itemId)
+        {
+            var itemToDelete = await this.itemsRepository.All()
+                                                         .Include(x => x.Part)
+                                                         .FirstOrDefaultAsync(x => x.ItemId == itemId);
+            await this.partService.ReturnPartFromCartAsync(itemToDelete.PartId, itemToDelete.OrderedQuantity);
+            this.itemsRepository.Delete(itemToDelete);
+            await this.itemsRepository.SaveChangesAsync();
         }
     }
 }

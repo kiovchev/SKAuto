@@ -1,7 +1,9 @@
 ﻿namespace SKAuto.Services.Data
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using SKAuto.Common.DtoModels.RecipientDtos;
     using SKAuto.Data.Models;
     using SKAuto.Web.ViewModels.ViewModels.RecipientViewModels;
 
@@ -14,5 +16,7 @@
         Task<int> FindRecipientAsync(string number);
 
         Task<Recipient> GetRecipientByIdAsync(int recipientId);
+
+        Task<List<RecipientIndexDto>> GetAllRecipientsAsync();
     }
 }
