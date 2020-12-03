@@ -24,6 +24,11 @@
             return this.View();
         }
 
+        public IActionResult All()
+        {
+            return this.View();
+        }
+
         public async Task<IActionResult> Last(LastOrderParamViewModel model)
         {
             if (model.OrderId > 0)
