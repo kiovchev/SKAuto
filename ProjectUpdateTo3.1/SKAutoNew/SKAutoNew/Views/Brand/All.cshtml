@@ -1,0 +1,51 @@
+﻿@using SKAutoNew.Web.ViewModels.BrandViewModels;
+@model IList<BrandWithLogoViewModel>;
+
+@{
+    ViewData["Title"] = "All";
+}
+
+    <div class="row">
+        <div class="col-2">
+            <div class="list-group skl-bg-color rounded border m-2 p-2 table-responsive">
+                <ul>
+                    @foreach (var item in Model)
+                    {
+                        <li class="form-inline p-1">
+                            <img src="~/Images/RedCarSteeringWheel3.png" height="20" width="20" />
+                            <a class="text-white" href="/Model/Kind?name=@item.BrandName"><strong>@item.BrandName</strong></a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class=" col-10 table-responsive">
+          <h2 class="text-white text-center border skl-bg-color rounded m-2 p-1">Изберете марка автомобил</h2>
+           @{ 
+              int i = 0;
+            }
+
+            @foreach (var product in @Model)
+            {
+              if (i % 5 == 0)
+              {
+                @:<div class="form-inline justify-content-center">
+              }
+              
+              @:<div class="rounded m-3 text-white skl-bg-color">
+                  <a class="text-white" href="/Model/Kind?name=@Model[i].BrandName">
+                      <img class="border" src="@Model[i].ImageAddress" height="170" width="218" />
+                      <label><strong>@Model[i].BrandName</strong></label>
+                  </a>
+              @:</div>
+              
+              if ((i + 1) % 5 == 0)
+              {
+              @:</div> 
+              }
+                ++i;
+             }
+        </div>
+    </div>
+

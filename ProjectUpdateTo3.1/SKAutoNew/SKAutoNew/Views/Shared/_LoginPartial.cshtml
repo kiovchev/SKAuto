@@ -1,0 +1,50 @@
+﻿@using SKAutoNew.Common
+@using SKAutoNew.Data.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="navbar-nav">
+    @if (this.SignInManager.IsSignedIn(this.User))
+    {
+        <li class="nav-item border rounded m-1 bg-dark">
+            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Здравей @(this.User.Identity.Name)!</a>
+        </li>
+        if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+        {
+            <li class="nav-item border rounded m-1 bg-dark">
+                <a class="nav-link text-white" asp-area="Administration" asp-controller="Dashboard" asp-action="Index" title="Admin">Admin</a>
+            </li>
+        }
+        <li class="nav-item border rounded m-1 bg-dark">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
+                <button type="submit" class="nav-link btn btn-link text-white">Изход</button>
+            </form>
+        </li>
+        <li class="nav-item">
+            <a href="/ShoppingCart/Last" class="icon-cart nav-link" style="float: left">
+                <div class="cart-line-1" style="background-color: #E5E9EA"></div>
+                <div class="cart-line-2" style="background-color: #E5E9EA"></div>
+                <div class="cart-line-3" style="background-color: #E5E9EA"></div>
+                <div class="cart-wheel" style="background-color: #E5E9EA"></div>
+            </a>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item border rounded m-1 bg-dark">
+            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">Регистрация</a>
+        </li>
+        <li class="nav-item border rounded m-1 bg-dark">
+            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Вход</a>
+        </li>
+        <li class="nav-item">
+            <a href="/ShoppingCart/Last" class="icon-cart nav-link" style="float: left">
+                <div class="cart-line-1" style="background-color: #E5E9EA"></div>
+                <div class="cart-line-2" style="background-color: #E5E9EA"></div>
+                <div class="cart-line-3" style="background-color: #E5E9EA"></div>
+                <div class="cart-wheel" style="background-color: #E5E9EA"></div>
+            </a>
+        </li>
+    }
+</ul>

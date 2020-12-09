@@ -1,0 +1,52 @@
+﻿@using SKAutoNew.Web.ViewModels.ModelViewModels;
+@model List<ModelWithBrandNameOutputModel>;
+
+@{
+    int count = 0;
+}
+
+    <h1 style="color:white">Операции с модели</h1>
+
+<div class="form-group border rounded text-white text-center skl-bg-color mt-5">
+    <a class="btn btn-lg btn-block text-white" asp-controller="Model" asp-action="Create">Добави нов модел</a>
+</div>
+<div class="table-responsive">
+    @if (Model.Count() == 0)
+    {
+        <h3 class="text-danger ">В момента няма данни за модели!!!</h3>
+    }
+    else
+    {
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th class="text-white skl-bg-color border" scope="col">#</th>
+                    <th class="text-white skl-bg-color border" scope="col">Снимка</th>
+                    <th class="text-white skl-bg-color border" scope="col">Име на модел</th>
+                    <th class="text-white skl-bg-color border" scope="col">Година от - до</th>
+                    <th class="text-white skl-bg-color border" scope="col">Име на бранд</th>
+                    <th class="text-white skl-bg-color border" scope="col">Промени/Изтрий</th>>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    ++count;
+                    <tr class="text-center">
+                        <td class="text-white skl-bg-color border align-middle" scope="col">@count</td>
+                        <td class="text-white skl-bg-color border align-middle" scope="col">
+                            <img src="@Model[i].ImageAddress" width="100" height="75" />
+                        </td>
+                        <td class="text-white skl-bg-color border align-middle" id="modelName" name="modelName" scope="col">@Model[i].ModelName</td>
+                        <td class="text-white skl-bg-color border align-middle" id="modelYears" name="modelYears" scope="col">@Model[i].StartYear - @Model[i].EndYear</td>
+                        <td class="text-white skl-bg-color border align-middle" id="brandName" name="brandName" scope="col">@Model[i].BrandName</td>
+                        <td class="text-white skl-bg-color border align-middle" scope="col">
+                            <a class="btn bg-dark border p-1 text-white" asp-controller="Model" asp-action="Update" asp-route-modelId="@Model[i].ModelId">Промени</a>
+                            <a class="btn bg-danger border p-1 text-white" asp-controller="Model" asp-action="Delete" asp-route-modelId="@Model[i].ModelId">Изтрий</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

@@ -1,0 +1,20 @@
+﻿@using SKAutoNew.Web.ViewModels.OrderViewModels;
+@model LastOrderViewModel;
+
+<h3 class="text-secondary">Последна поръчка</h3>
+<br />
+<h4 class="text-primary">Получател: <span class="text-white">@Model.RecipientName</span></h4>
+<h4 class="text-primary">Дата и час на заявка: <span class="text-white">@Model.IssuedOn.ToString("dd/MM/yyyy hh:mm")</span></h4>
+<h4 class="text-primary">Статус на заявката: <span class="text-white">@Model.OrderStatus</span></h4>
+<br />
+
+@for (int i = 0; i < Model.Items.Count; i++)
+{
+    <div class="text-secondary">Име на част: <span class="text-white">@Model.Items[i].PartName</span></div>
+    <div class="text-secondary">Марка и модел: <span class="text-white">@Model.Items[i].BrandAndModel</span></div>
+    <div class="text-secondary">Заявено количество: <span class="text-white">@Model.Items[i].OrderedQuantity бр.</span></div>
+    <div class="text-secondary">Единична цена: <span class="text-white">@Model.Items[i].CustomerPrice.ToString("0.00") лв.</span></div>
+    <br />
+}
+
+<h4 class="text-primary">Обща сума за плащане: <span class="text-white">@Model.OrderPrice.ToString("0.00") лв.</span></h4>

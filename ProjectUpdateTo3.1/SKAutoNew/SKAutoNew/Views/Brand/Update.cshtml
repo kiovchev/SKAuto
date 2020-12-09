@@ -1,0 +1,32 @@
+﻿@using SKAutoNew.Web.ViewModels.BrandViewModels;
+@model BrandUpdateOutputModel;
+
+@{
+    ViewData["Title"] = "Update";
+}
+
+<h1 class="text-white text-center">Промени Бранд</h1>
+<div class="row text-white justify-content-xl-center">
+    <div class="col-md-4">
+            <form id="account" method="post">
+                <hr class="bg-white" />
+                <div class="form-group" type="hidden">
+                    <input class="form-control" id="id" name="id" value="@Model.BrandId" type="hidden"/>
+                </div>
+                <div class="form-group">
+                    <label>Име на бранд</label>
+                    <input class="form-control" id="name" name="name" value="@Model.BrandName" />
+                </div>
+                <div class="form-group">
+                    <label>Адрес на снимка</label>
+                    <input class="form-control" id="imageAddress" name="imageAddress" type="text" value="@Model.ImageAddress"/>
+                    <label class="text-primary">Важно: Ако не промените адреса, бранда остава със старата снимка!</label>
+                </div>
+                <hr class="bg-white" />
+                <div class="form-group text-center">
+                    <button type="submit" class="btn skl-bg-color border">Промени</button>
+                </div>
+            </form>
+    </div>
+</div>
+

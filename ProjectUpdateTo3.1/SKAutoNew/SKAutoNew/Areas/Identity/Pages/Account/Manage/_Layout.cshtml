@@ -1,0 +1,23 @@
+﻿@{ 
+    Layout = "/Views/Shared/_Layout.cshtml"; 
+}
+
+<h1 class="text-white">Управлявайте Вашия профил</h1>
+
+<div>
+    <h4 class="text-white">Промяна на настройките</h4>
+    <hr class="bg-white" />
+    <div class="row">
+        <div class="col-md-3">
+            <partial name="_ManageNav" />
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
+

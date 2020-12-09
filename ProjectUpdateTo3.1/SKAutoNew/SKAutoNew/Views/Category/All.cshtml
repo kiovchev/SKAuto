@@ -1,0 +1,33 @@
+﻿@using SKAutoNew.Web.ViewModels.CategoryViewModels
+@model IList<CategoryWithImageViewModel>;
+
+@{
+    ViewData["Title"] = "All";
+}
+
+<h2 class="text-white text-center skl-bg-color border rounded m-2 p-1">Налични категории</h2>
+
+<table class="table-responsive">
+    @{
+        int i = 0;
+    }
+    @foreach (var product in @Model)
+    {
+        if (i % 5 == 0)
+        {
+            @:<tr>
+            }
+            @:<td class="text-center">
+                <span class="text-white rounded" >
+                    <img class="border" src="@Model[i].ImageAddress" height="175" width="220" />
+                    <label><strong>@Model[i].Name</strong></label>
+                </span>
+            @:</td>
+            if ((i + 1) % 5 == 0)
+            {
+            @:</tr>
+        }
+        ++i;
+    }
+</table>
+

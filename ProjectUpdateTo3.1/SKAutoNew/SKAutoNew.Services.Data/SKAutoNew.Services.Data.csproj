@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SKAutoNew.Common\SKAutoNew.Common.csproj" />
+    <ProjectReference Include="..\SkAutoNew.Data.Models\SKAutoNew.Data.Models.csproj" />
+    <ProjectReference Include="..\SKAutoNew.Services.Mappers\SKAutoNew.Services.Mappers.csproj" />
+  </ItemGroup>
+
+</Project>
