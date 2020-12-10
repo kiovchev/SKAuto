@@ -3,7 +3,6 @@ namespace SKAutoNew
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -35,8 +34,6 @@ namespace SKAutoNew
             services.AddDbContext<SKAutoDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<SKAutoDbContext>();
 
             services.AddDefaultIdentity<ApplicationUser>(options =>
             {
@@ -73,7 +70,6 @@ namespace SKAutoNew
                     options.ConsentCookie.Name = ".AspNetCore.ConsentCookie";
                 });
 
-            //services.AddControllersWithViews();
             services.AddControllersWithViews(
                 options =>
                 {
@@ -100,8 +96,8 @@ namespace SKAutoNew
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IPartService, PartService>();
-            //services.AddTransient<ITownService, TownService>();
-            //services.AddTransient<IUseFullCategoryService, UseFullCategoryService>();
+            services.AddTransient<ITownService, TownService>();
+            services.AddTransient<IUseFullCategoryService, UseFullCategoryService>();
             //services.AddTransient<ICompanyService, CompanySrvice>();
             services.AddTransient<IRecipientService, RecipientService>();
             services.AddTransient<IOrderService, OrderService>();
@@ -174,10 +170,6 @@ namespace SKAutoNew
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapControllerRoute(
-                //    name: "default",
-                //    pattern: "{controller=Home}/{action=Index}/{id?}");
-                //endpoints.MapRazorPages();
                 endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
