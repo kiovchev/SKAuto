@@ -1,6 +1,7 @@
 ﻿namespace SKAutoNew.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using SKAutoNew.HandMappers.TownMappers;
     using SKAutoNew.Services.Data.Contractcs;
     using SKAutoNew.Web.ViewModels.TownViewModels;
     using System.Threading.Tasks;
@@ -21,25 +22,16 @@
 
         public async Task<IActionResult> ShowAll(TownShallAllViewModel model)
         {
-            var viewModel = await this.townService.GetTownsByCategoryNameAsync(model.CategoryName);
+            var townWithCategoryDto = await this.townService.GetTownsByCategoryNameAsync(model.CategoryName);
+            var townWithCategory = TownWithCategoryNameViewModelMapper.Map(townWithCategoryDto);
 
-            // need mapper
-            var currentModel = new TownWithCategoryNameViewModel
-            {
-                CategoryName = viewModel.CategoryName,
-                TownNames = viewModel.TownNames
-            };
-
-            return this.View(currentModel);
+            return this.View(townWithCategory);
         }
 
         public async Task<IActionResult> All()
         {
-            var allTowns = await this.townService.GetTownNamesAsync();
-            var allTownsModel = new AllTownsViewModel
-            {
-                TownsNames = allTowns.TownsNames
-            };
+            var allTownsDto = await this.townService.GetTownNamesAsync();
+            var allTownsModel = AllTownsViewModelMapper.Map(allTownsDto);
 
             return this.View(allTownsModel);
         }

@@ -1,0 +1,45 @@
+﻿@using SKAutoNew.Web.ViewModels.CompanyViewModels;
+@model List<CompanyInputViewModel>;
+
+@{
+    ViewData["Title"] = "All";
+}
+
+@{
+    int count = 0;
+}
+
+<div class="table-responsive">
+    @if (Model.Count() == 0)
+    {
+        <h3 class="text-danger ">Няма информация за фирми от секция "Полезно"!!!</h3>
+    }
+    else
+    {
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th class="text-white skl-bg-color border" scope="col">Име на фирма</th>
+                    <th class="text-white skl-bg-color border" scope="col">Град</th>
+                    <th class="text-white skl-bg-color border" scope="col">Адрес</th>
+                    <th class="text-white skl-bg-color border" scope="col">Телефон за връзка</th>
+                    <th class="text-white skl-bg-color border" scope="col">Категория</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.OrderBy(x => x.CategoryName).ThenBy(x => x.TownName).ThenBy(x => x.Address).Count(); i++)
+                {
+                    ++count;
+                    <tr class="text-center">
+                        <td class="text-white skl-bg-color border" scope="col">@Model[i].Name</td>
+                        <td class="text-white skl-bg-color border" scope="col">@Model[i].TownName</td>
+                        <td class="text-white skl-bg-color border" scope="col">@Model[i].Address</td>
+                        <td class="text-white skl-bg-color border" scope="col">@Model[i].Phone</td>
+                        <td class="text-white skl-bg-color border" scope="col">@Model[i].CategoryName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+

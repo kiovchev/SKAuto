@@ -30,6 +30,7 @@
     <Folder Include="Views\Brand\" />
     <Folder Include="Views\Model\" />
     <Folder Include="Views\Category\" />
+    <Folder Include="Views\Company\" />
     <Folder Include="Views\UseFullCategory\" />
     <Folder Include="Views\Town\" />
     <Folder Include="Views\Order\" />

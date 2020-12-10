@@ -65,7 +65,14 @@
             await this.useFullCategories.SaveAsync();
         }
 
-        public async Task<List<UseFullCategoryWithImageViewDtoModel>> GetAllUseFullCategoriesWithParamsAsync()
+        public async Task<IList<UseFullCategory>> GetAlluseFullCategoriesAsync()
+        {
+            var allCategories = await this.useFullCategories.AllAsNoTracking().ToListAsync();
+
+            return allCategories;
+        }
+
+        public async Task<IList<UseFullCategoryWithImageViewDtoModel>> GetAllUseFullCategoriesWithParamsAsync()
         {
             var allUseFullCategories = await this.useFullCategories.All().ToListAsync();
             var useFullCategoryWithImages = allUseFullCategories

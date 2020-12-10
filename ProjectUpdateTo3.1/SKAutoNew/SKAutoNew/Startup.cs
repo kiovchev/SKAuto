@@ -98,7 +98,7 @@ namespace SKAutoNew
             services.AddTransient<IPartService, PartService>();
             services.AddTransient<ITownService, TownService>();
             services.AddTransient<IUseFullCategoryService, UseFullCategoryService>();
-            //services.AddTransient<ICompanyService, CompanySrvice>();
+            services.AddTransient<ICompanyService, CompanySrvice>();
             services.AddTransient<IRecipientService, RecipientService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IManufactoryService, ManufactoryService>();

@@ -5,6 +5,8 @@
     using SKAutoNew.Data.Models;
     using SKAutoNew.Data.Repositories;
     using SKAutoNew.Services.Data.Contractcs;
+    using SKAutoNew.Services.Mappers.TownServiceMappers;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -55,12 +57,17 @@
             await this.towns.SaveAsync();
         }
 
+        public async Task<IList<Town>> GetAllTownsAsync()
+        {
+            var allTowns = await this.towns.AllAsNoTracking().ToListAsync();
+
+            return allTowns;
+        }
+
         public async Task<AllTownsViewDtoModel> GetTownNamesAsync()
         {
             var allTowns = await this.towns.All().ToListAsync();
-
-            var all = new AllTownsViewDtoModel();
-            all.TownsNames = allTowns.Select(x => x.Name).ToList();
+            var all = GetTownNamesMapper.Map(allTowns);
 
             return all;
         }
@@ -74,12 +81,7 @@
                                            .Select(x => x.Town.Name)
                                            .OrderBy(x => x)
                                            .ToListAsync();
-
-            var viewModel = new TownWithCategoryNameViewDtoModel()
-            {
-                CategoryName = name,
-                TownNames = allTowns,
-            };
+            var viewModel = TownWithCategoryNameMapper.Map(name, allTowns);
 
             return viewModel;
         }
