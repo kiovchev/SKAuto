@@ -29,7 +29,6 @@
 
         public async Task<IActionResult> All(PartParamsInputModel model)
         {
-            // change prop name from ModelName to BrandAndModelName
             var neededDtoParts = await this.partService.GetPartsByModelAndCategoryAsync(model.ModelName, model.CategoryName);
             var neededParts = PartAllMapper.Map(neededDtoParts);
 
@@ -73,7 +72,8 @@
                 var dtoPartModel = PartCreateInputMapper.Map(model);
                 await this.partService.CreatePartAsync(dtoPartModel);
 
-                return this.RedirectToAction("All", "Part", new { modelName = model.BrandAndModelName, categoryName = model.CategoryName });
+                return this.RedirectToAction("All", "Part", new { modelName = model.BrandAndModelName, 
+                                                                  categoryName = model.CategoryName });
             }
 
             return this.Redirect("/Identity/Account/AccessDenied");

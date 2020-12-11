@@ -38,14 +38,12 @@
 
         public IActionResult Create()
         {
-            if (this.User.IsInRole("Administrator"))
-            {
-                return this.View();
-            }
-            else
+            if (!this.User.IsInRole("Administrator"))
             {
                 return this.Redirect("/Identity/Account/AccessDenied");
             }
+
+            return this.View();
         }
 
         [HttpPost]
@@ -53,22 +51,21 @@
         {
             if (!this.ModelState.IsValid)
             {
+                // need an error page
                 return this.Redirect("/Town/Create");
             }
-            else
-            {
-                bool townExists = await this.townService.CheckIfExistsAsync(model.Name);
-                if (townExists)
-                {
-                    return this.Redirect("/Town/Create");
-                }
-                else
-                {
-                    await this.townService.CreateTownByNameAsync(model.Name);
 
-                    return this.Redirect("/Town/All");
-                }
+            bool townExists = await this.townService.CheckIfExistsAsync(model.Name);
+
+            if (townExists)
+            {
+                // need an error page 
+                return this.Redirect("/Town/Create");
             }
+
+            await this.townService.CreateTownByNameAsync(model.Name);
+
+            return this.Redirect("/Town/All");
         }
     }
 }

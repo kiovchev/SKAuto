@@ -7,7 +7,7 @@
 
     public static class GetAllCompaniesServiceMapper
     {
-        public static List<CompanyInputViewDtoModel> Map(IQueryable<Company> allCompanies,
+        public static List<CompanyInputViewDtoModel> Map(List<Company> allCompanies,
                                                          IList<Town> allTowns,
                                                          IList<UseFullCategory> allUseFullCategories)
         {

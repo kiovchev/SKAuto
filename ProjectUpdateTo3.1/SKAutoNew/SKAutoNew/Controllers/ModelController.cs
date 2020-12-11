@@ -59,8 +59,10 @@
                 return this.Redirect("/Model/Create");
             }
 
-            bool existModel = await this.model
-                .IfModelExistsAsync(createModel.BrandName, createModel.Name, createModel.StartYear, createModel.EndYear);
+            bool existModel = await this.model.IfModelExistsAsync(createModel.BrandName,
+                                                                  createModel.Name, 
+                                                                  createModel.StartYear, 
+                                                                  createModel.EndYear);
 
             if (existModel)
             {
@@ -98,8 +100,11 @@
                     return this.Redirect("/Model/Index");
                 }
 
-                var isSameModel = await this.model
-                    .IsSameAsync(model.BrandName, model.Name, model.StartYear, model.EndYear, model.ImageAddress);
+                var isSameModel = await this.model.IsSameAsync(model.BrandName,
+                                                               model.Name, 
+                                                               model.StartYear, 
+                                                               model.EndYear,
+                                                               model.ImageAddress);
 
                 if (!isSameModel)
                 {

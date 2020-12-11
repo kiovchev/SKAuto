@@ -33,7 +33,7 @@
 
             var allTowns = await this.townService.GetAllTownsAsync();
             var town = allTowns.FirstOrDefault(x => x.Name == company.TownName);
-
+            
             var currentCompany = CreateCompanyServiceMapper.Map(company, town, useFullCategory);
 
             await this.conpanies.InsertAsync(currentCompany);
@@ -42,7 +42,10 @@
 
         public async Task<IList<CompanyInputViewDtoModel>> GetAllCompaniesAsync()
         {
-            var allCompanies = this.conpanies.All();
+            var allCompanies = await this.conpanies.All()
+                                             .Include(x => x.Town)
+                                             .Include(x => x.UseFullCategory)
+                                             .ToListAsync();
             var allTowns = await this.townService.GetAllTownsAsync();
             var allUseFullCategories = await this.useFullCategoryService.GetAlluseFullCategoriesAsync();
 
@@ -74,8 +77,8 @@
             var allTowns = await this.townService.GetAllTownsAsync();
             var allCategories = await this.useFullCategoryService.GetAlluseFullCategoriesAsync();
 
-            var townNames = allTowns.Select(x => x.Name).ToList();
-            var categoryNames = allCategories.Select(x => x.Name).ToList();
+            var townNames = allTowns.Select(x => x.Name).OrderBy(x => x).ToList();
+            var categoryNames = allCategories.Select(x => x.Name).OrderBy(x => x).ToList();
 
             var viewModel = GetCompanyCreateParamsServiceMapper.Map(townNames, categoryNames);
 

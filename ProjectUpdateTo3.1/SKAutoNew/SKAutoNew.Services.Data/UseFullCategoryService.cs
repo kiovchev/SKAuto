@@ -44,7 +44,7 @@
                 imageAddress = GlobalConstants.ImageAddress;
             }
 
-            UseFullCategory useFullCategory = new UseFullCategory()
+            var useFullCategory = new UseFullCategory()
             {
                 Name = name,
                 ImageAddress = imageAddress,
@@ -52,7 +52,7 @@
 
             foreach (var town in towns)
             {
-                TownUseFullCategory townUseFullCategory = new TownUseFullCategory()
+                var townUseFullCategory = new TownUseFullCategory()
                 {
                     UseFullCategory = useFullCategory,
                     Town = town,
@@ -67,7 +67,7 @@
 
         public async Task<IList<UseFullCategory>> GetAlluseFullCategoriesAsync()
         {
-            var allCategories = await this.useFullCategories.AllAsNoTracking().ToListAsync();
+            var allCategories = await this.useFullCategories.All().ToListAsync();
 
             return allCategories;
         }
@@ -77,10 +77,10 @@
             var allUseFullCategories = await this.useFullCategories.All().ToListAsync();
             var useFullCategoryWithImages = allUseFullCategories
                                             .Select(x => new UseFullCategoryWithImageViewDtoModel
-            {
-                Name = x.Name,
-                ImageAddress = x.ImageAddress
-            }).ToList();
+                                                             {
+                                                                 Name = x.Name,
+                                                                 ImageAddress = x.ImageAddress
+                                                             }).ToList();
 
             return useFullCategoryWithImages;
         }

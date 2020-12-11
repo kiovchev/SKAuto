@@ -5,31 +5,29 @@
     ViewData["Title"] = "All";
 }
 
-<h2 class="text-white text-center border skl-bg-color rounded m-2 p-1">Налични полезни категории</h2>
-@{
-    int i = 0;
-}
-
-@foreach (var product in @Model)
-{
-    if (i % 5 == 0)
-    {
-        @:<div class="form-inline justify-content-center">
+<div class="col-10 table-responsive offset-1">
+    <h2 class="text-white text-center border skl-bg-color rounded m-2 p-1">Налични полезни категории</h2>
+    <table class="table-responsive">
+        @{
+            int i = 0;
         }
-
-        @:<div class="rounded m-3 text-white skl-bg-color">
-            <a class="text-white" href="/Town/ShowAll?categoryName=@Model[i].Name">
-                <img class="border" src=@Model[i].ImageAddress height="175" width="220" />
-                <label><strong>@Model[i].Name</strong></label>
-            </a>
-        @:</div>
-
-
-        if ((i + 1) % 5 == 0)
+        @foreach (var product in @Model)
         {
-        @:</div>
-    }
-
-    ++i;
-}
-
+            if (i % 5 == 0)
+            {
+                @:<tr>
+                }
+                @:<td class="text-center">
+                      <a class="btn text-white skl-bg-color border rounded m-2 p-1" href="/Town/ShowAll?categoryName=@Model[i].Name">
+                          <img class="border skl-bg-color" src="@Model[i].ImageAddress" height="170" width="210" />
+                          <label><strong>@Model[i].Name</strong></label>
+                      </a>
+                @:</td>
+                if ((i + 1) % 5 == 0)
+                {
+                @:</tr>
+            }
+            ++i;
+        }
+    </table>
+</div>

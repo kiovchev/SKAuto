@@ -13,17 +13,17 @@
     public class TownService : ITownService
     {
         private readonly IRepository<Town> towns;
-        private readonly IRepository<UseFullCategory> useFullCategories;
         private readonly IRepository<TownUseFullCategory> townUseFullCategories;
+        private readonly IUseFullCategoryService useFullCategoryService;
 
         public TownService(
             IRepository<Town> towns,
-            IRepository<UseFullCategory> useFullCategories,
-            IRepository<TownUseFullCategory> townUseFullCategories)
+            IRepository<TownUseFullCategory> townUseFullCategories,
+            IUseFullCategoryService useFullCategoryService)
         {
             this.towns = towns;
-            this.useFullCategories = useFullCategories;
             this.townUseFullCategories = townUseFullCategories;
+            this.useFullCategoryService = useFullCategoryService;
         }
 
         public async Task<bool> CheckIfExistsAsync(string name)
@@ -35,7 +35,7 @@
 
         public async Task CreateTownByNameAsync(string name)
         {
-            var allUseFullCategories = this.useFullCategories.All();
+            var allUseFullCategories = await this.useFullCategoryService.GetAlluseFullCategoriesAsync();
 
             Town town = new Town
             {
@@ -59,7 +59,7 @@
 
         public async Task<IList<Town>> GetAllTownsAsync()
         {
-            var allTowns = await this.towns.AllAsNoTracking().ToListAsync();
+            var allTowns = await this.towns.All().ToListAsync();
 
             return allTowns;
         }

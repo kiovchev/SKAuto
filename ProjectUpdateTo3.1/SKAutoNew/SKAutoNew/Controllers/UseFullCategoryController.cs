@@ -1,9 +1,9 @@
 ﻿namespace SKAutoNew.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using SKAutoNew.HandMappers.UseFullCategoryMapper;
     using SKAutoNew.Services.Data.Contractcs;
     using SKAutoNew.Web.ViewModels.UseFullCategoryViewModels;
-    using System.Linq;
     using System.Threading.Tasks;
 
     public class UseFullCategoryController : BaseController
@@ -23,48 +23,39 @@
         public async Task<IActionResult> All()
         {
             var useFullCategoriesDto = await this.useFullCategoryService.GetAllUseFullCategoriesWithParamsAsync();
-            var useFullCategories = useFullCategoriesDto.Select(x => new UseFullCategoryWithImageViewModel
-            {
-                Name = x.Name,
-                ImageAddress = x.ImageAddress
-            }).ToList();
+            var useFullCategories = UseFullCategoryAllHandMapper.Map(useFullCategoriesDto);
 
             return this.View(useFullCategories);
         }
 
         public IActionResult Create()
         {
-            if (this.User.IsInRole("Administrator"))
-            {
-                return this.View();
-            }
-            else
+            if (!this.User.IsInRole("Administrator"))
             {
                 return this.Redirect("/Identity/Account/AccessDenied");
             }
+
+            return this.View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(UseFullCategoryWithImageViewModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.Redirect("/UseFullCategory/Create");
-            }
-            else
+            if (this.ModelState.IsValid)
             {
                 bool useFullCategoryExists = await this.useFullCategoryService.CheckIfExistsAsync(model.Name);
+
                 if (useFullCategoryExists)
                 {
                     return this.Redirect("/UseFullCategory/Create");
                 }
-                else
-                {
+
                     await this.useFullCategoryService.CreateUseFullCategoryByNameAsync(model.Name, model.ImageAddress);
 
-                    return this.Redirect("/UseFullCategory/All");
-                }
+                return this.Redirect("/UseFullCategory/All");
             }
+
+            return this.Redirect("/UseFullCategory/Create");
         }
     }
 }
