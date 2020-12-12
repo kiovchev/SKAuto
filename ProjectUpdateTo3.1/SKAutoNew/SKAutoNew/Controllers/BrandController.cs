@@ -77,7 +77,7 @@
 
         public async Task<IActionResult> Update(int brandId)
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var currentBrand = await this.brandService.GetBrandByIdAsync(brandId);
                 var brand = BrandUpdateGetMapper.Map(currentBrand);
@@ -101,7 +101,7 @@
                 return this.Redirect("/Brand/Index");
             }
 
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var brand = BrandUpdatePostMapper.Map(model);
                 var isSame = await this.brandService.UpdateBrandAsync(brand);
@@ -121,7 +121,7 @@
 
         public async Task<IActionResult> Delete(int brandId)
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var haveModels = await this.brandService.DeleteBrandAsync(brandId);
 

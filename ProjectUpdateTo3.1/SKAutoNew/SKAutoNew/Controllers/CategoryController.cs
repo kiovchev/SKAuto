@@ -31,7 +31,7 @@
 
         public async Task<IActionResult> All()
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var allCategories = await this.categoryService.GetAllCategoriesForViewModelAsync();
                 var categoryWithImages = CategoryAllMapper.Map(allCategories);
@@ -44,7 +44,7 @@
 
         public IActionResult Create()
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View();
             }
@@ -90,7 +90,7 @@
 
         public async Task<IActionResult> Update(int categoryId)
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 if (true)
                 {
@@ -107,7 +107,7 @@
         [HttpPost]
         public async Task<IActionResult> Update(CategoryUpdateInputModel category)
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var isSame = await this.categoryService
                     .IsSameCategoryAsync(category.Name, category.ImageAddress);

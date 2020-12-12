@@ -21,7 +21,7 @@
 
         public IActionResult Index()
         {
-            if (!this.User.IsInRole("Administrator"))
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.Redirect("/Identity/Account/AccessDenied");
             }
@@ -31,7 +31,7 @@
 
         public async Task<IActionResult> Home()
         {
-            if (!this.User.IsInRole("Administrator"))
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.Redirect("/Identity/Account/AccessDenied");
             }
@@ -43,7 +43,7 @@
 
         public async Task<IActionResult> All()
         {
-            if (!this.User.IsInRole("Administrator"))
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.Redirect("/Identity/Account/AccessDenied");
             }
@@ -61,7 +61,7 @@
                 return this.Redirect("/Home/Index");
             }
 
-            if (!this.User.IsInRole("Administrator"))
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.Redirect("/Identity/Account/AccessDenied");
             }

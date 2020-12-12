@@ -20,7 +20,7 @@
 
         public async Task<IActionResult> Index()
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var models = await this.model.GetAllModels();
                 var modelsAll = ModelIndexMapper.Map(models);
@@ -41,7 +41,7 @@
 
         public async Task<IActionResult> Create()
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var brandNames = await this.brand.GetBrandNamesAsync();
 
@@ -84,7 +84,7 @@
 
         public async Task<IActionResult> Update(int modelId)
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var currentModel = await this.model.GetModelByIdAsync(modelId);
                 var model = ModelUpdateGetMapper.Map(currentModel);
@@ -98,7 +98,7 @@
         [HttpPost]
         public async Task<IActionResult> Update(ModelUpdateInputModel model)
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 if (!this.ModelState.IsValid)
                 {
@@ -130,7 +130,7 @@
 
         public async Task<IActionResult> Delete(int modelId)
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var haveParts = await this.model.HavePartsAsync(modelId);
 

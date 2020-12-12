@@ -49,7 +49,7 @@
 
         public IActionResult Create()
         {
-            if (!this.User.IsInRole("Administrator"))
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.Redirect("/Identity/Account/AccessDenied");
             }

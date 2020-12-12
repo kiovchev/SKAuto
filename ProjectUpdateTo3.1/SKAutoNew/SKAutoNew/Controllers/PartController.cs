@@ -18,7 +18,7 @@
 
         public async Task<IActionResult> Index()
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var dtoAllPartsModel = await this.partService.GetAllPartsAsync();
                 var partsAll = PartIndexMaper.Map(dtoAllPartsModel);
@@ -38,7 +38,7 @@
 
         public async Task<IActionResult> Create()
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var partDtoCreate = await this.partService.GetPartCreateParams();
                 var partCreate = PartCreateOutPutMapper.Map(partDtoCreate);
@@ -52,7 +52,7 @@
         [HttpPost]
         public async Task<IActionResult> Create(PartCreateInputModel model)
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 if (!this.ModelState.IsValid)
                 {
@@ -82,7 +82,7 @@
 
         public async Task<IActionResult> Add(PartAddGetModel model)
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var partDto = await this.partService.GetAddOutputModelByIdAsync(model.PartId);
                 var partAddOutputModel = PartAddOutputMapper.Map(partDto);
@@ -96,7 +96,7 @@
         [HttpPost]
         public async Task<IActionResult> Add(PartAddInputModel partAdd)
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 if (!this.ModelState.IsValid)
                 {
@@ -128,7 +128,7 @@
         [HttpPost]
         public async Task<IActionResult> Update(PartUpdateInputModel inputModel)
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 if (!this.ModelState.IsValid)
                 {
@@ -159,7 +159,7 @@
 
         public async Task<IActionResult> Delete(int partId)
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 await this.partService.DeletePartAsync(partId);
 
