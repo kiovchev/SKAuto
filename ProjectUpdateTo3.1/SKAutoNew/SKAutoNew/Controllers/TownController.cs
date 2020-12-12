@@ -1,6 +1,7 @@
 ﻿namespace SKAutoNew.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using SKAutoNew.Common;
     using SKAutoNew.HandMappers.TownMappers;
     using SKAutoNew.Services.Data.Contractcs;
     using SKAutoNew.Web.ViewModels.TownViewModels;
@@ -17,6 +18,11 @@
 
         public IActionResult Index()
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             return this.View();
         }
 
@@ -30,6 +36,11 @@
 
         public async Task<IActionResult> All()
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             var allTownsDto = await this.townService.GetTownNamesAsync();
             var allTownsModel = AllTownsViewModelMapper.Map(allTownsDto);
 
@@ -49,6 +60,11 @@
         [HttpPost]
         public async Task<IActionResult> Create(TownInputViewModel model)
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             if (!this.ModelState.IsValid)
             {
                 // need an error page

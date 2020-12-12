@@ -18,7 +18,7 @@
 
         public async Task<IActionResult> Index()
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var brands = await this.brandService.GetAllBrandsWithImageAsync();
                 var brandsAll = BrandIndexMapper.Map(brands);
@@ -39,7 +39,7 @@
 
         public IActionResult Create()
         {
-            if (this.User.IsInRole("Administrator"))
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.View();
             }
@@ -50,6 +50,11 @@
         [HttpPost]
         public async Task<IActionResult> Create(BrandCreateInputModel brandCreateInputModel)
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.Redirect("/Brand/Create");
@@ -86,6 +91,11 @@
         [HttpPost]
         public async Task<IActionResult> Update(BrandUpdateInputModel model)
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.Redirect("/Brand/Index");

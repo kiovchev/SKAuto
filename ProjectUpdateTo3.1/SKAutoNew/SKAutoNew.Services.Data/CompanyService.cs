@@ -40,6 +40,21 @@
             await this.conpanies.SaveAsync();
         }
 
+        public async Task<bool> DeleteAsync(int companyId)
+        {
+            var currentCompay = await this.conpanies.All().FirstOrDefaultAsync(x => x.Id == companyId);
+
+            if (currentCompay != null)
+            {
+                this.conpanies.Delete(currentCompay);
+                await this.conpanies.SaveAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
         public async Task<IList<CompanyInputViewDtoModel>> GetAllCompaniesAsync()
         {
             var allCompanies = await this.conpanies.All()
@@ -52,6 +67,23 @@
             var companyNames = GetAllCompaniesServiceMapper.Map(allCompanies, allTowns, allUseFullCategories);
 
             return companyNames;
+        }
+
+        public async Task<IList<CompanyIndexViewDtoModel>> GetAllCompaniesForIndexAsync()
+        {
+            var allCompanies = await this.conpanies.All()
+                                             .Include(x => x.Town)
+                                             .Include(x => x.UseFullCategory)
+                                             .ToListAsync();
+            var allTowns = await this.townService.GetAllTownsAsync();
+            var allUseFullCategories = await this.useFullCategoryService.GetAlluseFullCategoriesAsync();
+
+            var allCompaniesModel = GetAllCompaniesForIndexServiceMapper.Map(allCompanies, allTowns, allUseFullCategories)
+                                                           .OrderBy(x => x.TownName)
+                                                           .ThenBy(x => x.CategoryName)
+                                                           .ToList();
+
+            return allCompaniesModel;
         }
 
         public async Task<IList<CompanyInputViewDtoModel>> GetCompaniesByTownAndCategoryAsync(string townName,

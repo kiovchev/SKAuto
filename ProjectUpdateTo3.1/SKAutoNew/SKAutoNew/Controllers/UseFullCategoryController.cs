@@ -1,6 +1,7 @@
 ﻿namespace SKAutoNew.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using SKAutoNew.Common;
     using SKAutoNew.HandMappers.UseFullCategoryMapper;
     using SKAutoNew.Services.Data.Contractcs;
     using SKAutoNew.Web.ViewModels.UseFullCategoryViewModels;
@@ -17,6 +18,11 @@
 
         public IActionResult Index()
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             return this.View();
         }
 
@@ -30,7 +36,7 @@
 
         public IActionResult Create()
         {
-            if (!this.User.IsInRole("Administrator"))
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.Redirect("/Identity/Account/AccessDenied");
             }
@@ -41,6 +47,11 @@
         [HttpPost]
         public async Task<IActionResult> Create(UseFullCategoryWithImageViewModel model)
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             if (this.ModelState.IsValid)
             {
                 bool useFullCategoryExists = await this.useFullCategoryService.CheckIfExistsAsync(model.Name);

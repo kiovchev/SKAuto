@@ -4,6 +4,8 @@
     using SKAutoNew.Data.Models;
     using SKAutoNew.Data.Repositories;
     using SKAutoNew.Services.Data.Contractcs;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class OrderStatusService : IOrderStatusService
@@ -13,6 +15,13 @@
         public OrderStatusService(IRepository<OrderStatus> orders)
         {
             this.orders = orders;
+        }
+
+        public async Task<IList<string>> GetAllOrderStatusesNamesAsync()
+        {
+            var allOrderStatusesNames = await this.orders.All().Select(x => x.Name).ToListAsync();
+
+            return allOrderStatusesNames;
         }
 
         public async Task<OrderStatus> GetOrderStatusByName(string name)

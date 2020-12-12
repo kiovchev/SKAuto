@@ -1,6 +1,7 @@
 ﻿namespace SKAutoNew.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using SKAutoNew.Common;
     using SKAutoNew.HandMappers.OrderMappers;
     using SKAutoNew.Helper;
     using SKAutoNew.Services.Data.Contractcs;
@@ -18,13 +19,22 @@
             this.orderService = orderService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return this.View();
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/");
+            }
+
+            var ordersAllDtos = await this.orderService.GetAllOrdersAsync();
+            var ordersAllViewModels = OrderIndexMapper.Map(ordersAllDtos);
+
+            return this.View(ordersAllViewModels);
         }
 
         public IActionResult All()
         {
+            // show all orders for a recipien by recipient id - if do this, we will need new recipient view
             return this.View();
         }
 
@@ -38,6 +48,7 @@
                 return this.View(orverViewModel);
             }
 
+            // need an error 
             return this.Redirect("/Home/Index");
         }
 
@@ -49,6 +60,61 @@
             this.HttpContext.Session.Clear();
 
             return this.RedirectToAction("Last", "Order", new LastOrderParamViewModel { OrderId = orderId });
+        }
+
+        public async Task<IActionResult> Delete(int orderId)
+        {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            await this.orderService.DeleteOrderAsync(orderId);
+
+            return this.Redirect("/Order/Index");
+        }
+
+        public async Task<IActionResult> Update(int orderId)
+        {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            var updateOutPutDtoModel = await this.orderService.GetUpdateOrderParamsAsync(orderId);
+            var updateOutPutViewModel = OrderUpdateOutPutHandMapper.Map(updateOutPutDtoModel);
+
+            return this.View(updateOutPutViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateInputOrderViewModel inputModel)
+        {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                var error = new OrderError { ErrorMessage = GlobalConstants.OrderModelValidationMessege };
+                return this.RedirectToAction("Error", "Order", error);
+            }
+
+            var isOrderUpdated = await this.orderService.UpdateAsync(inputModel.Id, inputModel.OrderStatusName);
+
+            if (!isOrderUpdated)
+            {
+                var error = new OrderError { ErrorMessage = GlobalConstants.OrderSameMessage };
+                return this.RedirectToAction("Error", "Order", error);
+            }
+
+            return this.Redirect("/Order/Index");
+        }
+
+        public IActionResult Error(OrderError orderError)
+        {
+            return this.View(orderError);
         }
     }
 }

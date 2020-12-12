@@ -8,6 +8,8 @@
     {
         Task<IList<CompanyInputViewDtoModel>> GetAllCompaniesAsync();
 
+        Task<IList<CompanyIndexViewDtoModel>> GetAllCompaniesForIndexAsync();
+
         Task CreateCompanyAsync(CompanyInputViewDtoModel company);
 
         Task<IList<CompanyInputViewDtoModel>> GetCompaniesByTownAndCategoryAsync(string townName, string categoryName);
@@ -15,5 +17,7 @@
         Task<CompanyCreateViewDtoModel> GetCompanyCreateParamsAsync();
 
         Task<bool> IfCompanyExistsAsync(string name, string town, string category);
+
+        Task<bool> DeleteAsync(int companyId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace SKAutoNew.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using SKAutoNew.Common;
     using SKAutoNew.HandMappers.CompanyMapper;
     using SKAutoNew.Services.Data.Contractcs;
     using SKAutoNew.Web.ViewModels.CompanyViewModels;
@@ -15,13 +16,26 @@
             this.company = company;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return this.View();
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            var allCompaniesDto = await this.company.GetAllCompaniesForIndexAsync();
+            var allCompanies = IndexHandMapper.Map(allCompaniesDto);
+
+            return this.View(allCompanies);
         }
 
         public async Task<IActionResult> All()
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             var companyNamesDto = await this.company.GetAllCompaniesAsync();
             var companyNames = AllHandMapper.Map(companyNamesDto);
 
@@ -52,6 +66,11 @@
         [HttpPost]
         public async Task<IActionResult> Create(CompanyInputViewModel companyModel)
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.Redirect("/Company/Create");
@@ -71,6 +90,33 @@
 
             await this.company.CreateCompanyAsync(companyModelDto);
             return this.Redirect("/Company/All");
+        }
+
+        public async Task<IActionResult> Delete(CompanyDeleteViewModel viewModel)
+        {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                // need an error page
+                return this.Redirect("/");
+            }            
+
+            await this.company.DeleteAsync(viewModel.CompanyId);
+            return this.Redirect("/Company/Index");
+        }
+
+        public async Task<IActionResult> Update(int companyId)
+        {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            return this.View();
         }
     }
 }

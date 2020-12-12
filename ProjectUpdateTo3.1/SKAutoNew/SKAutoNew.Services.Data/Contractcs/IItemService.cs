@@ -26,5 +26,7 @@
         Task RemoveItemsAndAddQuantityForPartsInDbAsync();
 
         Task Delete(int itemId);
+
+        Task DeleteItemsForOrderAsync(int orderId);
     }
 }

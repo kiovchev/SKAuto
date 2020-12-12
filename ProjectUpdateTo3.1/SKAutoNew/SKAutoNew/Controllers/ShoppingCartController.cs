@@ -1,6 +1,7 @@
 ﻿namespace SKAutoNew.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using SKAutoNew.Common;
     using SKAutoNew.HandMappers.CartMappers;
     using SKAutoNew.Helper;
     using SKAutoNew.Services.Data.Contractcs;
@@ -128,6 +129,11 @@
 
         public async Task<IActionResult> Remove(int partId)
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             if (partId == 0)
             {
                 return this.Redirect("/Home/Index");

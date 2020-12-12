@@ -162,5 +162,23 @@
             this.itemsRepository.Delete(itemToDelete);
             await this.itemsRepository.SaveAsync();
         }
+
+        public async Task DeleteItemsForOrderAsync(int orderId)
+        {
+            var neededItems = await this.itemsRepository.All()
+                                                  .Include(x => x.Order)
+                                                  .Include(x => x.Part)
+                                                  .Where(x => x.Order.Id == orderId)
+                                                  .ToListAsync();
+
+            if (neededItems.Count > 0)
+            {
+                foreach (var item in neededItems)
+                {
+                    await this.partService.ReturnPartFromCartAsync(item.PartId, item.OrderedQuantity);
+                    itemsRepository.Delete(item);
+                }
+            }
+        }
     }
 }

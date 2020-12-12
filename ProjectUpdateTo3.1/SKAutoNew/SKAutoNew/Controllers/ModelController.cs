@@ -54,6 +54,11 @@
         [HttpPost]
         public async Task<IActionResult> Create(ModelInputViewModel createModel)
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             if (!this.ModelState.IsValid || createModel.StartYear >= createModel.EndYear)
             {
                 return this.Redirect("/Model/Create");

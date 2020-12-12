@@ -1,6 +1,7 @@
 ﻿namespace SKAutoNew.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using SKAutoNew.Common;
     using SKAutoNew.HandMappers.PartMappers;
     using SKAutoNew.Services.Data.Contractcs;
     using SKAutoNew.Web.ViewModels.PartViewModels;
@@ -113,6 +114,11 @@
 
         public async Task<IActionResult> Update(PartUpdateGetModel model)
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             var partDto = await this.partService.GetPartUpdateModel(model.PartId);
             var partModel = PartUpdateOutputMapper.Map(partDto);
 

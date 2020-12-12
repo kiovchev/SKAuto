@@ -9,6 +9,7 @@
     using SKAutoNew.Services.Data.Contractcs;
     using SKAutoNew.Services.Mappers.OrderServiceMappers;
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class OrderService : IOrderService
@@ -30,6 +31,7 @@
             this.orderStatusService = orderStatusService;
         }
 
+        // create order
         public async Task<int> CreateOrderAsync(CartOrderCreateDtoModel dtoModel)
         {
             var recipient = await this.recipientService.GetRecipientByIdAsync(dtoModel.RecipientId);
@@ -53,6 +55,36 @@
             return currentOrder.Id;
         }
 
+        // delete order
+        public async Task DeleteOrderAsync(int orderId)
+        {
+            var orderToDelete = await this.orders.All().FirstOrDefaultAsync(x => x.Id == orderId);
+
+            if (orderToDelete != null)
+            {
+                await this.itemService.DeleteItemsForOrderAsync(orderToDelete.Id);
+
+                this.orders.Delete(orderToDelete);
+                await this.orders.SaveAsync();
+            }
+        }
+
+        // get all orders 
+        public async Task<IList<IndexOrderDto>> GetAllOrdersAsync()
+        {
+            var ordersAll = await this.orders.All()
+                                       .Include(x => x.Recipient)
+                                       .Include(x => x.OrderStatus)
+                                       .Include(x => x.Items)
+                                       .ThenInclude(x => x.Part)
+                                       .ToListAsync();
+
+            var ordersAllDtos = OrderIndexServiceMapper.Map(ordersAll);
+
+            return ordersAllDtos;
+        }
+
+        // gets last order for current recipient
         public async Task<LastOrderDto> GetLastOrderAsync(int orderId)
         {
             var lastOrder = await this.orders.All()
@@ -70,6 +102,43 @@
             }
 
             return neededOrder;
+        }
+
+        // get params for order update
+        public async Task<UpdateOutPutOrderDtoModel> GetUpdateOrderParamsAsync(int orderId)
+        {
+            var orderParamsModel = await this.orders.All()
+                                       .Include(x => x.Recipient)
+                                       .Include(x => x.OrderStatus)
+                                       .Include(x => x.Items)
+                                       .ThenInclude(x => x.Part)
+                                       .FirstOrDefaultAsync(x => x.Id == orderId);
+
+            var allOrderStatusesNames = await this.orderStatusService.GetAllOrderStatusesNamesAsync();
+
+            var orderParamsDto = OrderUpdateParamsServiceMapper.Map(orderParamsModel, allOrderStatusesNames);
+
+            return orderParamsDto;
+        }
+
+        public async Task<bool> UpdateAsync(int orderId, string statusName)
+        {
+            var searchedOrder = await this.orders.All()
+                                          .Include(x => x.OrderStatus)
+                                          .FirstOrDefaultAsync(x => x.Id == orderId);
+
+            if (searchedOrder.OrderStatus.Name == statusName)
+            {
+                return false;
+            }
+
+            var orderStatus = await this.orderStatusService.GetOrderStatusByName(statusName);
+            searchedOrder.OrderStatus = orderStatus;
+
+            this.orders.Update(searchedOrder);
+            await this.orders.SaveAsync();
+
+            return true;
         }
     }
 }

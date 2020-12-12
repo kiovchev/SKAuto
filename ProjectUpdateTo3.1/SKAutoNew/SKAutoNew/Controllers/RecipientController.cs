@@ -17,6 +17,11 @@
 
         public IActionResult Index()
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             var recipientsForIndexDto = this.recipientService.GetAllRecipientsAsync();
             return this.View();
         }
@@ -64,6 +69,11 @@
         [HttpPost]
         public async Task<IActionResult> Find(RecipientFindInputViewModel model)
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.Redirect("/Recipient/Find");

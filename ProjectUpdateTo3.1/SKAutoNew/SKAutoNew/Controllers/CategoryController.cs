@@ -18,6 +18,11 @@
 
         public async Task<IActionResult> Index()
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             var categoriesFromDb = await this.categoryService.GetAllCategoriesAsync();
             var categories = CategoryIndexMapper.Map(categoriesFromDb);
 
@@ -50,6 +55,11 @@
         [HttpPost]
         public async Task<IActionResult> Create(CategoryWithImageViewModel categoryModel)
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.Redirect("/Category/Create");
@@ -120,6 +130,11 @@
 
         public async Task<IActionResult> Delete(int categoryId)
         {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
             var isDeleted = await this.categoryService.DeleteCategoryAsync(categoryId);
 
             if (isDeleted)

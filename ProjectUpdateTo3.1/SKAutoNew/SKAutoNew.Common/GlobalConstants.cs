@@ -42,5 +42,9 @@
         // Recipient
         public const string RecipientFindErrorMessage = "В базата няма получател с такъв телефон!!!!!";
         public const string RecipientCreateErrorMessage = "В базата има получател с такъв телефон!!!!!";
+
+        // Order
+        public const string OrderModelValidationMessege = "Невалиден модел!!!!!";
+        public const string OrderSameMessage = "Поръчката в базата е със същия статус на доставка!!!!!";
     }
 }
