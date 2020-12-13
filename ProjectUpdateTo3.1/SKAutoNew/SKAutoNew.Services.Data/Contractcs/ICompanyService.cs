@@ -19,5 +19,9 @@
         Task<bool> IfCompanyExistsAsync(string name, string town, string category);
 
         Task<bool> DeleteAsync(int companyId);
+
+        Task<CompanyUpdateOutPutDtoModel> GetCompanyByIdAsync(int companyId);
+
+        Task<bool> UpdateCompanyAsync(CompanyUpdateInputDtoModel dtoModel);
     }
 }

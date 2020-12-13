@@ -2,7 +2,6 @@
 {
     using SKAutoNew.Common.DtoModels.BrandDtos;
     using SKAutoNew.Web.ViewModels.BrandViewModels;
-    using System;
 
     public static class BrandUpdatePostMapper
     {
@@ -10,7 +9,7 @@
         {
             var brand = new BrandUpdateDtoModel()
             {
-                BrandId = model.Id,
+                BrandId = model.BrandId,
                 BrandName = model.Name.ToUpper(),
                 ImageAddress = model.ImageAddress,
             };

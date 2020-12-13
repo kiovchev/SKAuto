@@ -104,6 +104,24 @@
             return companiesByTown;
         }
 
+        public async Task<CompanyUpdateOutPutDtoModel> GetCompanyByIdAsync(int companyId)
+        {
+            var allTowns = await this.townService.GetAllTownsAsync();
+            var allCategories = await this.useFullCategoryService.GetAlluseFullCategoriesAsync();
+
+            var townNames = allTowns.Select(x => x.Name).OrderBy(x => x).ToList();
+            var categoryNames = allCategories.Select(x => x.Name).OrderBy(x => x).ToList();
+
+            var neededCompany = await this.conpanies.All()
+                                             .Include(x => x.Town)
+                                             .Include(x => x.UseFullCategory)
+                                             .FirstOrDefaultAsync(x => x.Id == companyId);
+
+            var companyDto = GetCompanyByIdServiceMapper.Map(neededCompany, townNames, categoryNames);
+
+            return companyDto;
+        }
+
         public async Task<CompanyCreateViewDtoModel> GetCompanyCreateParamsAsync()
         {
             var allTowns = await this.townService.GetAllTownsAsync();
@@ -125,6 +143,36 @@
                                                            && x.UseFullCategory.Name.ToUpper() == category.ToUpper());
 
             return hasCompany;
+        }
+
+        public async Task<bool> UpdateCompanyAsync(CompanyUpdateInputDtoModel dtoModel)
+        {
+            var companyToChange = await this.conpanies.All()
+                                                      .Include(x => x.Town)
+                                                      .Include(x => x.UseFullCategory)
+                                                      .FirstAsync(x => x.Id == dtoModel.CompanyId);
+
+            if (companyToChange.Name == dtoModel.CompanyName 
+                && companyToChange.Town.Name == dtoModel.TownName 
+                && companyToChange.Address == dtoModel.Address
+                && companyToChange.Phone == dtoModel.Phone
+                && companyToChange.UseFullCategory.Name == dtoModel.CategoryName)
+            {
+                return false;
+            }
+
+            var allTowns = await this.townService.GetAllTownsAsync();
+            var neededTown = allTowns.FirstOrDefault(x => x.Name == dtoModel.TownName);
+
+            var allCategories = await this.useFullCategoryService.GetAlluseFullCategoriesAsync();
+            var neededCategory = allCategories.FirstOrDefault(x => x.Name == dtoModel.CategoryName);
+
+            companyToChange = CompanyUpdateServiceMapper.Map(companyToChange, dtoModel, neededTown, neededCategory);
+
+            this.conpanies.Update(companyToChange);
+            await this.conpanies.SaveAsync();
+
+            return true;
         }
     }
 }

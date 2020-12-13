@@ -116,7 +116,30 @@
                 return this.Redirect("/Identity/Account/AccessDenied");
             }
 
-            return this.View();
+            var companyDto = await this.company.GetCompanyByIdAsync(companyId);
+            var companyView = CompanyUpdateOutPutHandMapper.Map(companyDto);
+
+            return this.View(companyView);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(CompanyUpdateInputViewModel inputViewModel)
+        {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                // need an error page 
+                return this.Redirect("/");
+            }
+
+            var dtoModel = CompanyUpdateInputHandMapper.Map(inputViewModel);
+            await this.company.UpdateCompanyAsync(dtoModel);
+
+            return this.Redirect("/Company/Index");
         }
     }
 }

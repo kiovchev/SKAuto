@@ -1,5 +1,47 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using SKAutoNew.Web.ViewModels.CompanyViewModels;
+@model CompanyUpdateOutPutViewModel;
+
+<h1 class="text-white text-center">Промени компания</h1>
+<div class="row text-white justify-content-xl-center">
+    <div class="col-md-4">
+        <form id="account" method="post">
+            <hr class="bg-white" />
+            <div class="form-group">
+                <label>Име на компания</label>
+                <input class="form-control" name="companyName" value="@Model.CompanyName" />
+            </div>
+            <div class="form-group">
+                <label>Град</label>
+                <select class="form-control" name="townName" type="text">
+                    <option selected>@Model.TownName</option>
+                    @foreach (var item in Model.Towns)
+                    {
+                        <option>@item</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Адрес</label>
+                <input class="form-control" name="address" value="@Model.Address" />
+            </div>
+            <div class="form-group">
+                <label>Телефон</label>
+                <input class="form-control" name="phone" value="@Model.Phone" />
+            </div>
+            <div class="form-group">
+                <label>Категория</label>
+                <select class="form-control" name="categoryName" type="text">
+                    <option selected>@Model.CategoryName</option>
+                    @foreach (var item in Model.Categories)
+                    {
+                        <option>@item</option>
+                    }
+                </select>
+            </div>
+            <hr class="bg-white" />
+            <div class="form-group text-center">
+                <button type="submit" class="btn skl-bg-color border">Промени</button>
+            </div>
+        </form>
+    </div>
+</div>

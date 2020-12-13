@@ -5,7 +5,7 @@
     public class BrandUpdateInputModel
     {
         [Required]
-        public int Id { get; set; }
+        public int BrandId { get; set; }
 
         [Required]
         public string Name { get; set; }
