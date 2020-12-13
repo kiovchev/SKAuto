@@ -18,5 +18,7 @@
         Task<UpdateOutPutOrderDtoModel> GetUpdateOrderParamsAsync(int orderId);
 
         Task<bool> UpdateAsync(int orderId, string statusName);
+
+        Task DeleteAllOrdersByRecipientIdAsync(int recipientId);
     }
 }

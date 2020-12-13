@@ -1,5 +1,49 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@using SKAutoNew.Web.ViewModels.RecipientViewModels;
+@model IList<RecipientIndexViewModel>;
+
+@{ 
+    int count = 0;
 }
+
+<h1 class="mb-5" style="color:white">Операции с получатели</h1>
+
+<div class="table-responsive">
+    @if (Model.Count() == 0)
+    {
+        <h3 class="text-danger ">В момента няма данни за получатели!!!</h3>
+    }
+    else
+    {
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th class="text-white skl-bg-color border" scope="col">№</th>
+                    <th class="text-white skl-bg-color border" scope="col">Име на получател</th>
+                    <th class="text-white skl-bg-color border" scope="col">Презиме на получател</th>
+                    <th class="text-white skl-bg-color border" scope="col">Град</th>
+                    <th class="text-white skl-bg-color border" scope="col">Адрес</th>
+                    <th class="text-white skl-bg-color border" scope="col">Телефон за връзка</th>
+                    <th class="text-white skl-bg-color border" scope="col">Промени / Изтрий</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    ++count;
+                <tr class="text-center">
+                    <td class="text-white skl-bg-color border" scope="col">@count</td>
+                    <td class="text-white skl-bg-color border" scope="col">@Model[i].FirstName</td>
+                    <td class="text-white skl-bg-color border" scope="col">@Model[i].LastName</td>
+                    <td class="text-white skl-bg-color border" scope="col">@Model[i].RecipientTown</td>
+                    <td class="text-white skl-bg-color border" scope="col">@Model[i].Address</td>
+                    <td class="text-white skl-bg-color border" scope="col">@Model[i].Phone</td>
+                    <td class="text-white skl-bg-color border align-middle" scope="col">
+                        <a class="btn bg-dark border p-1 text-white" asp-controller="Recipient" asp-action="Update" asp-route-recipientId="@Model[i].Id">Промени</a>
+                        <a class="btn bg-danger border p-1 text-white" asp-controller="Recipient" asp-action="Delete" asp-route-recipientId="@Model[i].Id">Изтрий</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

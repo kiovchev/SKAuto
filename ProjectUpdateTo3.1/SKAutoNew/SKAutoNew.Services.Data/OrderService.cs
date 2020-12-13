@@ -10,23 +10,24 @@
     using SKAutoNew.Services.Mappers.OrderServiceMappers;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class OrderService : IOrderService
     {
         private readonly IRepository<Order> orders;
-        private readonly IRecipientService recipientService;
+        private readonly IRepository<Recipient> recipientRepo;
         private readonly IItemService itemService;
         private readonly IOrderStatusService orderStatusService;
 
         public OrderService(
                             IRepository<Order> orders,
-                            IRecipientService recipientService,
+                            IRepository<Recipient> recipientRepo,
                             IItemService itemService,
                             IOrderStatusService orderStatusService)
         {
             this.orders = orders;
-            this.recipientService = recipientService;
+            this.recipientRepo = recipientRepo;
             this.itemService = itemService;
             this.orderStatusService = orderStatusService;
         }
@@ -34,7 +35,7 @@
         // create order
         public async Task<int> CreateOrderAsync(CartOrderCreateDtoModel dtoModel)
         {
-            var recipient = await this.recipientService.GetRecipientByIdAsync(dtoModel.RecipientId);
+            var recipient = await this.recipientRepo.All().FirstOrDefaultAsync(x => x.Id == dtoModel.RecipientId);
             var items = await this.itemService.GetItemsByItemsIdsAsync(dtoModel.ItemsIds);
             var orderStatus = await this.orderStatusService.GetOrderStatusByName(GlobalConstants.PendingBGStatus);
 
@@ -53,6 +54,20 @@
             await this.orders.SaveAsync();
 
             return currentOrder.Id;
+        }
+
+        public async Task DeleteAllOrdersByRecipientIdAsync(int recipientId)
+        {
+            var ordersToDelete = await this.orders.All()
+                                            .Include(x => x.Recipient)
+                                            .Where(x => x.Recipient.Id == recipientId)
+                                            .ToListAsync();
+
+            foreach (var orderToDelete in ordersToDelete)
+            {
+                await this.itemService.DeleteItemsForOrderAsync(orderToDelete.Id);
+                this.orders.Delete(orderToDelete);
+            }
         }
 
         // delete order

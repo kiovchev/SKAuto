@@ -21,5 +21,11 @@
         Task<Recipient> GetRecipientByIdAsync(int recipientId);
 
         Task<List<RecipientIndexDto>> GetAllRecipientsAsync();
+
+        Task<bool> DeleteRecipientAsync(RecipientDeleteDtoModel deleteDtoModel);
+
+        Task<RecipientParamsDtoModel> GetRecipientParamsForUpdateAsync(RecipientUpdateOutputDtoModel dtoModel);
+
+        Task<bool>  UpdateRecipientAsync(RecipientUpdateInputDtoModel dtoModel);
     }
 }

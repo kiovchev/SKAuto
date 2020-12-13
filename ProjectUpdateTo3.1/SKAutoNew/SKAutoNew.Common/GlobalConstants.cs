@@ -42,6 +42,10 @@
         // Recipient
         public const string RecipientFindErrorMessage = "В базата няма получател с такъв телефон!!!!!";
         public const string RecipientCreateErrorMessage = "В базата има получател с такъв телефон!!!!!";
+        public const string RecipientDeleteModelValidationMessege = "Невалиден модел!!!!!";
+        public const string RecipientInvalidDeleteModelMessege = "В базата няма такъв получател!!!!!";
+        public const string RecipientUpdateModelValidationMessege = "В базата няма такъв получател!!!!!";
+        public const string RecipientUpdateSameModelMessege = "В базата вече има такъв получател!!!!!";
 
         // Order
         public const string OrderModelValidationMessege = "Невалиден модел!!!!!";
