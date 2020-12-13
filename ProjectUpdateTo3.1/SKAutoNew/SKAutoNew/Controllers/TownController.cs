@@ -16,14 +16,17 @@
             this.townService = townService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.Redirect("/Identity/Account/AccessDenied");
             }
 
-            return this.View();
+            var dtoModels = await this.townService.GetTownsForIndexAsync();
+            var viewModels = TownIndexViewMapper.Map(dtoModels);
+
+            return this.View(viewModels);
         }
 
         public async Task<IActionResult> ShowAll(TownShallAllViewModel model)

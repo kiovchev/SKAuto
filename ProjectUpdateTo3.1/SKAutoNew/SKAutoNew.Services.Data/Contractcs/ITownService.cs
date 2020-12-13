@@ -16,5 +16,7 @@
         Task<bool> CheckIfExistsAsync(string name);
 
         Task<AllTownsViewDtoModel> GetTownNamesAsync();
+
+        Task<IList<TownIndexDtoModel>> GetTownsForIndexAsync();
     }
 }

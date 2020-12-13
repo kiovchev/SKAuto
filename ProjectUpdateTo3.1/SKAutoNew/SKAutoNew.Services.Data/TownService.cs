@@ -85,5 +85,13 @@
 
             return viewModel;
         }
+
+        public async Task<IList<TownIndexDtoModel>> GetTownsForIndexAsync()
+        {
+            var allTowns = await this.towns.All().ToListAsync();
+            var townsDto = GetTownsForIndexMapper.Map(allTowns);
+
+            return townsDto;
+        }
     }
 }
