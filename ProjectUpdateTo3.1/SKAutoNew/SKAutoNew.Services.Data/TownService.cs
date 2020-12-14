@@ -15,20 +15,17 @@
         private readonly IRepository<Town> towns;
         private readonly IRepository<TownUseFullCategory> townUseFullCategories;
         private readonly IUseFullCategoryService useFullCategoryService;
-        //private readonly ICompanyService companyService;
         private readonly IRepository<Company> companyRepo;
 
         public TownService(
             IRepository<Town> towns,
             IRepository<TownUseFullCategory> townUseFullCategories,
             IUseFullCategoryService useFullCategoryService,
-            //ICompanyService companyService,
             IRepository<Company> companyRepo)
         {
             this.towns = towns;
             this.townUseFullCategories = townUseFullCategories;
             this.useFullCategoryService = useFullCategoryService;
-            //this.companyService = companyService;
             this.companyRepo = companyRepo;
         }
 

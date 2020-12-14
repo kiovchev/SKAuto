@@ -14,5 +14,13 @@
         Task CreateUseFullCategoryByNameAsync(string name, string imageAddress);
 
         Task<bool> CheckIfExistsAsync(string name);
+
+        Task<IList<IndexDtoModel>> GetAllCategoriesForIndexAsync();
+
+        Task<UseFullUpdateGetOutputDtoModel> GetDtoModelForUpdateOutputModelAsync(UseFullUpdateGetInputDtoModel inputDtoModel);
+
+        Task<bool> UpdateUseFullCategoryAsync(UseFullUpdatePostInputDtoModel dtoModel);
+
+        Task<bool> DeleteUseFullCategoryAsync(UseFullDeleteDtoModel dtoModel);
     }
 }

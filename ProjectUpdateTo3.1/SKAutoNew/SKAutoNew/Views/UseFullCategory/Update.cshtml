@@ -1,0 +1,27 @@
+﻿@using SKAutoNew.Web.ViewModels.UseFullCategoryViewModels;
+@model UseFullUpdateGetOutputViewModel;
+
+    <h1 class="text-white text-center">Промени Полезна категория</h1>
+    <div class="row text-white justify-content-xl-center">
+        <div class="col-md-4">
+            <section>
+                <form method="post">
+                    <hr class="bg-white" />
+                    <div class="form-group">
+                        <label>Име на Полезна категория</label>
+                        <input class="form-control" name="useFullCategoryName" type="text" value="@Model.UseFullCategoryName" />
+                    </div>
+                    <div class="form-group">
+                        <label>Адрес на снимка</label>
+                        <input class="form-control" id="imageAddress" name="imageAddress" type="text" value="@Model.ImageAddress" />
+                        <label class="text-primary">Важно: Ако не подададете адрес ще създадете Полезна категория без снимка!</label>
+                    </div>
+                    <hr class="bg-white" />
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn skl-bg-color border">Промени</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+

@@ -16,14 +16,17 @@
             this.useFullCategoryService = useFullCategoryService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 return this.Redirect("/Identity/Account/AccessDenied");
             }
 
-            return this.View();
+            var dtoModels = await this.useFullCategoryService.GetAllCategoriesForIndexAsync();
+            var viewModels = UseFullIndexHandMapper.Map(dtoModels);
+
+            return this.View(viewModels);
         }
 
         public async Task<IActionResult> All()
@@ -66,7 +69,86 @@
                 return this.Redirect("/UseFullCategory/All");
             }
 
+           // need an error page 
             return this.Redirect("/UseFullCategory/Create");
+        }
+
+        public async Task<IActionResult> Update(UseFullUpdateGetIputViewModel inputViewModel)
+        {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                // need erro page
+                return this.Redirect("/");
+            }
+
+            var dtoInputModel = UseFullUpdateGetInputMapper.Map(inputViewModel);
+            var dtoOutPutModel = await this.useFullCategoryService.GetDtoModelForUpdateOutputModelAsync(dtoInputModel);
+
+            if (dtoInputModel == null)
+            {
+                // need an error page
+                return null;
+            }
+
+            var viewModel = UseFullUpdateGetOutPutMapper.Map(dtoOutPutModel);
+
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(UseFullUpdatePostInputViewModel viewModel)
+        {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                // need erro page
+                return this.Redirect("/");
+            }
+
+            var inputDtomodel = UseFullUpdatePostInputMapper.Map(viewModel);
+            var isSame = await this.useFullCategoryService.UpdateUseFullCategoryAsync(inputDtomodel);
+
+            if (!isSame)
+            {
+                // need erro page
+                return this.Redirect("/");
+            }
+
+            return this.Redirect("/UseFullCategory/Index");
+        }
+
+        public async Task<IActionResult> Delete(UseFullDeleteInputViewModel viewModel)
+        {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                // need erro page
+                return this.Redirect("/");
+            }
+
+            var dtoModel = UseFullCategoryDeleteHandMapper.Map(viewModel);
+            var ifExists = await this.useFullCategoryService.DeleteUseFullCategoryAsync(dtoModel);
+
+            if (ifExists)
+            {
+                // need erro page
+                return this.Redirect("/");
+            }
+
+            return this.Redirect("/UseFullCategory/Index");
         }
     }
 }
