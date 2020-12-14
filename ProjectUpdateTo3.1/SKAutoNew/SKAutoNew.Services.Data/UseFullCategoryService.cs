@@ -130,6 +130,11 @@
             var neededCategory = await this.useFullCategories.All()
                                                              .FirstOrDefaultAsync(x => x.Id == inputDtoModel.UseFullCategoryId);
 
+            if (neededCategory == null)
+            {
+                return null;
+            }
+
             var dtoOutputModel = UseFullUpdateGetOutPutServiceMapper.Map(neededCategory);
 
             return dtoOutputModel;
@@ -142,7 +147,7 @@
             if (allmodels.Any(x => x.ImageAddress == dtoModel.ImageAddress 
                                 && x.Name == dtoModel.UseFullCategoryName))
             {
-                return false;
+                return true;
             }
 
             var modelToUpdate = allmodels.FirstOrDefault(x => x.Id == dtoModel.UseFullCategoryId);
@@ -151,7 +156,7 @@
             this.useFullCategories.Update(modelToUpdate);
             await this.useFullCategories.SaveAsync();
 
-            return true;
+            return false;
         }
     }
 }

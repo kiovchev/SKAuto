@@ -50,5 +50,15 @@
         // Order
         public const string OrderModelValidationMessege = "Невалиден модел!!!!!";
         public const string OrderSameMessage = "Поръчката в базата е със същия статус на доставка!!!!!";
+
+        //Town
+        public const string TownModelValidationMessаge = "Невалиден модел!!!!!";
+        public const string TownExistErrorMessage = "В базата вече съществува град с това име!!!!!";
+        public const string TownDeleteErrorMessage = "В базата няма такъв град и няма как да бъде изтрит!!!!!";
+
+        // UseFullCategory
+        public const string UseFullCategoryExistErrorMessage = "В базата вече съществува категория с това име!!!!!";
+        public const string UseFullCategoryModelValidationMessаge = "Невалиден модел!!!!!";
+        public const string UseFullCategoryUpdateErrorMessage = "В базата няма такава категория!!!!!";
     }
 }

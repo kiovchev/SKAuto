@@ -90,11 +90,6 @@
                 .WithMany(t => t.Towns)
                 .HasForeignKey(uc => uc.UseFullCategoryId);
 
-            //builder.Entity<Part>()
-            //    .HasOne(b => b.Brand)
-            //    .WithMany(p => p.Parts)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
             builder.Entity<Part>()
                 .HasOne(c => c.Category)
                 .WithMany(p => p.Parts)

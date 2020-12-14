@@ -70,16 +70,22 @@
 
             if (!this.ModelState.IsValid)
             {
-                // need an error page
-                return this.Redirect("/Town/Create");
+                var error = new TownError
+                {
+                    ErrorMessage = GlobalConstants.TownModelValidationMessаge
+                };
+                return this.RedirectToAction("Error", "Town", error);
             }
 
             bool townExists = await this.townService.CheckIfExistsAsync(model.Name);
 
             if (townExists)
             {
-                // need an error page 
-                return this.Redirect("/Town/Create");
+                var error = new TownError
+                {
+                    ErrorMessage = GlobalConstants.TownExistErrorMessage
+                };
+                return this.RedirectToAction("Error", "Town", error);
             }
 
             await this.townService.CreateTownByNameAsync(model.Name);
@@ -96,8 +102,11 @@
 
             if (!this.ModelState.IsValid)
             {
-                // need an error page
-                return this.Redirect("/Town/Index");
+                var error = new TownError
+                {
+                    ErrorMessage = GlobalConstants.TownModelValidationMessаge
+                };
+                return this.RedirectToAction("Error", "Town", error);
             }
 
             var dtoInputModel = TownUpdateGetInputModelMapper.Map(viewModel);
@@ -118,8 +127,11 @@
 
             if (!this.ModelState.IsValid)
             {
-                // need an error page
-                return this.Redirect("/Town/Index");
+                var error = new TownError
+                {
+                    ErrorMessage = GlobalConstants.TownModelValidationMessаge
+                };
+                return this.RedirectToAction("Error", "Town", error);
             }
 
             var dtoModel = TownUpdatePostInputMapper.Map(inputModel);
@@ -127,8 +139,11 @@
 
             if (!isSame)
             {
-                // need an error page
-                return this.Redirect("/Town/Index");
+                var error = new TownError
+                {
+                    ErrorMessage = GlobalConstants.TownExistErrorMessage
+                };
+                return this.RedirectToAction("Error", "Town", error);
             }
 
             return this.Redirect("/Town/Index");
@@ -143,8 +158,11 @@
 
             if (!this.ModelState.IsValid)
             {
-                // need an error page
-                return this.Redirect("/Town/Index");
+                var error = new TownError
+                {
+                    ErrorMessage = GlobalConstants.TownModelValidationMessаge
+                };
+                return this.RedirectToAction("Error", "Town", error);
             }
 
             var dtoModel = TownDeleteHandMapper.Map(townDelete);
@@ -152,11 +170,19 @@
 
             if (!isDeleted)
             {
-                // need an error page
-                return this.Redirect("/Town/Index");
+                var error = new TownError
+                {
+                    ErrorMessage = GlobalConstants.TownDeleteErrorMessage
+                };
+                return this.RedirectToAction("Error", "Town", error);
             }
 
             return this.Redirect("/Town/Index");
+        }
+
+        public IActionResult Error(TownError error)
+        {
+            return this.View(error);
         }
     }
 }

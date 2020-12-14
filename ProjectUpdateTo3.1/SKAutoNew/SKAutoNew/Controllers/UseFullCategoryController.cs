@@ -61,7 +61,11 @@
 
                 if (useFullCategoryExists)
                 {
-                    return this.Redirect("/UseFullCategory/Create");
+                    var existError = new UseFullCategoryError
+                    {
+                        ErrorMessage = GlobalConstants.UseFullCategoryExistErrorMessage
+                    };
+                    return this.RedirectToAction("Error", "UseFullCategory", existError);
                 }
 
                     await this.useFullCategoryService.CreateUseFullCategoryByNameAsync(model.Name, model.ImageAddress);
@@ -69,8 +73,11 @@
                 return this.Redirect("/UseFullCategory/All");
             }
 
-           // need an error page 
-            return this.Redirect("/UseFullCategory/Create");
+            var error = new UseFullCategoryError
+            {
+                ErrorMessage = GlobalConstants.UseFullCategoryModelValidationMessаge
+            };
+            return this.RedirectToAction("Error", "UseFullCategory", error);
         }
 
         public async Task<IActionResult> Update(UseFullUpdateGetIputViewModel inputViewModel)
@@ -82,17 +89,23 @@
 
             if (!this.ModelState.IsValid)
             {
-                // need erro page
-                return this.Redirect("/");
+                var error = new UseFullCategoryError
+                {
+                    ErrorMessage = GlobalConstants.UseFullCategoryModelValidationMessаge
+                };
+                return this.RedirectToAction("Error", "UseFullCategory", error);
             }
 
             var dtoInputModel = UseFullUpdateGetInputMapper.Map(inputViewModel);
             var dtoOutPutModel = await this.useFullCategoryService.GetDtoModelForUpdateOutputModelAsync(dtoInputModel);
 
-            if (dtoInputModel == null)
+            if (dtoOutPutModel == null)
             {
-                // need an error page
-                return null;
+                var error = new UseFullCategoryError
+                {
+                    ErrorMessage = GlobalConstants.UseFullCategoryUpdateErrorMessage
+                };
+                return this.RedirectToAction("Error", "UseFullCategory", error);
             }
 
             var viewModel = UseFullUpdateGetOutPutMapper.Map(dtoOutPutModel);
@@ -110,17 +123,23 @@
 
             if (!this.ModelState.IsValid)
             {
-                // need erro page
-                return this.Redirect("/");
+                var error = new UseFullCategoryError
+                {
+                    ErrorMessage = GlobalConstants.UseFullCategoryModelValidationMessаge
+                };
+                return this.RedirectToAction("Error", "UseFullCategory", error);
             }
 
             var inputDtomodel = UseFullUpdatePostInputMapper.Map(viewModel);
             var isSame = await this.useFullCategoryService.UpdateUseFullCategoryAsync(inputDtomodel);
 
-            if (!isSame)
+            if (isSame)
             {
-                // need erro page
-                return this.Redirect("/");
+                var error = new UseFullCategoryError
+                {
+                    ErrorMessage = GlobalConstants.UseFullCategoryExistErrorMessage
+                };
+                return this.RedirectToAction("Error", "UseFullCategory", error);
             }
 
             return this.Redirect("/UseFullCategory/Index");
@@ -135,8 +154,11 @@
 
             if (!this.ModelState.IsValid)
             {
-                // need erro page
-                return this.Redirect("/");
+                var error = new UseFullCategoryError
+                {
+                    ErrorMessage = GlobalConstants.UseFullCategoryModelValidationMessаge
+                };
+                return this.RedirectToAction("Error", "UseFullCategory", error);
             }
 
             var dtoModel = UseFullCategoryDeleteHandMapper.Map(viewModel);
@@ -144,11 +166,19 @@
 
             if (ifExists)
             {
-                // need erro page
-                return this.Redirect("/");
+                var error = new UseFullCategoryError
+                {
+                    ErrorMessage = GlobalConstants.UseFullCategoryExistErrorMessage
+                };
+                return this.RedirectToAction("Error", "UseFullCategory", error);
             }
 
             return this.Redirect("/UseFullCategory/Index");
+        }
+
+        public IActionResult Error(UseFullCategoryError error)
+        {
+            return this.View(error);
         }
     }
 }
