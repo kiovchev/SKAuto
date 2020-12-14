@@ -137,7 +137,13 @@
             }
 
             var dtoModel = CompanyUpdateInputHandMapper.Map(inputViewModel);
-            await this.company.UpdateCompanyAsync(dtoModel);
+            var isSame =  await this.company.UpdateCompanyAsync(dtoModel);
+
+            if (!isSame)
+            {
+                // need an error page 
+                return this.Redirect("/");
+            }
 
             return this.Redirect("/Company/Index");
         }

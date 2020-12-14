@@ -1,6 +1,7 @@
 ﻿namespace SKAutoNew.Services.Data.Contractcs
 {
     using SKAutoNew.Common.DtoModels.CompanyDtos;
+    using SKAutoNew.Data.Models;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 

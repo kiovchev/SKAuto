@@ -31,7 +31,6 @@
     <Folder Include="Views\Model\" />
     <Folder Include="Views\Category\" />
     <Folder Include="Views\UseFullCategory\" />
-    <Folder Include="Views\Town\" />
     <Folder Include="Views\ShoppingCart\" />
     <Folder Include="Views\Part\" />
   </ItemGroup>

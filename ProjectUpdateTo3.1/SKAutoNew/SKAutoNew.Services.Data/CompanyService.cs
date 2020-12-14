@@ -147,19 +147,23 @@
 
         public async Task<bool> UpdateCompanyAsync(CompanyUpdateInputDtoModel dtoModel)
         {
-            var companyToChange = await this.conpanies.All()
-                                                      .Include(x => x.Town)
-                                                      .Include(x => x.UseFullCategory)
-                                                      .FirstAsync(x => x.Id == dtoModel.CompanyId);
+            var allCompanies = await this.conpanies.All()
+                                                   .Include(x => x.Town)
+                                                   .Include(x => x.UseFullCategory)
+                                                   .ToListAsync();
 
-            if (companyToChange.Name == dtoModel.CompanyName 
-                && companyToChange.Town.Name == dtoModel.TownName 
-                && companyToChange.Address == dtoModel.Address
-                && companyToChange.Phone == dtoModel.Phone
-                && companyToChange.UseFullCategory.Name == dtoModel.CategoryName)
+            if (allCompanies.Any(x => x.Name == dtoModel.CompanyName
+                && x.Town.Name == dtoModel.TownName
+                && x.Address == dtoModel.Address
+                && x.Phone == dtoModel.Phone
+                && x.UseFullCategory.Name == dtoModel.CategoryName))
             {
                 return false;
             }
+
+            var companyToChange = allCompanies.FirstOrDefault(x => x.Id == dtoModel.CompanyId);
+
+            
 
             var allTowns = await this.townService.GetAllTownsAsync();
             var neededTown = allTowns.FirstOrDefault(x => x.Name == dtoModel.TownName);

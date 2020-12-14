@@ -18,5 +18,11 @@
         Task<AllTownsViewDtoModel> GetTownNamesAsync();
 
         Task<IList<TownIndexDtoModel>> GetTownsForIndexAsync();
+
+        Task<TownUpdateGetOutPutDto> GetTownById(TownUpdateGetInputDtoModel inputModel);
+
+        Task<bool> UpdateTownAsync(TownUpdatePostInputDtoModel inputModel);
+
+        Task<bool> DeleteTownAsync(TownDeleteDtoModel deleteDtoModel);
     }
 }

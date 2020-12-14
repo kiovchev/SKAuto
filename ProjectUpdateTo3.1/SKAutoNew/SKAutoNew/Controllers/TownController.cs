@@ -86,5 +86,77 @@
 
             return this.Redirect("/Town/All");
         }
+
+        public async Task<IActionResult> Update(TownUpdateGetInputViewModel viewModel)
+        {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                // need an error page
+                return this.Redirect("/Town/Index");
+            }
+
+            var dtoInputModel = TownUpdateGetInputModelMapper.Map(viewModel);
+            var dtoOutPutModel = await this.townService.GetTownById(dtoInputModel);
+
+            var viewOutputModel = TownUpdateGetOutputMapper.Map(dtoOutPutModel);
+
+            return this.View(viewOutputModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(TownUpdatePostInputModel inputModel)
+        {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                // need an error page
+                return this.Redirect("/Town/Index");
+            }
+
+            var dtoModel = TownUpdatePostInputMapper.Map(inputModel);
+            var isSame = await this.townService.UpdateTownAsync(dtoModel);
+
+            if (!isSame)
+            {
+                // need an error page
+                return this.Redirect("/Town/Index");
+            }
+
+            return this.Redirect("/Town/Index");
+        }
+
+        public async Task<IActionResult> Delete(TownDeleteViewModel townDelete)
+        {
+            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                // need an error page
+                return this.Redirect("/Town/Index");
+            }
+
+            var dtoModel = TownDeleteHandMapper.Map(townDelete);
+            var isDeleted = await this.townService.DeleteTownAsync(dtoModel);
+
+            if (!isDeleted)
+            {
+                // need an error page
+                return this.Redirect("/Town/Index");
+            }
+
+            return this.Redirect("/Town/Index");
+        }
     }
 }

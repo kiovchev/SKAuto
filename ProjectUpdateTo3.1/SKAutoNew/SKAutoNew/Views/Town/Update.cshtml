@@ -1,0 +1,19 @@
+﻿@using SKAutoNew.Web.ViewModels.TownViewModels;
+@model TownUpdateOutputViewModel;
+
+<h1 class="text-white text-center">Промени град</h1>
+<div class="row text-white justify-content-xl-center">
+    <div class="col-md-4">
+        <form id="account" method="post">
+            <hr class="bg-white" />
+            <div class="form-group">
+                <label>Име на част</label>
+                <input class="form-control" name="townName" value="@Model.TownName" />
+            </div>
+            <hr class="bg-white" />
+            <div class="form-group text-center">
+                <button type="submit" class="btn skl-bg-color border">Промени</button>
+            </div>
+        </form>
+    </div>
+</div>
