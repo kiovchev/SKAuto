@@ -11,17 +11,30 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// business logic for Item
+    /// </summary>
     public class ItemService : IItemService
     {
         private readonly IPartService partService;
         private readonly IRepository<Item> itemsRepository;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="partService"></param>
+        /// <param name="itemsRepository"></param>
         public ItemService(IPartService partService, IRepository<Item> itemsRepository)
         {
             this.partService = partService;
             this.itemsRepository = itemsRepository;
         }
 
+        /// <summary>
+        /// find part by id create new item and add it in database
+        /// </summary>
+        /// <param name="partId"></param>
+        /// <returns></returns>
         public async Task<CartDtoModel> GetCartDtoByPartIdAsync(int partId)
         {
             var part = await this.partService.GetPartForItemByPartId(partId);
@@ -39,6 +52,11 @@
             return cartDto;
         }
 
+        /// <summary>
+        /// find part by id create new item and add it in database
+        /// </summary>
+        /// <param name="partId"></param>
+        /// <returns></returns>
         public async Task<Item> GetItemByPartIdAsync(int partId)
         {
             var part = await this.partService.GetPartForItemByPartId(partId);
@@ -54,6 +72,13 @@
             return item;
         }
 
+        /// <summary>
+        /// return part, it means to increase it quantity (plus ordered) in databse and to delete item
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="partId"></param>
+        /// <param name="orderedQuantity"></param>
+        /// <returns></returns>
         public async Task ReturnItemAsync(int itemId, int partId, int orderedQuantity)
         {
             await this.partService.ReturnPartFromCartAsync(partId, orderedQuantity);
@@ -63,6 +88,11 @@
             await this.itemsRepository.SaveAsync();
         }
 
+        /// <summary>
+        /// increase ordered quantity, change part quantity and update both in database 
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
         public async Task ChangeItemAndPartQuantityInDbAsync(int itemId)
         {
             var item = await this.itemsRepository.All()
@@ -75,6 +105,11 @@
             await this.itemsRepository.SaveAsync();
         }
 
+        /// <summary>
+        /// update item in database
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="order"></param>
         public void UpdateItems(List<Item> items, Order order)
         {
             for (int i = 0; i < items.Count; i++)
@@ -85,6 +120,11 @@
             }
         }
 
+        /// <summary>
+        /// get items from database, find them by id
+        /// </summary>
+        /// <param name="itemsIds"></param>
+        /// <returns></returns>
         public async Task<List<Item>> GetItemsByItemsIdsAsync(List<int> itemsIds)
         {
             var items = await this.itemsRepository.AllAsNoTracking().ToListAsync();
@@ -105,6 +145,11 @@
             return neededItems;
         }
 
+        /// <summary>
+        /// get items from database for an order, find them by order id
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public async Task<List<Item>> GetItemsByOrderIdAsync(int orderId)
         {
             var items = await this.itemsRepository.All()
@@ -117,6 +162,10 @@
             return items;
         }
 
+        /// <summary>
+        /// get all items from database
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<ItemAllDto>> GetAllItemsAsync()
         {
             var itemsAll = await this.itemsRepository.All()
@@ -133,6 +182,10 @@
             return itemsDtos;
         }
 
+        /// <summary>
+        /// remove item and return part quantity in database
+        /// </summary>
+        /// <returns></returns>
         public async Task RemoveItemsAndAddQuantityForPartsInDbAsync()
         {
             var allItems = await this.itemsRepository.All()
@@ -153,6 +206,11 @@
             }
         }
 
+        /// <summary>
+        /// find item by id and delete it from database
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
         public async Task Delete(int itemId)
         {
             var itemToDelete = await this.itemsRepository.All()
@@ -163,6 +221,11 @@
             await this.itemsRepository.SaveAsync();
         }
 
+        /// <summary>
+        /// find all items for an order by order id and delet ethem from database 
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public async Task DeleteItemsForOrderAsync(int orderId)
         {
             var neededItems = await this.itemsRepository.All()

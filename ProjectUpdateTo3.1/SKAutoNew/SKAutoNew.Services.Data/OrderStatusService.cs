@@ -8,6 +8,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// business logic for OrderStatus
+    /// </summary>
     public class OrderStatusService : IOrderStatusService
     {
         private readonly IRepository<OrderStatus> orders;

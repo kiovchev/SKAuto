@@ -11,6 +11,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// business logic for UseFullCategory
+    /// </summary>
     public class UseFullCategoryService : IUseFullCategoryService
     {
         private readonly IRepository<UseFullCategory> useFullCategories;
@@ -18,6 +21,13 @@
         private readonly IRepository<TownUseFullCategory> townUseFullCategories;
         private readonly IRepository<Company> companyRepo;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="useFullCategories"></param>
+        /// <param name="towns"></param>
+        /// <param name="townUseFullCategories"></param>
+        /// <param name="companyRepo"></param>
         public UseFullCategoryService(
             IRepository<UseFullCategory> useFullCategories,
             IRepository<Town> towns,
@@ -30,6 +40,11 @@
             this.companyRepo = companyRepo;
         }
 
+        /// <summary>
+        /// check is there same category in database
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public async Task<bool> CheckIfExistsAsync(string name)
         {
             bool checkUseFullCategory = await this.useFullCategories
@@ -39,6 +54,12 @@
             return checkUseFullCategory;
         }
 
+        /// <summary>
+        /// create new usefullcategory, townusefullcategories and add them all in database
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="imageAddress"></param>
+        /// <returns></returns>
         public async Task CreateUseFullCategoryByNameAsync(string name, string imageAddress)
         {
             var towns = this.towns.All();
@@ -69,6 +90,11 @@
             await this.useFullCategories.SaveAsync();
         }
 
+        /// <summary>
+        /// delete category and townusefullcategories that are conected with it from database
+        /// </summary>
+        /// <param name="dtoModel"></param>
+        /// <returns></returns>
         public async Task<bool> DeleteUseFullCategoryAsync(UseFullDeleteDtoModel dtoModel)
         {
             var modelToDelete = await this.useFullCategories.All()
@@ -97,6 +123,10 @@
             return false;
         }
 
+        /// <summary>
+        /// get all usefullcategories from database
+        /// </summary>
+        /// <returns></returns>
         public async Task<IList<IndexDtoModel>> GetAllCategoriesForIndexAsync()
         {
             var allCategories = await this.useFullCategories.All().ToListAsync();
@@ -105,6 +135,10 @@
             return dtomodels;
         }
 
+        /// <summary>
+        /// get all usefullcategories from database for company service
+        /// </summary>
+        /// <returns></returns>
         public async Task<IList<UseFullCategory>> GetAlluseFullCategoriesAsync()
         {
             var allCategories = await this.useFullCategories.All().ToListAsync();
@@ -112,6 +146,10 @@
             return allCategories;
         }
 
+        /// <summary>
+        /// get all usefullcategories with images rom database
+        /// </summary>
+        /// <returns></returns>
         public async Task<IList<UseFullCategoryWithImageViewDtoModel>> GetAllUseFullCategoriesWithParamsAsync()
         {
             var allUseFullCategories = await this.useFullCategories.All().ToListAsync();
@@ -125,6 +163,11 @@
             return useFullCategoryWithImages;
         }
 
+        /// <summary>
+        /// get dto model needed for update view 
+        /// </summary>
+        /// <param name="inputDtoModel"></param>
+        /// <returns></returns>
         public async Task<UseFullUpdateGetOutputDtoModel> GetDtoModelForUpdateOutputModelAsync(UseFullUpdateGetInputDtoModel inputDtoModel)
         {
             var neededCategory = await this.useFullCategories.All()
@@ -140,6 +183,11 @@
             return dtoOutputModel;
         }
 
+        /// <summary>
+        /// change usefullcategory and add changes to database
+        /// </summary>
+        /// <param name="dtoModel"></param>
+        /// <returns></returns>
         public async Task<bool> UpdateUseFullCategoryAsync(UseFullUpdatePostInputDtoModel dtoModel)
         {
             var allmodels = await this.useFullCategories.All().ToListAsync();

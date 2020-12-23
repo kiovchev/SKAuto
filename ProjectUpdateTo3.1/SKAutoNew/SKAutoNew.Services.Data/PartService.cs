@@ -12,6 +12,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// business logic for Part
+    /// </summary>
     public class PartService : IPartService
     {
         private readonly IRepository<Part> parts;
@@ -20,6 +23,14 @@
         private readonly ICategoryService categoryService;
         private readonly IManufactoryService manufactoryService;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="parts"></param>
+        /// <param name="brandService"></param>
+        /// <param name="modelService"></param>
+        /// <param name="categoryService"></param>
+        /// <param name="manufactoryService"></param>
         public PartService(
             IRepository<Part> parts,
             IBrandService brandService,
@@ -34,6 +45,11 @@
             this.manufactoryService = manufactoryService;
         }
 
+        /// <summary>
+        /// find part in database, add quantity to it and update it
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task AddQuantityAsync(PartAddInputDtoModel model)
         {
             var part = await this.parts.All().FirstOrDefaultAsync(x => x.Id == model.PartId);
@@ -50,6 +66,14 @@
             await this.parts.SaveAsync();
         }
 
+        /// <summary>
+        /// check in database if part exists and return boolean
+        /// </summary>
+        /// <param name="partName"></param>
+        /// <param name="brandAndModelName"></param>
+        /// <param name="categoryName"></param>
+        /// <param name="manufactoryName"></param>
+        /// <returns></returns>
         public async Task<bool> CheckIfPartExistsAsync(
                                                         string partName,
                                                         string brandAndModelName,
@@ -82,6 +106,11 @@
             return true;
         }
 
+        /// <summary>
+        /// create new part and add it to database
+        /// </summary>
+        /// <param name="partModel"></param>
+        /// <returns></returns>
         public async Task CreatePartAsync(PartCreateInputDtoModel partModel)
         {
             var allCarParams = this.TakeParmsFromModelName(partModel.ModelName);
@@ -115,6 +144,11 @@
             await this.parts.SaveAsync();
         }
 
+        /// <summary>
+        /// find part by id and remove it from dsatabase
+        /// </summary>
+        /// <param name="partId"></param>
+        /// <returns></returns>
         public async Task DeletePartAsync(int partId)
         {
             var part = await this.parts.All().FirstOrDefaultAsync(x => x.Id == partId);
@@ -123,6 +157,11 @@
             await this.parts.SaveAsync();
         }
 
+        /// <summary>
+        /// get part from database by id
+        /// </summary>
+        /// <param name="partId"></param>
+        /// <returns></returns>
         public async Task<PartAddOutputDtoModel> GetAddOutputModelByIdAsync(int partId)
         {
             var part = await this.parts.All()
@@ -136,6 +175,10 @@
             return partDto;
         }
 
+        /// <summary>
+        /// get all parts from database
+        /// </summary>
+        /// <returns></returns>
         public async Task<IList<PartGetAllPartsForIndexDtoModel>> GetAllPartsAsync()
         {
             var allParts = await this.parts.All()
@@ -150,6 +193,10 @@
             return partAllModel;
         }
 
+        /// <summary>
+        /// get params needed for create view from database
+        /// </summary>
+        /// <returns></returns>
         public async Task<PartCreateOutPutDtoModel> GetPartCreateParams()
         {
             var brands = await this.brandService.GetAllBrandsWithModelsAsync();
@@ -171,6 +218,11 @@
             return partCreate;
         }
 
+        /// <summary>
+        /// find and get part from database by id, thagt method is needed when we create new item 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<Part> GetPartForItemByPartId(int id)
         {
             var part = await this.parts.All()
@@ -187,6 +239,12 @@
             return part;
         }
 
+        /// <summary>
+        ///  get all parts for a model and for a category from database
+        /// </summary>
+        /// <param name="modelName"></param>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
         public async Task<IList<PartAllDtoModel>> GetPartsByModelAndCategoryAsync(string modelName, string categoryName)
         {
             var allCarParams = this.TakeParmsFromModelName(modelName);
@@ -224,6 +282,11 @@
             return partsByCategoryAndModel;
         }
 
+        /// <summary>
+        /// get part model needed for update view
+        /// </summary>
+        /// <param name="partId"></param>
+        /// <returns></returns>
         public async Task<PartUpdateOutputDtoModel> GetPartUpdateModel(int partId)
         {
             var part = await this.parts.All()
@@ -251,6 +314,16 @@
             return partDto;
         }
 
+        /// <summary>
+        /// check in database is there same part in it
+        /// </summary>
+        /// <param name="partName"></param>
+        /// <param name="brandAndModelName"></param>
+        /// <param name="categoryName"></param>
+        /// <param name="manufactoryName"></param>
+        /// <param name="partQuantity"></param>
+        /// <param name="price"></param>
+        /// <returns></returns>
         public async Task<bool> IsSamePartAsync(string partName, string brandAndModelName, string categoryName, string manufactoryName, int partQuantity, decimal price)
         {
             var carParams = this.TakeParmsFromModelName(brandAndModelName);
@@ -281,6 +354,11 @@
             return true;
         }
 
+        /// <summary>
+        /// decrease part quantity in database, when order an item
+        /// </summary>
+        /// <param name="partId"></param>
+        /// <returns></returns>
         public async Task RemoveQuantityAsync(int partId)
         {
             var part = await this.parts.All().FirstOrDefaultAsync(x => x.Id == partId);
@@ -289,6 +367,12 @@
             this.parts.Update(part);
         }
 
+        /// <summary>
+        /// increase part quantity in database when an item is deleted
+        /// </summary>
+        /// <param name="partId"></param>
+        /// <param name="orderedQuantity"></param>
+        /// <returns></returns>
         public async Task ReturnPartFromCartAsync(int partId, int orderedQuantity)
         {
             var part = await this.parts.All().FirstOrDefaultAsync(x => x.Id == partId);
@@ -297,6 +381,11 @@
             this.parts.Update(part);
         }
 
+        /// <summary>
+        /// update part and save changes in database
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task UpdatePartAsync(PartUpdateInputDtoModel model)
         {
             var allCarParams = this.TakeParmsFromModelName(model.BrandAndModelName);
@@ -319,6 +408,11 @@
             await this.parts.SaveAsync();
         }
 
+        /// <summary>
+        /// take params from brand and model name (need to split string for that) - this is a help method
+        /// </summary>
+        /// <param name="brandWithModelName"></param>
+        /// <returns></returns>
         private List<string> TakeParmsFromModelName(string brandWithModelName)
         {
             var carParams = brandWithModelName

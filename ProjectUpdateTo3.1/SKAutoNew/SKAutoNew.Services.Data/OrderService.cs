@@ -13,6 +13,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// business logic for Order
+    /// </summary>
     public class OrderService : IOrderService
     {
         private readonly IRepository<Order> orders;
@@ -20,6 +23,13 @@
         private readonly IItemService itemService;
         private readonly IOrderStatusService orderStatusService;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="orders"></param>
+        /// <param name="recipientRepo"></param>
+        /// <param name="itemService"></param>
+        /// <param name="orderStatusService"></param>
         public OrderService(
                             IRepository<Order> orders,
                             IRepository<Recipient> recipientRepo,
@@ -32,7 +42,11 @@
             this.orderStatusService = orderStatusService;
         }
 
-        // create order
+        /// <summary>
+        /// create an order and add it in database
+        /// </summary>
+        /// <param name="dtoModel"></param>
+        /// <returns></returns>
         public async Task<int> CreateOrderAsync(CartOrderCreateDtoModel dtoModel)
         {
             var recipient = await this.recipientRepo.All().FirstOrDefaultAsync(x => x.Id == dtoModel.RecipientId);
@@ -56,6 +70,11 @@
             return currentOrder.Id;
         }
 
+        /// <summary>
+        /// delete from database all orders for a recipient by recipient id
+        /// </summary>
+        /// <param name="recipientId"></param>
+        /// <returns></returns>
         public async Task DeleteAllOrdersByRecipientIdAsync(int recipientId)
         {
             var ordersToDelete = await this.orders.All()
@@ -70,7 +89,11 @@
             }
         }
 
-        // delete order
+        /// <summary>
+        /// find an order by id and delete it from database
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public async Task DeleteOrderAsync(int orderId)
         {
             var orderToDelete = await this.orders.All().FirstOrDefaultAsync(x => x.Id == orderId);
@@ -84,7 +107,10 @@
             }
         }
 
-        // get all orders 
+        /// <summary>
+        /// get all orders from database
+        /// </summary>
+        /// <returns></returns>        
         public async Task<IList<IndexOrderDto>> GetAllOrdersAsync()
         {
             var ordersAll = await this.orders.All()
@@ -99,7 +125,11 @@
             return ordersAllDtos;
         }
 
-        // gets last order for current recipient
+        /// <summary>
+        /// gets last order for current recipient from database
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public async Task<LastOrderDto> GetLastOrderAsync(int orderId)
         {
             var lastOrder = await this.orders.All()
@@ -119,7 +149,11 @@
             return neededOrder;
         }
 
-        // get params for order update
+        /// <summary>
+        /// get params for order update
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public async Task<UpdateOutPutOrderDtoModel> GetUpdateOrderParamsAsync(int orderId)
         {
             var orderParamsModel = await this.orders.All()
@@ -136,6 +170,12 @@
             return orderParamsDto;
         }
 
+        /// <summary>
+        /// update order in database
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="statusName"></param>
+        /// <returns></returns>
         public async Task<bool> UpdateAsync(int orderId, string statusName)
         {
             var searchedOrder = await this.orders.All()

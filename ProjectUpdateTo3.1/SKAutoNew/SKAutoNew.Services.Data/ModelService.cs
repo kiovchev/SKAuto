@@ -11,6 +11,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// business logic for Model
+    /// </summary>
     public class ModelService : IModelService
     {
         private readonly IRepository<Model> models;
@@ -18,6 +21,13 @@
         private readonly ICategoryService categoryService;
         private readonly IRepository<ModelCategories> modelCategories;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="models"></param>
+        /// <param name="brandService"></param>
+        /// <param name="categoryService"></param>
+        /// <param name="modelCategories"></param>
         public ModelService(
             IRepository<Model> models,
             IBrandService brandService,
@@ -30,6 +40,11 @@
             this.modelCategories = modelCategories;
         }
 
+        /// <summary>
+        /// create new model and new modelcategories and add them all to database
+        /// </summary>
+        /// <param name="modelToCreate"></param>
+        /// <returns></returns>
         public async Task CreateModel(ModelCreateDtoModel modelToCreate)
         {
             if (modelToCreate.ImageAddress == null)
@@ -56,6 +71,11 @@
             await this.models.SaveAsync();
         }
 
+        /// <summary>
+        /// find model by id and delete it from databse 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task DeleteModelAsync(int id)
         {
             var neededModel = await this.models.All()
@@ -76,6 +96,10 @@
             await this.models.SaveAsync();
         }
 
+        /// <summary>
+        /// get all models from database
+        /// </summary>
+        /// <returns></returns>
         public async Task<IList<ModelWithBrandNameDtoModel>> GetAllModels()
         {
             var brandsWithModels = await this.models.All().Include(x => x.Brand).ToListAsync();
@@ -84,6 +108,11 @@
             return models;
         }
 
+        /// <summary>
+        /// find all models for a brand and get them from database
+        /// </summary>
+        /// <param name="kindInputModel"></param>
+        /// <returns></returns>
         public async Task<IList<ModelWithImageDtoModel>> GetAllModelsByBrandNameAsync(string kindInputModel)
         {
             var brandId = await this.brandService.GetBrandIdByNameAsync(kindInputModel);
@@ -93,6 +122,11 @@
             return modelsByBrand;
         }
 
+        /// <summary>
+        /// find model by id and get it from database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ModelUpdateOutputDtoModel> GetModelByIdAsync(int id)
         {
             var currentModel = await this.models.All().Include(x => x.Brand).FirstOrDefaultAsync(x => x.Id == id);
@@ -102,6 +136,13 @@
             return neededModel;
         }
 
+        /// <summary>
+        /// find model by name, start year, end year and get it from database
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="startYear"></param>
+        /// <param name="endYear"></param>
+        /// <returns></returns>
         public async Task<Model> GetModelByNameStartAndEndYearsAsync(string name, int startYear, int endYear)
         {
             var model = await this.models.All().FirstOrDefaultAsync(x => x.Name == name
@@ -111,6 +152,11 @@
             return model;
         }
 
+        /// <summary>
+        /// check is there any parts for a model and return boolean
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<bool> HavePartsAsync(int id)
         {
             var neededModel = await this.models.All()
@@ -126,6 +172,14 @@
             return false;
         }
 
+        /// <summary>
+        /// check if model exists in databse and return boolean
+        /// </summary>
+        /// <param name="brandName"></param>
+        /// <param name="modelName"></param>
+        /// <param name="startYear"></param>
+        /// <param name="endYear"></param>
+        /// <returns></returns>
         public async Task<bool> IfModelExistsAsync(string brandName, string modelName, int startYear, int endYear)
         {
             int brandId = await this.brandService.GetBrandIdByNameAsync(brandName);
@@ -137,6 +191,15 @@
             return existModel;
         }
 
+        /// <summary>
+        /// check is there in database same model and return boolean
+        /// </summary>
+        /// <param name="brandName"></param>
+        /// <param name="modelName"></param>
+        /// <param name="startYear"></param>
+        /// <param name="endYear"></param>
+        /// <param name="imageAddress"></param>
+        /// <returns></returns>
         public async Task<bool> IsSameAsync(string brandName, string modelName, int startYear, int endYear, string imageAddress)
         {
             int brandId = await this.brandService.GetBrandIdByNameAsync(brandName);
@@ -149,6 +212,11 @@
             return existModel;
         }
 
+        /// <summary>
+        /// update model in database
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task UpdateModelAsync(ModelUpdateInputDtoModel model)
         {
             var brand = await this.brandService.GetBrandByNameAsync(model.BrandName);

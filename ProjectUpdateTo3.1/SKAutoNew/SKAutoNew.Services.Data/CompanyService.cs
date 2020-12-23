@@ -10,12 +10,21 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// business logic for Company
+    /// </summary>
     public class CompanySrvice : ICompanyService
     {
         private readonly IRepository<Company> conpanies;
         private readonly ITownService townService;
         private readonly IUseFullCategoryService useFullCategoryService;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="conpanies"></param>
+        /// <param name="townService"></param>
+        /// <param name="useFullCategoryService"></param>
         public CompanySrvice(
             IRepository<Company> conpanies,
             ITownService townService,
@@ -26,6 +35,11 @@
             this.useFullCategoryService = useFullCategoryService;
         }
 
+        /// <summary>
+        /// method - create new company and add it in database
+        /// </summary>
+        /// <param name="company"></param>
+        /// <returns></returns>
         public async Task CreateCompanyAsync(CompanyInputViewDtoModel company)
         {
             var useFullCategories = await this.useFullCategoryService.GetAlluseFullCategoriesAsync();
@@ -40,6 +54,11 @@
             await this.conpanies.SaveAsync();
         }
 
+        /// <summary>
+        /// delete company from database
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
         public async Task<bool> DeleteAsync(int companyId)
         {
             var currentCompay = await this.conpanies.All().FirstOrDefaultAsync(x => x.Id == companyId);
@@ -55,6 +74,10 @@
             return false;
         }
 
+        /// <summary>
+        /// get all companies from database
+        /// </summary>
+        /// <returns></returns>
         public async Task<IList<CompanyInputViewDtoModel>> GetAllCompaniesAsync()
         {
             var allCompanies = await this.conpanies.All()
@@ -69,6 +92,10 @@
             return companyNames;
         }
 
+        /// <summary>
+        /// get all companies for index from database
+        /// </summary>
+        /// <returns></returns>
         public async Task<IList<CompanyIndexViewDtoModel>> GetAllCompaniesForIndexAsync()
         {
             var allCompanies = await this.conpanies.All()
@@ -86,6 +113,12 @@
             return allCompaniesModel;
         }
 
+        /// <summary>
+        /// get companies by town and category from database
+        /// </summary>
+        /// <param name="townName"></param>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
         public async Task<IList<CompanyInputViewDtoModel>> GetCompaniesByTownAndCategoryAsync(string townName,
                                                                                            string categoryName)
         {
@@ -104,6 +137,11 @@
             return companiesByTown;
         }
 
+        /// <summary>
+        /// find company in database by id nad get it 
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
         public async Task<CompanyUpdateOutPutDtoModel> GetCompanyByIdAsync(int companyId)
         {
             var allTowns = await this.townService.GetAllTownsAsync();
@@ -122,6 +160,10 @@
             return companyDto;
         }
 
+        /// <summary>
+        /// get list of towns and list of usefull categories and add them in dto model needed for creation
+        /// </summary>
+        /// <returns></returns>
         public async Task<CompanyCreateViewDtoModel> GetCompanyCreateParamsAsync()
         {
             var allTowns = await this.townService.GetAllTownsAsync();
@@ -135,6 +177,13 @@
             return viewModel;
         }
 
+        /// <summary>
+        /// check if company exists in database
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="town"></param>
+        /// <param name="category"></param>
+        /// <returns></returns>
         public async Task<bool> IfCompanyExistsAsync(string name, string town, string category)
         {
             var hasCompany = await this.conpanies.All()
@@ -145,6 +194,11 @@
             return hasCompany;
         }
 
+        /// <summary>
+        /// update company in database
+        /// </summary>
+        /// <param name="dtoModel"></param>
+        /// <returns></returns>
         public async Task<bool> UpdateCompanyAsync(CompanyUpdateInputDtoModel dtoModel)
         {
             var allCompanies = await this.conpanies.All()
