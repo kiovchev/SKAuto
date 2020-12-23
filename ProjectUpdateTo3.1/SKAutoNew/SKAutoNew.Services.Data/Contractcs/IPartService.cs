@@ -1,10 +1,10 @@
-﻿using SKAutoNew.Common.DtoModels.PartDtos;
-using SKAutoNew.Data.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace SKAutoNew.Services.Data.Contractcs
+﻿namespace SKAutoNew.Services.Data.Contractcs
 {
+    using SKAutoNew.Common.DtoModels.PartDtos;
+    using SKAutoNew.Data.Models;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     public interface IPartService
     {
         Task CreatePartAsync(PartCreateInputDtoModel partModel);
