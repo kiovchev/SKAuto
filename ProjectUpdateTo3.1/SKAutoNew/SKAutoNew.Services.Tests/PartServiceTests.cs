@@ -5,6 +5,7 @@
     using SKAutoNew.Common.DtoModels.ModelDtos;
     using SKAutoNew.Common.DtoModels.PartDtos;
     using SKAutoNew.Data;
+    using SKAutoNew.Services.Data;
     using SKAutoNew.Services.Tests.ServicesTestHelpers;
     using System.Threading.Tasks;
     using Xunit;
@@ -16,14 +17,7 @@
         [Fact]
         public async Task CheckIfPartExistsAsyncShouldReturnTrue()
         {
-            var brandService = GetBrandService.Return(db);
-            var modelService = GetModelService.Return(db, brandService);
-            var categoryService = GetCategoryService.Return(db);
-            var manufactoryService = GetManufactoryService.Return(db);
-            var partService = GetPartService.Return(db, brandService,
-                                                        modelService,
-                                                        categoryService, manufactoryService);
-            await AddBrandModelCategoryManufactoryAndPart(brandService, modelService, categoryService, manufactoryService, partService);
+            var partService = await ReturnPartService(db);
 
             var ifExists = await partService.CheckIfPartExistsAsync("Калник",
                                                                     "Audi A6 1994-1998",
@@ -36,14 +30,7 @@
         [Fact]
         public async Task CheckIfPartExistsAsyncShouldReturnFalse()
         {
-            var brandService = GetBrandService.Return(db);
-            var modelService = GetModelService.Return(db, brandService);
-            var categoryService = GetCategoryService.Return(db);
-            var manufactoryService = GetManufactoryService.Return(db);
-            var partService = GetPartService.Return(db, brandService,
-                                                        modelService,
-                                                        categoryService, manufactoryService);
-            await AddBrandModelCategoryManufactoryAndPart(brandService, modelService, categoryService, manufactoryService, partService);
+            var partService = await ReturnPartService(db);
 
             var ifExists = await partService.CheckIfPartExistsAsync("Броня",
                                                                     "Audi A6 1994-1998",
@@ -56,14 +43,7 @@
         [Fact]
         public async Task CreatePartAsyncShouldReturnTwo()
         {
-            var brandService = GetBrandService.Return(db);
-            var modelService = GetModelService.Return(db, brandService);
-            var categoryService = GetCategoryService.Return(db);
-            var manufactoryService = GetManufactoryService.Return(db);
-            var partService = GetPartService.Return(db, brandService,
-                                                        modelService,
-                                                        categoryService, manufactoryService);
-            await AddBrandModelCategoryManufactoryAndPart(brandService, modelService, categoryService, manufactoryService, partService);
+            var partService = await ReturnPartService(db);
 
             await partService.CreatePartAsync(new PartCreateInputDtoModel
             {
@@ -86,14 +66,7 @@
         [Fact]
         public async Task DeletePartAsyncShouldReturnZero()
         {
-            var brandService = GetBrandService.Return(db);
-            var modelService = GetModelService.Return(db, brandService);
-            var categoryService = GetCategoryService.Return(db);
-            var manufactoryService = GetManufactoryService.Return(db);
-            var partService = GetPartService.Return(db, brandService,
-                                                        modelService,
-                                                        categoryService, manufactoryService);
-            await AddBrandModelCategoryManufactoryAndPart(brandService, modelService, categoryService, manufactoryService, partService);
+            var partService = await ReturnPartService(db);
 
             await partService.DeletePartAsync(1);
 
@@ -108,14 +81,7 @@
         [Fact]
         public async Task GetAddOutputModelByIdAsyncShouldReturnKaih()
         {
-            var brandService = GetBrandService.Return(db);
-            var modelService = GetModelService.Return(db, brandService);
-            var categoryService = GetCategoryService.Return(db);
-            var manufactoryService = GetManufactoryService.Return(db);
-            var partService = GetPartService.Return(db, brandService,
-                                                        modelService,
-                                                        categoryService, manufactoryService);
-            await AddBrandModelCategoryManufactoryAndPart(brandService, modelService, categoryService, manufactoryService, partService);
+            var partService = await ReturnPartService(db);
 
             var currentPart = await partService.GetAddOutputModelByIdAsync(1);
 
@@ -129,14 +95,7 @@
         [Fact]
         public async Task GetAllPartsAsyncShouldReturnOne()
         {
-            var brandService = GetBrandService.Return(db);
-            var modelService = GetModelService.Return(db, brandService);
-            var categoryService = GetCategoryService.Return(db);
-            var manufactoryService = GetManufactoryService.Return(db);
-            var partService = GetPartService.Return(db, brandService,
-                                                        modelService,
-                                                        categoryService, manufactoryService);
-            await AddBrandModelCategoryManufactoryAndPart(brandService, modelService, categoryService, manufactoryService, partService);
+            var partService = await ReturnPartService(db);
 
             var allParts = await partService.GetAllPartsAsync();
 
@@ -150,14 +109,7 @@
         [Fact]
         public async Task GetPartCreateParamsShouldReturnOneBrandWithModelAndOneVategory()
         {
-            var brandService = GetBrandService.Return(db);
-            var modelService = GetModelService.Return(db, brandService);
-            var categoryService = GetCategoryService.Return(db);
-            var manufactoryService = GetManufactoryService.Return(db);
-            var partService = GetPartService.Return(db, brandService,
-                                                        modelService,
-                                                        categoryService, manufactoryService);
-            await AddBrandModelCategoryManufactoryAndPart(brandService, modelService, categoryService, manufactoryService, partService);
+            var partService = await ReturnPartService(db);
 
             var partParamsmodel = await partService.GetPartCreateParams();
 
@@ -175,14 +127,7 @@
         [Fact]
         public async Task GetPartsByModelAndCategoryAsyncShouldReturnOne()
         {
-            var brandService = GetBrandService.Return(db);
-            var modelService = GetModelService.Return(db, brandService);
-            var categoryService = GetCategoryService.Return(db);
-            var manufactoryService = GetManufactoryService.Return(db);
-            var partService = GetPartService.Return(db, brandService,
-                                                        modelService,
-                                                        categoryService, manufactoryService);
-            await AddBrandModelCategoryManufactoryAndPart(brandService, modelService, categoryService, manufactoryService, partService);
+            var partService = await ReturnPartService(db);
 
             var partsByModelAndCategory = await partService.GetPartsByModelAndCategoryAsync("Audi A6 1994-1998", "Едрогабаритни части");
 
@@ -196,14 +141,7 @@
         [Fact]
         public async Task GetPartUpdateModelShouldReturnIdOne()
         {
-            var brandService = GetBrandService.Return(db);
-            var modelService = GetModelService.Return(db, brandService);
-            var categoryService = GetCategoryService.Return(db);
-            var manufactoryService = GetManufactoryService.Return(db);
-            var partService = GetPartService.Return(db, brandService,
-                                                        modelService,
-                                                        categoryService, manufactoryService);
-            await AddBrandModelCategoryManufactoryAndPart(brandService, modelService, categoryService, manufactoryService, partService);
+            var partService = await ReturnPartService(db);
 
             var partModel = await partService.GetPartUpdateModel(1);
 
@@ -217,14 +155,7 @@
         [Fact]
         public async Task IsSamePartAsyncShouldReturnTrue()
         {
-            var brandService = GetBrandService.Return(db);
-            var modelService = GetModelService.Return(db, brandService);
-            var categoryService = GetCategoryService.Return(db);
-            var manufactoryService = GetManufactoryService.Return(db);
-            var partService = GetPartService.Return(db, brandService,
-                                                        modelService,
-                                                        categoryService, manufactoryService);
-            await AddBrandModelCategoryManufactoryAndPart(brandService, modelService, categoryService, manufactoryService, partService);
+            var partService = await ReturnPartService(db);
 
             var isSame = await partService.IsSamePartAsync("Калник", "Audi A6 1994-1998", "Едрогабаритни части", "Kaih", 1, 10);
 
@@ -235,14 +166,7 @@
         [Fact]
         public async Task IsSamePartAsyncShouldReturnFalse()
         {
-            var brandService = GetBrandService.Return(db);
-            var modelService = GetModelService.Return(db, brandService);
-            var categoryService = GetCategoryService.Return(db);
-            var manufactoryService = GetManufactoryService.Return(db);
-            var partService = GetPartService.Return(db, brandService,
-                                                        modelService,
-                                                        categoryService, manufactoryService);
-            await AddBrandModelCategoryManufactoryAndPart(brandService, modelService, categoryService, manufactoryService, partService);
+            var partService = await ReturnPartService(db);
 
             var isSame = await partService.IsSamePartAsync("Калник1", "Audi A6 1994-1998", "Едрогабаритни части", "Kaih", 1, 10);
 
@@ -250,8 +174,16 @@
             Assert.False(isSame);
         }
 
-        private static async Task AddBrandModelCategoryManufactoryAndPart(Data.BrandService brandService, Data.ModelService modelService, Data.CategoryService categoryService, Data.ManufactoryService manufactoryService, Data.PartService partService)
+        private static async Task<PartService> ReturnPartService(SKAutoDbContext db)
         {
+            var brandService = GetBrandService.Return(db);
+            var modelService = GetModelService.Return(db, brandService);
+            var categoryService = GetCategoryService.Return(db);
+            var manufactoryService = GetManufactoryService.Return(db);
+            var partService = GetPartService.Return(db, brandService,
+                                                        modelService,
+                                                        categoryService, manufactoryService);
+
             await brandService.CreateBrand(new BrandCreateDtoModel
             {
                 Name = "Audi",
@@ -285,6 +217,8 @@
                 Price = 10,
                 Quantity = 1
             });
+
+            return partService;
         }
     }
 }

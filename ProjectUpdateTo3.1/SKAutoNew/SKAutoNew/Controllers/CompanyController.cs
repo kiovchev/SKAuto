@@ -42,9 +42,9 @@
             return this.View(companyNames);
         }
 
-        public async Task<IActionResult> AllByTownAndCategory(string townName, string categoryName)
+        public async Task<IActionResult> AllByTownAndCategory(AllByTownNadCategoryModel model)
         {
-            var viewModelDto = await this.company.GetCompaniesByTownAndCategoryAsync(townName, categoryName);
+            var viewModelDto = await this.company.GetCompaniesByTownAndCategoryAsync(model.TownName, model.CategoryName);
             var viewModel = AllByTownAndCategoryHandMapper.Map(viewModelDto);
 
             return this.View(viewModel);
@@ -73,7 +73,8 @@
 
             if (!this.ModelState.IsValid)
             {
-                return this.Redirect("/Company/Create");
+                var error = new CompanyError { ErrorMessage = GlobalConstants.CompanyInvalidModelMessage };
+                return this.RedirectToAction("Error", "Order", error);
             }
 
             bool checkIfCompanyExists = await this.company.IfCompanyExistsAsync(companyModel.Name, 
@@ -82,8 +83,8 @@
 
             if (checkIfCompanyExists)
             {
-                // create a company error page
-                return this.Redirect("/Company/Create");
+                var error = new CompanyError { ErrorMessage = GlobalConstants.CompanyExistsMessage };
+                return this.RedirectToAction("Error", "Order", error);
             }
             
             var companyModelDto = CompanyCreateInputHandMapper.Map(companyModel);
@@ -101,8 +102,8 @@
 
             if (!this.ModelState.IsValid)
             {
-                // need an error page
-                return this.Redirect("/");
+                var error = new CompanyError { ErrorMessage = GlobalConstants.CompanyInvalidModelMessage };
+                return this.RedirectToAction("Error", "Order", error);
             }            
 
             await this.company.DeleteAsync(viewModel.CompanyId);
@@ -132,8 +133,8 @@
 
             if (!this.ModelState.IsValid)
             {
-                // need an error page 
-                return this.Redirect("/");
+                var error = new CompanyError { ErrorMessage = GlobalConstants.CompanyInvalidModelMessage };
+                return this.RedirectToAction("Error", "Order", error);
             }
 
             var dtoModel = CompanyUpdateInputHandMapper.Map(inputViewModel);
@@ -141,11 +142,16 @@
 
             if (!isSame)
             {
-                // need an error page 
-                return this.Redirect("/");
+                var error = new CompanyError { ErrorMessage = GlobalConstants.CompanySameMessage };
+                return this.RedirectToAction("Error", "Order", error);
             }
 
             return this.Redirect("/Company/Index");
+        }
+
+        public IActionResult Error(CompanyError companyError)
+        {
+            return this.View(companyError);
         }
     }
 }

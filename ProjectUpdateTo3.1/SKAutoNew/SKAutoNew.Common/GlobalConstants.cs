@@ -14,6 +14,7 @@
 
         // Category
         public const string CategotyUpdateErrorMessage = "В базата вече съществува такава категория!!!!!";
+        public const string CategotyinputModelUpdateErrorMessage = "Въведени са невалидни данни!!!!!";
         public const string CategotyCreateErrorMessage = "В базата вече съществува категория с това име!!!!!";
         public const string CategoryDeleteErrorMessage = "Категорията не може да бъде изтрита - има част/и свързани с нея или е подаден грешен идентификатор!!!!";
 
@@ -50,6 +51,7 @@
         // Order
         public const string OrderModelValidationMessege = "Невалиден модел!!!!!";
         public const string OrderSameMessage = "Поръчката в базата е със същия статус на доставка!!!!!";
+        public const string OrderLastMessage = "В базата не същвствува такава поръчка!!!!!";
 
         //Town
         public const string TownModelValidationMessаge = "Невалиден модел!!!!!";
@@ -60,5 +62,10 @@
         public const string UseFullCategoryExistErrorMessage = "В базата вече съществува категория с това име!!!!!";
         public const string UseFullCategoryModelValidationMessаge = "Невалиден модел!!!!!";
         public const string UseFullCategoryUpdateErrorMessage = "В базата няма такава категория!!!!!";
+
+        //Company
+        public const string CompanySameMessage = "В базата вече съществува компания с това име!!!!!";
+        public const string CompanyInvalidModelMessage = "Невалиден модел!!!!!";
+        public const string CompanyExistsMessage = "В базата вече съществува компания с това име!!!!!";
     }
 }

@@ -88,13 +88,13 @@
             return this.View(neededCategories);
         }
 
-        public async Task<IActionResult> Update(int categoryId)
+        public async Task<IActionResult> Update(CategoryUpdateIdmodel categoryModel)
         {
             if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
-                if (true)
+                if (ModelState.IsValid)
                 {
-                    var category = await this.categoryService.GetCategoryByIdAsync(categoryId);
+                    var category = await this.categoryService.GetCategoryByIdAsync(categoryModel.CategoryId);
                     var neededCategory = CategoryUpdateOutputMapper.Map(category);
 
                     return this.View(neededCategory);
@@ -107,6 +107,13 @@
         [HttpPost]
         public async Task<IActionResult> Update(CategoryUpdateInputModel category)
         {
+            if (!ModelState.IsValid)
+            {
+                var error = new CategoryError();
+                error.ErrorMessage = GlobalConstants.CategotyinputModelUpdateErrorMessage;
+                return this.RedirectToAction("Error", "Model", error);
+            }
+
             if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 var isSame = await this.categoryService
@@ -118,6 +125,7 @@
                     error.ErrorMessage = GlobalConstants.CategotyUpdateErrorMessage;
                     return this.RedirectToAction("Error", "Model", error);
                 }
+
 
                 var categoryDto = CategoryUpdateInputMapper.Map(category);
                 await this.categoryService.UpdateCategoryAsync(categoryDto);

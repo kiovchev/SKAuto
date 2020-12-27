@@ -77,7 +77,6 @@
         /// <returns></returns>
         public async Task<IList<BrandIndexDtoModel>> GetAllBrandsWithImageAsync()
         {
-            //var brandsAll = await this.brands.All().OrderBy(x => x.Name).ToListAsync();
             var brandsAll = this.brands.All();
             var allBrands = await EfExtensions.ToListAsyncSafe<Brand>(brandsAll);
             var result = BrandServiceIndexMapper.Map(allBrands);

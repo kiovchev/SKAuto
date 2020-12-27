@@ -1,8 +1,14 @@
 ﻿namespace SKAutoNew.Services.Tests
 {
+    using Moq;
     using SKAutoNew.Common.DtoModels.CategoryDtos;
     using SKAutoNew.Data;
+    using SKAutoNew.Data.Models;
+    using SKAutoNew.Data.Repositories;
+    using SKAutoNew.Services.Data;
     using SKAutoNew.Services.Tests.ServicesTestHelpers;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Xunit;
 

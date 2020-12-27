@@ -23,19 +23,13 @@
         {
             if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
-                return this.Redirect("/");
+                return this.Redirect("/Identity/Account/AccessDenied");
             }
 
             var ordersAllDtos = await this.orderService.GetAllOrdersAsync();
             var ordersAllViewModels = OrderIndexMapper.Map(ordersAllDtos);
 
             return this.View(ordersAllViewModels);
-        }
-
-        public IActionResult All()
-        {
-            // show all orders for a recipien by recipient id - if do this, we will need new recipient view
-            return this.View();
         }
 
         public async Task<IActionResult> Last(LastOrderParamViewModel model)
@@ -48,8 +42,8 @@
                 return this.View(orverViewModel);
             }
 
-            // need an error 
-            return this.Redirect("/Home/Index");
+            var error = new OrderError { ErrorMessage = GlobalConstants.OrderLastMessage };
+            return this.RedirectToAction("Error", "Order", error);
         }
 
         public async Task<IActionResult> Create(int recipientId)

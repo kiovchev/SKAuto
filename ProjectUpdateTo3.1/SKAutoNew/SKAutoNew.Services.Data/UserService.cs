@@ -4,6 +4,7 @@
     using SKAutoNew.Data.Models;
     using SKAutoNew.Data.Repositories;
     using SKAutoNew.Services.Data.Contractcs;
+    using SKAutoNew.Services.Data.EfExtensionsHelper;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -31,8 +32,9 @@
         /// <returns></returns>
          public async Task<bool> ChangeUserIsAuthorizeSatusByUserIdAsync(string userId, string value)
         {
-            var users = await this.repository.All().ToListAsync();
-            var user = users.SingleOrDefault(x => x.Id == userId);
+            var users = this.repository.All();
+            var usersAll = await EfExtensions.ToListAsyncSafe<ApplicationUser>(users);
+            var user = usersAll.SingleOrDefault(x => x.Id == userId);
 
             bool.TryParse(value, out bool result);
 
@@ -49,8 +51,9 @@
         /// <returns></returns>
         public async Task<bool?> GetAuthorizeStatusByUserNameAsync(string userName)
         {
-            var users = await this.repository.All().ToListAsync();
-            var user = users.SingleOrDefault(x => x.UserName == userName);
+            var users = this.repository.All();
+            var usersAll = await EfExtensions.ToListAsyncSafe<ApplicationUser>(users);
+            var user = usersAll.SingleOrDefault(x => x.UserName == userName);
 
             if (user == null)
             {
@@ -66,8 +69,9 @@
         /// <returns></returns>
         public async Task<int> GetCountOfUsers()
         {
-            var users = await this.repository.All().ToListAsync();
-            int count = users.Count();
+            var users = this.repository.All();
+            var usersAll = await EfExtensions.ToListAsyncSafe<ApplicationUser>(users);
+            int count = usersAll.Count();
 
             return count;
         }

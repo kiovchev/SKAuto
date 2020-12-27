@@ -20,6 +20,17 @@
             this.orders = orders;
         }
 
+        // this method is created for tests
+        public async Task CreateOrderStatusAsync(string orderStatusName)
+        {
+            var orderStatus = new OrderStatus 
+            {
+                Name = orderStatusName
+            };
+            await orders.InsertAsync(orderStatus);
+            await orders.SaveAsync();
+        }
+
         public async Task<IList<string>> GetAllOrderStatusesNamesAsync()
         {
             var allOrderStatusesNames = await this.orders.All().Select(x => x.Name).ToListAsync();
