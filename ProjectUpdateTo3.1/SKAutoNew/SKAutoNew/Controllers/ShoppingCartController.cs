@@ -129,10 +129,10 @@
 
         public async Task<IActionResult> Remove(int partId)
         {
-            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-            {
-                return this.Redirect("/Identity/Account/AccessDenied");
-            }
+            //if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            //{
+            //    return this.Redirect("/Identity/Account/AccessDenied");
+            //}
 
             if (partId == 0)
             {
