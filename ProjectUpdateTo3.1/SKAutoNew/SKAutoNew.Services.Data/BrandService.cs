@@ -63,9 +63,7 @@
                 return false;
             }
 
-            var brand = await this.brands.All().FirstOrDefaultAsync(x => x.Id == id);
-
-            this.brands.Delete(brand);
+            this.brands.Delete(brandWithModels);
             await this.brands.SaveAsync();
 
             return true;
